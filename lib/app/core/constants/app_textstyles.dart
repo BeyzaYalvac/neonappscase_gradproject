@@ -13,13 +13,13 @@ class AppTextSytlyes {
     color: AppColors.textBej,
   );
   static const TextStyle splashWelcomeStyle = TextStyle(
-    fontSize: 56,
+    fontSize: 40,
     fontWeight: FontWeight.normal,
-    color: AppColors.textMedium,
+    color: AppColors.textBej,
   );
   static const TextStyle splashWelcomeSubtitleStyle = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.normal,
-    color: AppColors.textMedium,
+    color: AppColors.textBej,
   );
 }

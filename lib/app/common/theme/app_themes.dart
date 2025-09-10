@@ -6,8 +6,8 @@ class AppTheme {
     useMaterial3: true,
     brightness: Brightness.light,
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.textLight,
-      foregroundColor: Colors.white,
+      backgroundColor: Colors.white,
+      foregroundColor: AppColors.textLight,
       centerTitle: true,
     ),
     scaffoldBackgroundColor: Colors.white,
