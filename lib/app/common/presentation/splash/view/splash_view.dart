@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart' show AutoRouterX, RoutePage;
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:neonappscase_gradproject/app/common/config/app_config.dart';
 import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/core/boot/app_bootstrap.dart';
@@ -30,28 +31,32 @@ class _SplashViewState extends State<SplashView>
   }
 
   Future<void> _start() async {
-    // 1) Ağır init’leri başlat (en fazla 4 sn bekle)
     await Future.wait([
-      AppBootstrap.init(), // init burada
-      Future.delayed(const Duration(milliseconds: 2000)), // 3 sn sabit
+      AppBootstrap.init(),
+      Future.delayed(const Duration(milliseconds: 2000)),
     ]);
 
-    // 2) Onboarding/HOME kararı
-    final box = Hive.box('settingsBox');
-    final seenOnboarding =
-        box.get('seenOnboarding', defaultValue: false) as bool;
-
     if (!mounted) return;
     setState(() => _readyToNavigate = true);
 
-    // 3) Kısa bir fade/scale bitişi için küçük gecikme (opsiyonel 300–600ms)
-    await Future.delayed(const Duration(milliseconds: 800));
-
+    await Future.delayed(const Duration(milliseconds: 400));
     if (!mounted) return;
-    setState(() => _readyToNavigate = true);
-    await Future.delayed(const Duration(milliseconds: 300)); // kısa fade
-    if (!mounted && seenOnboarding) return;
-    context.router.replace(SplashDescriptionRoute());
+    final boxFirst = Hive.box<bool>('first_control_box');
+
+    final isFirst = boxFirst.get(AppConfig.isFirstKey) ?? true;
+    debugPrint("isFirst değişkeni: ${isFirst.toString()}");
+
+    if (isFirst) {
+      // İlk giriş: DESC'i atla → direkt Home
+      //await boxFirst.put(AppConfig.isFirstKey, false);
+      context.router.replace(const SplashDescriptionRoute());
+    } else if (!isFirst) {
+      context.router.replace(const HomeRoute());
+    } else {
+      // Sonraki girişler: Onboarding'e git (istersen yine Home yapabilirsin)
+      if (!mounted) return;
+      context.router.replace(const HomeRoute());
+    }
   }
 
   @override
@@ -117,6 +122,7 @@ class _SplashViewState extends State<SplashView>
               ),
             ),
           ),
+          
         ],
       ),
     );

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/core/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/core/extensions/widget_extensions.dart';
 
-class SplashContainerToLeft extends StatelessWidget {
+class SplashContainerToRight extends StatelessWidget {
   final Widget textW;
-  SplashContainerToLeft({super.key, required this.textW});
+  final Color containerColor;
+  SplashContainerToRight({
+    super.key,
+    required this.textW,
+    required this.containerColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +17,10 @@ class SplashContainerToLeft extends StatelessWidget {
       height: AppMediaQuery.screenHeight(context) * 0.2,
       width: AppMediaQuery.screenWidth(context) * 0.95,
       decoration: BoxDecoration(
-        color: AppColors.bgTriartry,
+        color: containerColor,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(46),
-          bottomLeft: Radius.circular(46),
+          topRight: Radius.circular(46),
+          bottomRight: Radius.circular(46),
         ),
       ),
       child: FittedBox(

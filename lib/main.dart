@@ -6,8 +6,12 @@ import 'package:neonappscase_gradproject/app/common/theme/app_themes.dart';
 import 'package:neonappscase_gradproject/app/common/theme/cubit/theme_cubit.dart';
 import 'package:neonappscase_gradproject/app/common/theme/cubit/theme_state.dart';
 import 'package:neonappscase_gradproject/app/core/boot/app_bootstrap.dart';
+import 'package:neonappscase_gradproject/app/core/network/cubit/network_cubit.dart';
 import 'package:neonappscase_gradproject/app/core/injections/injection_container_items.dart';
 import 'package:provider/provider.dart';
+
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   final bindings = WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +37,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         BlocProvider<ThemeCubit>(create: (_) => ThemeCubit(settingsBox)),
+        BlocProvider<NetworkCubit>(create: (_) => NetworkCubit()..start()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
@@ -42,6 +47,7 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: state.themeMode,
+            scaffoldMessengerKey: rootScaffoldMessengerKey, // ✅ kritik
             //home: MoviesHomepage(),
             routerConfig: InjectionContainerItems.appRouter.config(),
           );

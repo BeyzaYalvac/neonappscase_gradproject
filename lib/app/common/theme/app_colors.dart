@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 class AppColors {
   //background colors
   static const Color bgPrimary = Color(0xffFFFFFF);
@@ -15,4 +17,7 @@ class AppColors {
   static const Color textBej = Color(0xffffdedc);
 
   //unique colors
+  static const Color textTransparent = Color(0x00000000);
+  static const Color success = Colors.green;
+  static const Color fail = Colors.red;
 }

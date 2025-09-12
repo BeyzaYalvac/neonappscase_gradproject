@@ -1,16 +1,18 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:neonappscase_gradproject/app/common/config/app_config.dart';
 import 'package:neonappscase_gradproject/app/common/presentation/splash/cubit/splash_cubit.dart';
 import 'package:neonappscase_gradproject/app/common/presentation/splash/cubit/splash_state.dart';
-import 'package:neonappscase_gradproject/app/common/presentation/splash/widget/splash_desc_body.dart';
+import 'package:neonappscase_gradproject/app/common/presentation/splash/view/splash_desc_body.dart';
+import 'package:neonappscase_gradproject/app/common/presentation/splash/widget/button/onboarding_button.dart';
+import 'package:neonappscase_gradproject/app/common/presentation/splash/widget/button/splash_dots.dart';
 import 'package:neonappscase_gradproject/app/common/presentation/splash/view/splash_welcome_body.dart';
 import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
 import 'package:neonappscase_gradproject/app/core/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/core/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/core/extensions/widget_extensions.dart';
-import 'package:neonappscase_gradproject/app/core/widget/button/onboarding_button.dart';
-import 'package:neonappscase_gradproject/app/common/presentation/splash/widget/splash_dots.dart';
 
 @RoutePage()
 class SplashDescriptionView extends StatelessWidget {
@@ -49,6 +51,10 @@ class SplashDescriptionView extends StatelessWidget {
                           onPressed: () {
                             if (state.index == state.totalPages - 1) {
                               context.router.replace(HomeRoute());
+                              final boxFirst = Hive.box<bool>(
+                                'first_control_box',
+                              );
+                              boxFirst.put(AppConfig.isFirstKey, false);
                             } else {
                               cubit.nextPage();
                             }

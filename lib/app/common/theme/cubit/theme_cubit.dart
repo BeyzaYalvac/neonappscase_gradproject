@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:neonappscase_gradproject/app/common/theme/cubit/theme_state.dart';
 
-
 class ThemeCubit extends Cubit<ThemeState> {
   final Box _box;
   static const String _themeKey = 'theme_key';
@@ -19,8 +18,6 @@ class ThemeCubit extends Cubit<ThemeState> {
     switch (v) {
       case 'dark':
         return ThemeMode.dark;
-      case 'system':
-        return ThemeMode.system;
       default:
         return ThemeMode.light;
     }
@@ -30,10 +27,10 @@ class ThemeCubit extends Cubit<ThemeState> {
     switch (m) {
       case ThemeMode.dark:
         return 'dark';
-      case ThemeMode.system:
-        return 'system';
       case ThemeMode.light:
-      return 'light';
+        return 'light';
+      default:
+        return 'light';
     }
   }
 
@@ -45,11 +42,9 @@ class ThemeCubit extends Cubit<ThemeState> {
 
   //Buton döngüsüüü
   void toggle() {
-    final next = switch (state.themeMode) {
-      ThemeMode.light => ThemeMode.dark,
-      ThemeMode.dark => ThemeMode.system,
-      ThemeMode.system => ThemeMode.light,
-    };
+    final next = state.themeMode == ThemeMode.dark
+        ? ThemeMode.light
+        : ThemeMode.dark;
     setTheme(next);
     emit(state.copyWith(themeMode: next));
   }
