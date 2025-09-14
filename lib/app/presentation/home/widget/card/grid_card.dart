@@ -1,0 +1,63 @@
+import 'package:flutter/material.dart';
+import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
+import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
+import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
+import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
+
+class GridCard extends StatelessWidget {
+  const GridCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      borderOnForeground: true,
+      elevation: 5,
+      shadowColor: AppColors.bgTriartry,
+      child: Stack(
+        children: [
+          Container(
+            height: AppMediaQuery.screenHeight(context) * 0.11,
+            width: AppMediaQuery.screenWidth(context) * 0.5,
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.bgTriartry, width: 2),
+              borderRadius: BorderRadius.circular(4),
+              image: DecorationImage(
+                image: AssetImage('assets/images/indir.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+
+          Container(
+            color: AppColors.bgTransparent,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: AppMediaQuery.screenWidth(context) * 0.12,
+                  decoration: BoxDecoration(
+                    color: AppColors.bgTriartry.withValues(alpha: 0.7),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '5 MB',
+                        style: TextStyle(color: AppColors.textWhite),
+                      ),
+                    ],
+                  ),
+                ).withAlignment(Alignment.topRight),
+                AppPaddings.CustomHeightSizedBox(context, 0.072),
+                Text('File', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('Modified: 15 days ago'),
+              ],
+            ).withPadding(const EdgeInsets.fromLTRB(8, 4, 8, 1)),
+          ),
+        ],
+      ),
+    );
+  }
+}

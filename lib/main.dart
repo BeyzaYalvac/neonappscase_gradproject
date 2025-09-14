@@ -5,9 +5,13 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_themes.dart';
 import 'package:neonappscase_gradproject/app/common/theme/cubit/theme_cubit.dart';
 import 'package:neonappscase_gradproject/app/common/theme/cubit/theme_state.dart';
-import 'package:neonappscase_gradproject/app/core/boot/app_bootstrap.dart';
-import 'package:neonappscase_gradproject/app/core/network/cubit/network_cubit.dart';
-import 'package:neonappscase_gradproject/app/core/injections/injection_container_items.dart';
+import 'package:neonappscase_gradproject/app/common/boot/app_bootstrap.dart';
+import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
+import 'package:neonappscase_gradproject/app/presentation/profile/cubit/profile_cubit.dart';
+import 'package:neonappscase_gradproject/app/presentation/upload/cubit/upload_cubit.dart';
+import 'package:neonappscase_gradproject/core/network/cubit/network_cubit.dart';
+import 'package:neonappscase_gradproject/app/common/injections/injection_container_items.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
@@ -38,12 +42,18 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<ThemeCubit>(create: (_) => ThemeCubit(settingsBox)),
         BlocProvider<NetworkCubit>(create: (_) => NetworkCubit()..start()),
+        BlocProvider<HomeCubit>(create: (_) => HomeCubit()),
+        BlocProvider<UploadCubit>(create: (_) => UploadCubit()),
+        BlocProvider<FavoriteCubit>(create: (_) => FavoriteCubit()),
+        BlocProvider<ProfileCubit>(
+          create: (_) => ProfileCubit()..loadProfieData(),
+        ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
+            title: 'CloudIt',
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: state.themeMode,

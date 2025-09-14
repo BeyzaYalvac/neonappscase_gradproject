@@ -14,6 +14,9 @@ class AppRouter extends RootStackRouter {
       AutoRoute(page: SplashRoute.page, initial: true),
       AutoRoute(page: SplashDescriptionRoute.page),
       AutoRoute(page: HomeRoute.page),
+      AutoRoute(page: FavoriteRoute.page),
+      AutoRoute(page: UploadRoute.page),
+      AutoRoute(page: UploadFileRoute.page),
     ];
   }
 }

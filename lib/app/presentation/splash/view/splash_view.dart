@@ -1,0 +1,129 @@
+import 'package:auto_route/auto_route.dart' show AutoRouterX, RoutePage;
+import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:lottie/lottie.dart';
+import 'package:neonappscase_gradproject/app/common/config/app_config.dart';
+import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
+import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
+import 'package:neonappscase_gradproject/app/common/boot/app_bootstrap.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
+import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
+
+@RoutePage()
+class SplashView extends StatefulWidget {
+  const SplashView({super.key});
+
+  @override
+  State<SplashView> createState() => _SplashViewState();
+}
+
+class _SplashViewState extends State<SplashView>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  bool _readyToNavigate = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(vsync: this);
+    _start();
+  }
+
+  Future<void> _start() async {
+    await Future.wait([
+      AppBootstrap.init(),
+      Future.delayed(const Duration(milliseconds: 2000)),
+    ]);
+
+    if (!mounted) return;
+    setState(() => _readyToNavigate = true);
+
+    await Future.delayed(const Duration(milliseconds: 400));
+    if (!mounted) return;
+    final boxFirst = Hive.box<bool>('first_control_box');
+
+    final isFirst = boxFirst.get(AppConfig.isFirstKey) ?? true;
+    debugPrint("isFirst değişkeni: ${isFirst.toString()}");
+
+    if (isFirst) {
+      // İlk giriş: DESC'i atla → direkt Home
+      //await boxFirst.put(AppConfig.isFirstKey, false);
+      context.router.replace(const SplashDescriptionRoute());
+    } else if (!isFirst) {
+      context.router.replace(const HomeRoute());
+    } else {
+      // Sonraki girişler: Onboarding'e git (istersen yine Home yapabilirsin)
+      if (!mounted) return;
+      context.router.replace(const HomeRoute());
+    }
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            color: AppColors.bgTriartry,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AnimatedScale(
+                  duration: const Duration(milliseconds: 800),
+                  scale: _readyToNavigate ? 0.95 : 1.0,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 600),
+                    opacity: _readyToNavigate ? 0.0 : 1.0,
+                    child: Lottie.asset(
+                      'assets/animations/theme_toggle.json',
+                      controller: _ctrl,
+                      onLoaded: (comp) {
+                        // Döngü istersen:
+                        _ctrl
+                          ..duration = comp.duration
+                          ..repeat();
+                      },
+                      width: 220,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+
+                AppPaddings.CustomHeightSizedBox(context, 0.2),
+
+                Text(
+                  AppStrings.appName,
+                  style: AppTextSytlyes.appNameTextStyle,
+                ),
+                Text(
+                  AppStrings.appSplashParagraph,
+                  style: AppTextSytlyes.splashSubtitleStyle,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.textMedium, Colors.transparent],
+                begin: AlignmentGeometry.bottomCenter,
+                end: AlignmentGeometry.center,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

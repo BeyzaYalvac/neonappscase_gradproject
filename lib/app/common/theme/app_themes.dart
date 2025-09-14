@@ -12,7 +12,7 @@ class AppTheme {
         secondary: AppColors.bgSecondary,
         tertiary: AppColors.bgTriartry,
         onPrimary: AppColors.textLight,
-        background: AppColors.bgPrimary,
+        background: AppColors.bgTriartry,
       );
 
   static ColorScheme _darkScheme =
@@ -28,6 +28,11 @@ class AppTheme {
       );
 
   static ThemeData lightTheme = ThemeData(
+    snackBarTheme: const SnackBarThemeData(
+      behavior: SnackBarBehavior.fixed, // ✅ floating değil
+      insetPadding: EdgeInsets.zero,
+    ),
+
     useMaterial3: true,
     colorScheme: _lightScheme,
     scaffoldBackgroundColor: _lightScheme.background,
@@ -43,6 +48,10 @@ class AppTheme {
   );
 
   static ThemeData darkTheme = ThemeData(
+    snackBarTheme: const SnackBarThemeData(
+      behavior: SnackBarBehavior.fixed, // ✅ floating değil
+      insetPadding: EdgeInsets.zero,
+    ),
     useMaterial3: true,
     colorScheme: _darkScheme,
     appBarTheme: const AppBarTheme(centerTitle: true),
