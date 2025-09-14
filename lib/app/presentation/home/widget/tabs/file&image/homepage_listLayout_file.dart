@@ -3,7 +3,9 @@ import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaq
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 
 class HomePageListLayoutTabFile extends StatelessWidget {
-  const HomePageListLayoutTabFile({super.key});
+  final List<String> filteredFiles;
+
+  const HomePageListLayoutTabFile({super.key, required this.filteredFiles});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,7 @@ class HomePageListLayoutTabFile extends StatelessWidget {
       padding: EdgeInsets.symmetric(
         horizontal: AppMediaQuery.screenWidth(context) * 0.05,
       ),
-      itemCount: 10,
+      itemCount: filteredFiles.length,
       itemBuilder: (context, index) {
         return ListTile(
           leading: const Icon(
@@ -19,7 +21,7 @@ class HomePageListLayoutTabFile extends StatelessWidget {
             color: AppColors.bgTriartry,
           ),
           title: Text(
-            'File ${index + 1}',
+            filteredFiles[index],
             style: TextStyle(
               color: AppColors.bgTriartry,
               fontWeight: FontWeight.bold,

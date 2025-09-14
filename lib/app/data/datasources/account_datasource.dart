@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/config/app_config.dart';
+import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
 import 'package:neonappscase_gradproject/core/dio_manager/api_client.dart';
 
 class AccountDatasource {
@@ -11,7 +12,7 @@ class AccountDatasource {
     },
   ).safe;
 
-  Future<Map<String, dynamic>> fetchAccountDetails() async {
+  Future<AccountModel> fetchAccountDetails() async {
     String accountId= await fetchAccountId();
     final resForFetchAcount = await api.get<Map<String, dynamic>>(
       '/accounts/${accountId}',
@@ -20,7 +21,11 @@ class AccountDatasource {
     if (resForFetchAcount.isSuccess && resForFetchAcount.data != null) {
       final data = resForFetchAcount.data;
       debugPrint(data.toString());
-      return data!;
+       final core = (data?['data'] is Map<String, dynamic>)
+        ? (data?['data'] as Map<String, dynamic>)
+        : data;
+        final model = AccountModel.fromMap(core!);
+      return model;
     } else {
       throw Exception(resForFetchAcount.error?.message ?? 'Bilinmeyen hata');
     }

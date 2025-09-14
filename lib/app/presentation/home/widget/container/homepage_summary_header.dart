@@ -2,9 +2,10 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
+import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
 
 class HomePageSummaryHeader extends StatelessWidget {
-  final Map<String, dynamic> accountInfos;
+  final AccountModel accountInfos;
 
   const HomePageSummaryHeader({super.key, required this.accountInfos});
   String _formatBytes(num bytes, [int decimals = 1]) {
@@ -18,13 +19,9 @@ class HomePageSummaryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = accountInfos['data'] as Map<String, dynamic>?;
-
-    final stats = data?['statsCurrent'] as Map<String, dynamic>?;
+    final stats = accountInfos.statsCurrent;
     print(stats);
-    final storageBytes = (stats?['storage'] is num)
-        ? (stats!['storage'] as num)
-        : 0;
+    final storageBytes = (stats.storage is num) ? (stats.storage as num) : 0;
     final usedBytes = storageBytes;
     debugPrint(storageBytes.toString());
     // Sabit kapasite örneği: 5 GB

@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<UploadCubit>(create: (_) => UploadCubit()),
         BlocProvider<FavoriteCubit>(create: (_) => FavoriteCubit()),
         BlocProvider<ProfileCubit>(
-          create: (_) => ProfileCubit()..loadProfieData(),
+          create: (_) => ProfileCubit()..loadProfileData(),
         ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(

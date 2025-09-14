@@ -3,9 +3,10 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
+import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
 
 class HomePageSummmaryData extends StatelessWidget {
-  final Map<String, dynamic> acountInfos;
+  final AccountModel acountInfos;
   const HomePageSummmaryData({super.key, required this.acountInfos});
 
   String _formatBytes(num bytes, [int decimals = 1]) {
@@ -20,13 +21,10 @@ class HomePageSummmaryData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Güvenli okuma
-    final data = acountInfos['data'] as Map<String, dynamic>?;
 
-    final stats = data?['statsCurrent'] as Map<String, dynamic>?;
+    final stats = acountInfos.statsCurrent ;
     print(stats);
-    final storageBytes = (stats?['storage'] is num)
-        ? (stats!['storage'] as num)
-        : 0;
+    final storageBytes = stats.storage as num? ?? 0;
 
     //debugPrint('ROOT keys: ${acountInfos.keys}');
     //debugPrint('data type : ${acountInfos['data']?.runtimeType}');

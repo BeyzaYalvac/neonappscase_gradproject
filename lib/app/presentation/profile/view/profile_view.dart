@@ -14,22 +14,12 @@ class ProfileView extends StatelessWidget {
     final w = AppMediaQuery.screenWidth(context);
     final avatarRadius = w * 0.14;
 
-    String _fmtBytes(num b) {
-      const k = 1024;
-      const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-      int i = 0;
-      double v = b.toDouble();
-      while (v >= k && i < units.length - 1) {
-        v /= k;
-        i++;
-      }
-      return "${v.toStringAsFixed(1)} ${units[i]}";
-    }
-
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        Map<String, dynamic>? account = state.acountInfos?["data"];
-        print(account.toString());
+        final account = state.acountInfos;
+        if (account == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -58,7 +48,7 @@ class ProfileView extends StatelessWidget {
                       padding: EdgeInsets.only(top: h * 0.06),
                       child: Center(
                         child: Text(
-                          account?["email"] ?? "Kullanıcı Adı",
+                          account!.email,
                           style: TextStyle(
                             fontSize: w * 0.04,
                             fontWeight: FontWeight.bold,
@@ -104,9 +94,7 @@ class ProfileView extends StatelessWidget {
                     Text("Current Storage:"),
                     LinearProgressIndicator(
                       minHeight: h * 0.02,
-                      value: account?["statsCurrent"]["storage"] != null
-                          ? account!["statsCurrent"]["storage"] / 100000000
-                          : 0.0,
+                      value: account.statsCurrent.storage / (100 * 1024 * 1024),
                       backgroundColor: AppColors.bgQuaternary,
                       valueColor: AlwaysStoppedAnimation<Color>(
                         AppColors.bgTriartry,
@@ -125,9 +113,7 @@ class ProfileView extends StatelessWidget {
                   Expanded(
                     child: _StatCard(
                       title: 'Folder',
-                      value:
-                          account?["statsCurrent"]["folderCount"].toString() ??
-                          "0",
+                      value: account.statsCurrent.folderCount.toString(),
                       height: h * 0.18,
                       color: AppColors.bgQuaternary,
                     ),
@@ -136,9 +122,7 @@ class ProfileView extends StatelessWidget {
                   Expanded(
                     child: _StatCard(
                       title: 'File',
-                      value:
-                          account?["statsCurrent"]["fileCount"].toString() ??
-                          "0",
+                      value: account.statsCurrent.fileCount.toString(),
 
                       height: h * 0.18,
                       color: AppColors.bgQuaternary,

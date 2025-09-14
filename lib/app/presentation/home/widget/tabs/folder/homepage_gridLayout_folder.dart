@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:neonappscase_gradproject/app/domain/model/content_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/card/grid_folder_card.dart';
 
 class HomePageFolderGridLayoutTabFolder extends StatelessWidget {
-  const HomePageFolderGridLayoutTabFolder({super.key});
+  final List<ContentModel> filteredFolders;
+  const HomePageFolderGridLayoutTabFolder({
+    super.key,
+    required this.filteredFolders,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +19,11 @@ class HomePageFolderGridLayoutTabFolder extends StatelessWidget {
         crossAxisSpacing: 12,
         childAspectRatio: 1.2,
       ),
-      itemCount: 10,
+      itemCount: filteredFolders.length,
       itemBuilder: (context, index) {
-        return GridTile(child: GridFolderCard());
+        return GridTile(
+          child: GridFolderCard(folderName: filteredFolders[index].name),
+        );
       },
     );
   }

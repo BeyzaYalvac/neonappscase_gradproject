@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:neonappscase_gradproject/app/common/config/app_config.dart';
 import 'package:neonappscase_gradproject/app/common/injections/injection_container_items.dart';
+import 'package:neonappscase_gradproject/app/domain/model/content_model.dart';
 import 'package:neonappscase_gradproject/core/dio_manager/api_client.dart';
 
 class ContentDataSource {
@@ -24,26 +26,39 @@ class ContentDataSource {
     },
   ).safe;
 
-  Future<void> getContent() async {
-    final Map<String, dynamic> accountData = await InjectionContainerItems
-        .appAccountDataSource
-        .fetchAccountDetails();
-    debugPrint(accountData.toString());
-    final String rootFolder = accountData['data']['rootFolder'];
-    debugPrint(rootFolder);
-    final res = await api.get<Map<String, dynamic>>('/contents/${rootFolder}');
-    print(res.data);
-    if (res.isSuccess && res.data != null) {
-      final data = res.data;
-      debugPrint(data.toString());
-    } else if (res.isFailure) {
-      debugPrint('Hata durumu: ${res.error?.message ?? 'Bilinmeyen hata'}');
-    } else if (res.isFailure && res.error?.message == null) {
-      debugPrint('Hata durumu: Bilinmeyen hata');
-    } else {
-      throw Exception(res.error?.message ?? 'Bilinmeyen hata');
+  final contentBox = Hive.box<ContentModel>('contentsBox');
+
+Future<List<ContentModel>> getContentsByType(String type) async {
+  final box = Hive.box<ContentModel>('contentsBox');
+
+  ContentType? mapType(String t) {
+    switch (t.toLowerCase()) {
+      case 'folder':
+        return ContentType.folder;
+      case 'file':
+        return ContentType.file;
+      case 'image':
+        return ContentType.image;
+      case 'video':
+        return ContentType.video;
+      default:
+        return null;
     }
   }
+
+  final ContentType? targetType = mapType(type);
+
+  if (targetType == null) {
+    // bilinmeyen type
+    return [];
+  }
+
+  // filtreleme
+  final results = box.values.where((c) => c.type == targetType).toList();
+
+  return results;
+}
+
 
   Future<Map<String, dynamic>> uploadImageContent(
     File file, {
@@ -79,6 +94,39 @@ class ContentDataSource {
       return data;
     } else {
       throw Exception(res.error?.message ?? 'Bilinmeyen hata');
+    }
+  }
+
+  Future<void> createFolder(String folderName) async {
+    try {
+      // 1) Hesap bilgisi -> rootFolderId'yi al
+      final account = await InjectionContainerItems.appAccountDataSource
+          .fetchAccountDetails(); // AccountModel
+      // account.data.rootFolder gibi bir alanın olmalı (daha önce öyleydi)
+      final String parentFolderId = account.rootFolder;
+
+      // 2) Doğru JSON alan adları ve JSON content-type
+      final res = await api.post<Map<String, dynamic>>(
+        '/contents/createFolder',
+        data: {
+          'parentFolderId': parentFolderId, // ✅ doğru anahtar
+          'folderName': folderName, // ✅ doğru anahtar
+        },
+        options: Options(contentType: Headers.jsonContentType),
+      );
+
+      if (res.isSuccess && res.data != null) {
+        final folderModel = ContentModel.fromGofileFolder(res.data!);
+        await contentBox.put(folderModel.id, folderModel);
+        debugPrint("klasörHive: ${contentBox.values.toList()}");
+        debugPrint('Klasör oluşturuldu: ${res.data}');
+      } else {
+        debugPrint(
+          'Klasör oluşturulamadı: ${res.error?.message ?? 'Bilinmeyen hata'}',
+        );
+      }
+    } catch (e) {
+      debugPrint('Hata oluştu: $e');
     }
   }
 
@@ -118,5 +166,4 @@ class ContentDataSource {
       throw Exception(res.error?.message ?? 'Bilinmeyen hata');
     }
   }
-
 }

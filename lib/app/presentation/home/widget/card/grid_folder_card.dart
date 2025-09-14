@@ -5,7 +5,8 @@ import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 
 class GridFolderCard extends StatelessWidget {
-  const GridFolderCard({super.key});
+  final String folderName;
+  const GridFolderCard({super.key, required this.folderName});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,7 @@ class GridFolderCard extends StatelessWidget {
                   ),
                 ).withAlignment(Alignment.topRight),
                 AppPaddings.CustomHeightSizedBox(context, 0.072),
-                Text('Folder', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(folderName, style: TextStyle(fontWeight: FontWeight.bold)),
                 Text('Modified: 15 days ago'),
               ],
             ).withPadding(const EdgeInsets.fromLTRB(8, 4, 8, 1)),

@@ -2,10 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
+import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
+import 'package:neonappscase_gradproject/app/domain/model/content_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/view/favorite_view.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
@@ -26,6 +29,8 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController _folderNameController = TextEditingController();
+
     return Scaffold(
       appBar: const CustomAppBar(),
 
@@ -83,7 +88,46 @@ class HomeView extends StatelessWidget {
           ActionFab(
             icon: Icons.create_new_folder,
             onPressed: () {
-              // TODO: klasör oluştur
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text("Klasör Oluştur"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          "Oluşturmak istediğiniz klasörün adı nedir?",
+                        ),
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: "Klasör Adı",
+                          ),
+                          controller: _folderNameController,
+                        ),
+                      ],
+                    ),
+
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text("İptal"),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          context.read<HomeCubit>().addFolder(
+                            _folderNameController.text,
+                          );
+                          _folderNameController.clear();
+                          context.read<HomeCubit>().hydrateActiveList();
+                        },
+                        child: const Text("Oluştur"),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
           ActionFab(
@@ -128,22 +172,27 @@ class _HomeTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.select((HomeCubit c) => c.state);
 
-    return LiquidPullToRefresh(
-      color: AppColors.bgPrimary,
-      backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? AppColors.bgSecondary
-          : AppColors.bgTriartry,
-      onRefresh: () {
-        context.read<HomeCubit>().handleRefresh();
-        return Future.value();
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        final account = state.acountInfos;
+        if (state.isLoading || account == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return LiquidPullToRefresh(
+          color: AppColors.bgPrimary,
+          backgroundColor: Theme.of(context).brightness == Brightness.dark
+              ? AppColors.bgSecondary
+              : AppColors.bgTriartry,
+          onRefresh: () {
+            context.read<HomeCubit>().handleRefresh();
+            return Future.value();
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: HomePageBody(isGrid: state.isGridView, acountData: account),
+          ),
+        );
       },
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: HomePageBody(
-          isGrid: state.isGridView,
-          acountData: state.acountInfos ?? {},
-        ),
-      ),
     );
   }
 }
@@ -155,7 +204,7 @@ class HomePageBody extends StatelessWidget {
     required this.acountData,
   });
   final bool isGrid;
-  final Map<String, dynamic> acountData;
+  final AccountModel acountData;
 
   @override
   Widget build(BuildContext context) {

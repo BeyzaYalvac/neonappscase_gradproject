@@ -1,15 +1,16 @@
-import 'dart:io';
 
 import 'package:neonappscase_gradproject/app/common/injections/injection_container_items.dart';
+import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
 
 abstract class AccountRepository {
-  Future<Map<String, dynamic>> fetchAccountDetails();
+  Future<AccountModel> fetchAccountDetails();
   Future<String> fetchAccountId();
+  
 }
 
 class AccountRepositoryImpl extends AccountRepository {
   @override
-  Future<Map<String, dynamic>> fetchAccountDetails() async {
+  Future<AccountModel> fetchAccountDetails() async {
     return InjectionContainerItems.appAccountDataSource.fetchAccountDetails();
   }
 

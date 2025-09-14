@@ -5,10 +5,16 @@ import 'package:image_picker/image_picker.dart';
 class UploadState extends Equatable {
   final XFile? imageFile;
   final PlatformFile? pickedFile; // Dosya yöneticisi (pdf/doc/xls ...)
+  final String? error;
 
   final bool isLoading;
 
-  const UploadState({this.imageFile, this.isLoading = false, this.pickedFile});
+  const UploadState({
+    this.imageFile,
+    this.isLoading = false,
+    this.pickedFile,
+    this.error,
+  });
 
   factory UploadState.initial() => const UploadState(isLoading: false);
 
@@ -21,6 +27,7 @@ class UploadState extends Equatable {
       imageFile: file ?? this.imageFile,
       isLoading: isLoading ?? this.isLoading,
       pickedFile: pickedFile ?? this.pickedFile,
+      error: error,
     );
   }
 
@@ -30,5 +37,6 @@ class UploadState extends Equatable {
     pickedFile?.name,
     pickedFile?.size,
     isLoading,
+    error,
   ];
 }

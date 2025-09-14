@@ -5,7 +5,8 @@ import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 
 class GridCard extends StatelessWidget {
-  const GridCard({super.key});
+  final String fileName;
+  const GridCard({super.key, required this.fileName});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,7 @@ class GridCard extends StatelessWidget {
                   ),
                 ).withAlignment(Alignment.topRight),
                 AppPaddings.CustomHeightSizedBox(context, 0.072),
-                Text('File', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(fileName, style: TextStyle(fontWeight: FontWeight.bold)),
                 Text('Modified: 15 days ago'),
               ],
             ).withPadding(const EdgeInsets.fromLTRB(8, 4, 8, 1)),
