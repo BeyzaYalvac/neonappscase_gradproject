@@ -8,10 +8,13 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeState.initial()) {
     loadProfileData();
     loadFolders();
-    loadFiles();
+    //loadFiles();
     // İlk yüklemede klasör ve dosyaları çekmek istersen:
     // loadContents();
+    
   }
+// Detay için: ilk frame'de loader ile başla, hiçbir auto-load yapma
+  HomeCubit.forDetail() : super(HomeState.initial().copyWith(isLoading: true));
 
   Future<void> loadFolders() async {
     emit(state.copyWith(isLoading: true));
@@ -28,6 +31,17 @@ class HomeCubit extends Cubit<HomeState> {
       emit(
         state.copyWith(isLoading: false, allFolders: result, folders: filtered),
       );
+    } catch (_) {
+      emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  Future<void> getFoldersInFolder(int fldId) async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      final result = await InjectionContainerItems.contentRepository
+          .getFolderList(fldId: fldId);
+      emit(state.copyWith(isLoading: false, folders: result));
     } catch (_) {
       emit(state.copyWith(isLoading: false));
     }
@@ -67,6 +81,20 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  Future<List<FileItem>?> getFilesInFolder(int fldId) async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      final result = await InjectionContainerItems.contentRepository
+          .getFileList(fldId: fldId);
+      emit(state.copyWith(isLoading: false, files: result));
+      print(result);
+      return result;
+    } catch (_) {
+      emit(state.copyWith(isLoading: false));
+    }
+    return null;
+  }
+
   void setGridView(bool value) => emit(state.copyWith(isGridView: value));
   void setSelectedIndex(int index) =>
       emit(state.copyWith(selectedIndex: index));
@@ -93,8 +121,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   //folder create ederken selected folder seçmek
-  setSelectedFolder(String v) =>
-      emit(state.copyWith(selectedFolder: v));
+  setSelectedFolder(String v) => emit(state.copyWith(selectedFolder: v));
 
   void setFileQuery(String v) => emit(state.copyWith(qFile: v));
 
@@ -119,7 +146,10 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> addFolder(String name) async {
-    await InjectionContainerItems.contentRepository.createFolder(name,state.selectedFolder);
+    await InjectionContainerItems.contentRepository.createFolder(
+      name,
+      state.selectedFolder,
+    );
     await loadFolders();
   }
 }

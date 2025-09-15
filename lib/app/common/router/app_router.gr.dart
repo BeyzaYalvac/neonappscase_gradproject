@@ -10,6 +10,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i8;
 import 'package:flutter/material.dart' as _i9;
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart'
+    as _i10;
 import 'package:neonappscase_gradproject/app/presentation/favorite/view/favorite_view.dart'
     as _i1;
 import 'package:neonappscase_gradproject/app/presentation/home/view/home_view.dart'
@@ -68,13 +70,15 @@ class HomeRoute extends _i8.PageRouteInfo<void> {
 class ItemDetailRoute extends _i8.PageRouteInfo<ItemDetailRouteArgs> {
   ItemDetailRoute({
     _i9.Key? key,
-    required dynamic item,
+    _i10.FileFolderListModel? item,
+    String? oldFolderName,
     List<_i8.PageRouteInfo>? children,
   }) : super(
           ItemDetailRoute.name,
           args: ItemDetailRouteArgs(
             key: key,
             item: item,
+            oldFolderName: oldFolderName,
           ),
           initialChildren: children,
         );
@@ -84,11 +88,14 @@ class ItemDetailRoute extends _i8.PageRouteInfo<ItemDetailRouteArgs> {
   static _i8.PageInfo page = _i8.PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<ItemDetailRouteArgs>();
-      return _i3.ItemDetailView(
+      final args = data.argsAs<ItemDetailRouteArgs>(
+          orElse: () => const ItemDetailRouteArgs());
+      return _i8.WrappedRoute(
+          child: _i3.ItemDetailView(
         key: args.key,
         item: args.item,
-      );
+        oldFolderName: args.oldFolderName,
+      ));
     },
   );
 }
@@ -96,16 +103,19 @@ class ItemDetailRoute extends _i8.PageRouteInfo<ItemDetailRouteArgs> {
 class ItemDetailRouteArgs {
   const ItemDetailRouteArgs({
     this.key,
-    required this.item,
+    this.item,
+    this.oldFolderName,
   });
 
   final _i9.Key? key;
 
-  final dynamic item;
+  final _i10.FileFolderListModel? item;
+
+  final String? oldFolderName;
 
   @override
   String toString() {
-    return 'ItemDetailRouteArgs{key: $key, item: $item}';
+    return 'ItemDetailRouteArgs{key: $key, item: $item, oldFolderName: $oldFolderName}';
   }
 }
 

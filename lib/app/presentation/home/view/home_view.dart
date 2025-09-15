@@ -105,8 +105,7 @@ class HomeView extends StatelessWidget {
 
                       // Geçerli value: sadece items'ta varsa ata, yoksa null kalsın
                       final current =
-                          state.selectedFolder != null &&
-                              items.any((e) => e.value == state.selectedFolder)
+                          items.any((e) => e.value == state.selectedFolder)
                           ? state.selectedFolder
                           : null;
 
