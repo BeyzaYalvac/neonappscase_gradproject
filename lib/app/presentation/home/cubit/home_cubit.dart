@@ -1,21 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/injections/injection_container_items.dart';
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeState.initial()) {
     loadProfileData();
-    // Demo: klasörleri doldur (sonra repository’den getirirsin)
-    hydrateListsFromHive();
+    loadFolders();
+    loadFiles();
+    // İlk yüklemede klasör ve dosyaları çekmek istersen:
+    // loadContents();
   }
 
-  Future<void> loadContents() async {
+  Future<void> loadFolders() async {
     emit(state.copyWith(isLoading: true));
     try {
-      await InjectionContainerItems.contentRepository.getContent();
+      final result = await InjectionContainerItems.contentRepository
+          .getFolderList(
+            fldId: state.currentFldId,
+            // Eğer API server-side isim filtresi destekliyorsa:
+            // nameFilter: state.qFolder.isEmpty ? null : state.qFolder,
+          );
+
+      // Ham listeyi sakla ve aktif qFolder’a göre ekrana yansıt
+      final filtered = _filterFolders(result, state.qFolder);
+      emit(
+        state.copyWith(isLoading: false, allFolders: result, folders: filtered),
+      );
+    } catch (_) {
       emit(state.copyWith(isLoading: false));
-    } catch (e) {
+    }
+  }
+
+  List<FileFolderListModel> _filterFolders(
+    List<FileFolderListModel> source,
+    String query,
+  ) {
+    final q = query.trim().toLowerCase();
+    if (q.isEmpty) return List<FileFolderListModel>.from(source);
+    return source.where((f) => (f.name).toLowerCase().contains(q)).toList();
+  }
+
+  Future<void> loadFiles() async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      final result = await InjectionContainerItems.contentRepository
+          .getFileList(
+            fldId: state.currentFldId,
+            nameFilter: state.qFile.isEmpty ? null : state.qFile,
+          );
+      emit(state.copyWith(isLoading: false, files: result));
+    } catch (_) {
       emit(state.copyWith(isLoading: false));
     }
   }
@@ -23,113 +59,67 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> loadProfileData() async {
     emit(state.copyWith(isLoading: true));
     try {
-      // Repo'nun AccountModel döndürdüğünü varsayıyoruz
       final account = await InjectionContainerItems.appAccountRepository
           .fetchAccountDetails();
-
-      debugPrint("HomeCubit - Account Info: $account");
-
       emit(state.copyWith(isLoading: false, acountInfos: account));
-    } catch (e) {
-      // İstersen burada error alanı ekleyebilirsin (state’e error field eklemek gerekir)
+    } catch (_) {
       emit(state.copyWith(isLoading: false));
     }
   }
 
-  void setGridView(bool value) {
-    emit(state.copyWith(isGridView: value));
-  }
+  void setGridView(bool value) => emit(state.copyWith(isGridView: value));
+  void setSelectedIndex(int index) =>
+      emit(state.copyWith(selectedIndex: index));
+  void handleRefresh() => loadProfileData();
 
-  void setSelectedIndex(int index) {
-    emit(state.copyWith(selectedIndex: index));
-  }
-
-  void handleRefresh() {
-    loadProfileData();
-    hydrateActiveList();
-  }
-
-  void setSearchQueryForTab(int tabIndex, String v) {
-    switch (tabIndex) {
-      case 0:
-        emit(state.copyWith(qFolder: v));
-        break;
-      case 1:
-        emit(state.copyWith(qFile: v));
-        break;
-      case 2:
-        emit(state.copyWith(qImage: v));
-        break;
+  // 🔵 ARAMA: Aktif taba göre ilgili query'yi güncelle ve gerekiyorsa server-side ara
+  void setSearchQueryForTab(int tabIndex, String query) {
+    if (tabIndex == 0) {
+      // Folders tab → sadece client-side filtre uygula
+      setFolderQuery(query);
+    } else if (tabIndex == 1) {
+      emit(state.copyWith(qFile: query));
+      _fetchFiles(query); // server-side arama varsa burada
+    } else {
+      emit(state.copyWith(qFile: query));
+      _fetchFiles(query);
     }
   }
 
-  void setFolderQuery(String v) => emit(state.copyWith(qFolder: v));
+  void setFolderQuery(String v) {
+    // allFolders -> ham liste; qFolder değişince client-side filtre uygula
+    final filtered = _filterFolders(state.allFolders, v);
+    emit(state.copyWith(qFolder: v, folders: filtered));
+  }
+
+  //folder create ederken selected folder seçmek
+  setSelectedFolder(String v) =>
+      emit(state.copyWith(selectedFolder: v));
+
   void setFileQuery(String v) => emit(state.copyWith(qFile: v));
-  void setImageQuery(String v) => emit(state.copyWith(qImage: v));
 
   void clearSearch(int tabIndex) => setSearchQueryForTab(tabIndex, '');
 
-  // Demo: klasör ekle
-  void addFolder(String name) async {
-    await InjectionContainerItems.contentRepository.createFolder(name);
-    await hydrateActiveList();
-  }
+  // 🔵 Sunucu taraflı isim filtreli dosya çekme
+  Future<void> _fetchFiles(String nameFilter) async {
+    debugPrint('Files: ${state.files.length}');
 
-  Future<void> hydrateListsFromHive({String? parentId}) async {
     emit(state.copyWith(isLoading: true));
     try {
-      final folders = await InjectionContainerItems.contentRepository
-          .getContentsByType('folder');
-      final files = await InjectionContainerItems.contentRepository
-          .getContentsByType('file');
-      final images = await InjectionContainerItems.contentRepository
-          .getContentsByType('image');
-
-      emit(state.copyWith(isLoading: false, folderContent: folders));
+      final res = await InjectionContainerItems.contentRepository.getFileList(
+        fldId: state.currentFldId,
+        nameFilter: nameFilter.isEmpty
+            ? null
+            : state.qFile, // server-side filter
+      );
+      emit(state.copyWith(isLoading: false, files: res));
     } catch (_) {
       emit(state.copyWith(isLoading: false));
     }
   }
 
-  /// Yalnızca aktif tab’ı yenile (performans için güzel)
-  Future<void> hydrateActiveList({String? parentId}) async {
-    emit(state.copyWith(isLoading: true));
-    try {
-      final idx = state.selectedIndex; // 0: folder, 1: file, 2: image
-      final type = idx == 0
-          ? 'folder'
-          : idx == 1
-          ? 'file'
-          : 'image';
-      final list = await InjectionContainerItems.contentRepository
-          .getContentsByType(type);
-
-      switch (idx) {
-        case 0:
-          emit(
-            state.copyWith(isLoading: false, folderContent: list),
-          ); // ⬅️ değişti
-          break;
-        case 1:
-          // ileride file tarafını da modele geçirince burada fileContent set et
-          emit(
-            state.copyWith(
-              isLoading: false,
-              fileNames: list.map((e) => e.name).toList(),
-            ),
-          );
-          break;
-        case 2:
-          emit(
-            state.copyWith(
-              isLoading: false,
-              imageNames: list.map((e) => e.name).toList(),
-            ),
-          );
-          break;
-      }
-    } catch (_) {
-      emit(state.copyWith(isLoading: false));
-    }
+  Future<void> addFolder(String name) async {
+    await InjectionContainerItems.contentRepository.createFolder(name,state.selectedFolder);
+    await loadFolders();
   }
 }

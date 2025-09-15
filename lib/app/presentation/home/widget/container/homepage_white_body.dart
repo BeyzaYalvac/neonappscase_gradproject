@@ -46,7 +46,7 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
         ? s.qFolder
         : _activeTab!.index == 1
         ? s.qFile
-        : s.qImage;
+        : s.qFile;
     if (_searchController.text != txt) {
       _searchController.text = txt;
       _searchController.selection = TextSelection.fromPosition(
@@ -59,10 +59,6 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        final folders = state.filteredFolders; // ✅
-        final files = state.filteredFiles; // ✅
-        final images = state.filteredImages;
-
         // Aktif tab'ın query'sini oku (TabController ile)
         String _currentQueryOf(TabController tab) {
           switch (tab.index) {
@@ -71,7 +67,7 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
             case 1:
               return state.qFile;
             default:
-              return state.qImage;
+              return state.qFile;
           }
         }
 
@@ -106,20 +102,22 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
                       );
                     });
 
-                    tab.addListener(() {
-                      if (tab.indexIsChanging) return;
+                   tab.addListener(() {
+  if (tab.indexIsChanging) return;
 
-                      final s = context.read<HomeCubit>().state;
-                      final text = tab.index == 0
-                          ? s.qFolder
-                          : tab.index == 1
-                          ? s.qFile
-                          : s.qImage;
-                      _searchController.text = text;
-                      _searchController.selection = TextSelection.fromPosition(
-                        TextPosition(offset: text.length),
-                      );
-                    });
+  final cubit = context.read<HomeCubit>();
+  final s = cubit.state;
+
+  final text = tab.index == 0 ? s.qFolder : s.qFile;
+  _searchController.text = text;
+  _searchController.selection = TextSelection.fromPosition(
+    TextPosition(offset: text.length),
+  );
+
+  if (tab.index == 1) cubit.loadFiles();    // <-- EKLE
+  if (tab.index == 0) cubit.loadFolders();  // (opsiyonel)
+});
+
                   }
 
                   return Column(
@@ -177,28 +175,28 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
                             // Tab 1: Folder
                             widget.isGrid
                                 ? HomePageFolderGridLayoutTabFolder(
-                                    filteredFolders: state.filteredFolders,
+                                    filteredFolders: state.folders,
                                   )
                                 : HomePageFolderListLayoutTabFolder(
-                                    filteredFolders: state.filteredFolders,
+                                    filteredFolders: state.folders,
                                   ),
 
                             // Tab 2: File
                             widget.isGrid
                                 ? HomePageGridLayoutTabFileImage(
-                                    filteredItems: files,
+                                    filteredItems: state.files,
                                   )
                                 : HomePageListLayoutTabFile(
-                                    filteredFiles: files,
+                                    filteredFiles: state.files,
                                   ),
 
                             // Tab 3: Image
                             widget.isGrid
                                 ? HomePageGridLayoutTabFileImage(
-                                    filteredItems: images,
+                                    filteredItems: [],
                                   )
                                 : HomePageListLayoutTabImage(
-                                    filteredImages: images,
+                                    filteredImages: [],
                                   ),
                           ],
                         ),

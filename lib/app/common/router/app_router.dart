@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
+import 'package:neonappscase_gradproject/app/presentation/item_details/view/item_detail.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'View,Route')
 class AppRouter extends RootStackRouter {
@@ -17,6 +18,7 @@ class AppRouter extends RootStackRouter {
       AutoRoute(page: FavoriteRoute.page),
       AutoRoute(page: UploadRoute.page),
       AutoRoute(page: UploadFileRoute.page),
+      AutoRoute(page: ItemDetailRoute.page),
     ];
   }
 }

@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:neonappscase_gradproject/app/domain/model/content_model.dart';
+import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/card/grid_folder_card.dart';
 
 class HomePageFolderGridLayoutTabFolder extends StatelessWidget {
-  final List<ContentModel> filteredFolders;
+  final List<FileFolderListModel> filteredFolders;
   const HomePageFolderGridLayoutTabFolder({
     super.key,
     required this.filteredFolders,
@@ -22,7 +24,14 @@ class HomePageFolderGridLayoutTabFolder extends StatelessWidget {
       itemCount: filteredFolders.length,
       itemBuilder: (context, index) {
         return GridTile(
-          child: GridFolderCard(folderName: filteredFolders[index].name),
+          child: GestureDetector(
+            onTap: () {
+              context.router.push(
+                ItemDetailRoute(item: filteredFolders[index]),
+              );
+            },
+            child: GridFolderCard(folderName: filteredFolders[index].name),
+          ),
         );
       },
     );

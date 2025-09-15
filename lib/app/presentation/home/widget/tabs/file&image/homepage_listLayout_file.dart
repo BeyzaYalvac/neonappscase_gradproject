@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
 
 class HomePageListLayoutTabFile extends StatelessWidget {
-  final List<String> filteredFiles;
+  final List<FileItem> filteredFiles;
 
   const HomePageListLayoutTabFile({super.key, required this.filteredFiles});
 
@@ -21,7 +22,7 @@ class HomePageListLayoutTabFile extends StatelessWidget {
             color: AppColors.bgTriartry,
           ),
           title: Text(
-            filteredFiles[index],
+            filteredFiles[index].name,
             style: TextStyle(
               color: AppColors.bgTriartry,
               fontWeight: FontWeight.bold,

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/card/grid_card.dart';
 
 class HomePageGridLayoutTabFileImage extends StatelessWidget {
-  final List<String> filteredItems;
+  final List<FileItem> filteredItems;
   const HomePageGridLayoutTabFileImage({super.key, required this.filteredItems,  });
 
   @override
@@ -18,7 +19,7 @@ class HomePageGridLayoutTabFileImage extends StatelessWidget {
       itemCount: filteredItems.length,
       itemBuilder: (context, index) {
         return GridTile(
-          child: GridCard(fileName: filteredItems[index]),
+          child: GridCard(fileName: filteredItems[index].name),
         );
       },
     );

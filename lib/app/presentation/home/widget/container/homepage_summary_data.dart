@@ -9,6 +9,10 @@ class HomePageSummmaryData extends StatelessWidget {
   final AccountModel acountInfos;
   const HomePageSummmaryData({super.key, required this.acountInfos});
 
+  double bytoToGb(int bytes) {
+    return (bytes / (1024 * 1024 * 1024));
+  }
+
   String _formatBytes(num bytes, [int decimals = 1]) {
     if (bytes <= 0) return '0 B';
     const k = 1024;
@@ -22,9 +26,13 @@ class HomePageSummmaryData extends StatelessWidget {
   Widget build(BuildContext context) {
     // Güvenli okuma
 
-    final stats = acountInfos.statsCurrent ;
+    final stats = acountInfos;
     print(stats);
-    final storageBytes = stats.storage as num? ?? 0;
+    final storageBytes = stats.storageUsed;
+    final storageGb = bytoToGb(storageBytes);
+    final storageLeft = stats.storageLeft;
+    final storageLeftGB = bytoToGb(storageLeft);
+    final storageCanUsed = storageGb + storageLeftGB;
 
     //debugPrint('ROOT keys: ${acountInfos.keys}');
     //debugPrint('data type : ${acountInfos['data']?.runtimeType}');
@@ -38,7 +46,10 @@ class HomePageSummmaryData extends StatelessWidget {
             const Icon(Icons.donut_large, color: AppColors.textBej, size: 8),
             AppPaddings.CustomWidthSizedBox(context, 0.01),
 
-            Text("Total 100 GB", style: TextStyle(color: AppColors.textBej)),
+            Text(
+              "Total ${storageCanUsed.toStringAsFixed(3)} GB",
+              style: TextStyle(color: AppColors.textBej),
+            ),
           ],
         ),
         Row(

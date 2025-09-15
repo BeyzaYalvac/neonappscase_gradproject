@@ -2,16 +2,16 @@ import 'package:auto_route/auto_route.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
-import 'package:neonappscase_gradproject/app/domain/model/content_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/view/favorite_view.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/alerts/create_folder_alert.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/select_roolfolder_dropdown.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/container/homepage_summary_data.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/container/homepage_summary_header.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/container/homepage_white_body.dart';
@@ -62,6 +62,7 @@ class HomeView extends StatelessWidget {
                 ),
               ],
             ),
+            // Closing the ExpandableFab widget
           );
 
           Future.delayed(Duration(seconds: isOnline ? 2 : 4), () {
@@ -91,45 +92,37 @@ class HomeView extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (context) {
-                  return AlertDialog(
-                    title: const Text("Klasör Oluştur"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          "Oluşturmak istediğiniz klasörün adı nedir?",
-                        ),
-                        TextField(
-                          decoration: const InputDecoration(
-                            hintText: "Klasör Adı",
-                          ),
-                          controller: _folderNameController,
-                        ),
-                      ],
-                    ),
+                  return BlocBuilder<HomeCubit, HomeState>(
+                    builder: (context, state) {
+                      // Items: hepsini String değere normalize et
+                      final items = state.folders.map((f) {
+                        final id = f.fldId.toString(); // <-- kritik
+                        return DropdownMenuItem<String>(
+                          value: id,
+                          child: Text(f.name, overflow: TextOverflow.ellipsis),
+                        );
+                      }).toList();
 
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text("İptal"),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                          context.read<HomeCubit>().addFolder(
-                            _folderNameController.text,
-                          );
-                          _folderNameController.clear();
-                          context.read<HomeCubit>().hydrateActiveList();
-                        },
-                        child: const Text("Oluştur"),
-                      ),
-                    ],
+                      // Geçerli value: sadece items'ta varsa ata, yoksa null kalsın
+                      final current =
+                          state.selectedFolder != null &&
+                              items.any((e) => e.value == state.selectedFolder)
+                          ? state.selectedFolder
+                          : null;
+
+                      return CreateFolderAlert(
+                        folderNameController: _folderNameController,
+                        current: current,
+                        items: items,
+                        state: state,
+                      );
+                    },
                   );
                 },
               );
             },
           ),
+
           ActionFab(
             icon: Icons.image,
             onPressed: () => context.router.push(const UploadRoute()),
@@ -175,7 +168,7 @@ class _HomeTab extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         final account = state.acountInfos;
-        if (state.isLoading || account == null) {
+        if (account == null) {
           return const Center(child: CircularProgressIndicator());
         }
         return LiquidPullToRefresh(

@@ -19,9 +19,9 @@ class HomePageSummaryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stats = accountInfos.statsCurrent;
+    final stats = accountInfos;
     print(stats);
-    final storageBytes = (stats.storage is num) ? (stats.storage as num) : 0;
+    final storageBytes = (stats.storageUsed is num) ? (stats.storageUsed as num) : 0;
     final usedBytes = storageBytes;
     debugPrint(storageBytes.toString());
     // Sabit kapasite örneği: 5 GB

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/config/app_config.dart';
 import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
+import 'package:neonappscase_gradproject/app/domain/model/account_stats_model.dart';
 import 'package:neonappscase_gradproject/core/dio_manager/api_client.dart';
 
 class AccountDatasource {
@@ -8,14 +9,12 @@ class AccountDatasource {
     baseUrl: AppConfig.apiBaseUrl,
     headers: {
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${AppConfig.bearerToken}',
     },
   ).safe;
 
   Future<AccountModel> fetchAccountDetails() async {
-    String accountId= await fetchAccountId();
     final resForFetchAcount = await api.get<Map<String, dynamic>>(
-      '/accounts/${accountId}',
+      '/account/info?key=${AppConfig.apiKey}',
     );
 
     if (resForFetchAcount.isSuccess && resForFetchAcount.data != null) {
@@ -31,20 +30,24 @@ class AccountDatasource {
     }
   }
 
-  Future<String> fetchAccountId() async {
+  Future<AccountStatsModel> fetchAccountStats() async {
     final resresForFetchAcountId = await api.get<Map<String, dynamic>>(
-      '/accounts/getid',
+      '/account/stats?key=${AppConfig.apiKey}&last=7',
     );
     if (resresForFetchAcountId.isSuccess &&
         resresForFetchAcountId.data != null) {
       final data = resresForFetchAcountId.data;
       if (data != null) {
-        final String id = (data['data'] as Map?)?['id'] as String;
-        debugPrint(id);
-        return id;
+        debugPrint(data.toString());
+        final core = (data['data'] is Map<String, dynamic>)
+            ? (data['data'] as Map<String, dynamic>)
+            : data;
+        final model = AccountStatsModel.fromMap(core);
+        return model;
       }
       debugPrint(data.toString());
-      return 'Bulunamadı';
+      //Boş dönerse
+      return AccountStatsModel.fromMap({});
     } else {
       throw Exception(
         resresForFetchAcountId.error?.message ?? 'Bilinmeyen hata',

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
-import 'package:neonappscase_gradproject/app/domain/model/content_model.dart';
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
 
 class HomePageFolderListLayoutTabFolder extends StatelessWidget {
-  final List<ContentModel> filteredFolders;
+  final List<FileFolderListModel> filteredFolders;
   const HomePageFolderListLayoutTabFolder({
     super.key,
     required this.filteredFolders,

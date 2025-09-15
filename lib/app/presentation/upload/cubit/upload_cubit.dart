@@ -30,9 +30,9 @@ class UploadCubit extends Cubit<UploadState> {
 
     if (state.imageFile != null) {
       emit(state.copyWith(isLoading: true));
-      await InjectionContainerItems.contentRepository.uploadImageContent(
+      /*await InjectionContainerItems.contentRepository.uploadImageContent(
         File(state.imageFile!.path),
-      );
+      );*/
       emit(state.copyWith(isLoading: false));
     }
   }
@@ -68,7 +68,7 @@ class UploadCubit extends Cubit<UploadState> {
     emit(state.copyWith(pickedFile: state.pickedFile));
     if (state.pickedFile != null) {
       emit(state.copyWith(isLoading: true));
-      await InjectionContainerItems.contentRepository.uploadImageContent(
+      await InjectionContainerItems.contentRepository.uploadFileContent(
         File(state.pickedFile!.path!),
       );
       emit(state.copyWith(isLoading: false));
