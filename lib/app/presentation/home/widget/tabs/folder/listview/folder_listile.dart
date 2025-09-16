@@ -22,18 +22,28 @@ class FolderListile extends StatelessWidget {
     return BlocBuilder<FavoriteCubit, FavoriteState>(
       builder: (context, state) {
         final cubit = context.read<FavoriteCubit>();
+        final isFavoriteFolder = state.favoriteFolders.any(
+          (fav) =>
+              fav['id'] == filteredFolders[index].fldId &&
+              fav['type'] == 'folder',
+        );
 
         return ListTile(
           leading: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: state.isFavorite
+                icon: isFavoriteFolder
                     ? Icon(Icons.star, color: AppColors.bgTriartry)
                     : Icon(Icons.star_border),
+
                 color: AppColors.bgTriartry,
                 onPressed: () {
-                  cubit.addFavoriteFolder(filteredFolders[index]);
+                  if (isFavoriteFolder) {
+                    cubit.removeFavoriteFolder(filteredFolders[index].fldId);
+                  } else {
+                    cubit.addFavoriteFolder(filteredFolders[index]);
+                  }
                 },
               ),
               const Icon(Icons.folder, color: AppColors.bgTriartry),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
+import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
+import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
 
@@ -86,33 +88,75 @@ class _HomePageListLayoutTabImageState extends State<HomePageListLayoutTabImage>
           p.images.length != c.images.length ||
           p.imagesHasMore != c.imagesHasMore ||
           p.isLoadingMore != c.isLoadingMore,
-      listener: (context, state) {
+      listener: (context, homeState) {
         // Yeni sayfa geldi ama hâlâ ekran dolmadıysa devam et
         _maybeTopUp(context.read<HomeCubit>());
       },
-      builder: (context, state) {
-        return ListView.builder(
-          controller: _sc,
-          primary: false, // Nested scroll senaryosu için önemli
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: state.images.length + (state.isLoadingMore ? 1 : 0),
-          itemBuilder: (context, index) {
-            if (index >= state.images.length) {
-              return const Padding(
-                padding: EdgeInsets.all(16),
-                child: Center(child: CircularProgressIndicator()),
-              );
-            }
-            final item = state.images[index];
-            return ListTile(
-              leading: const Icon(Icons.image, color: AppColors.bgTriartry),
-              title: Text(
-                item.name,
-                style: const TextStyle(
-                  color: AppColors.bgTriartry,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+      builder: (context, homeState) {
+        final favCubit = context.read<FavoriteCubit>();
+
+        return BlocBuilder<FavoriteCubit, FavoriteState>(
+          builder: (context, favState) {
+            final itemCount =
+                homeState.images.length + (homeState.isLoadingMore ? 1 : 0);
+
+            return ListView.builder(
+              controller: _sc,
+              primary: false,
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: itemCount,
+              itemBuilder: (context, index) {
+                // Loader satırı
+                if (index >= homeState.images.length) {
+                  return const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+
+                final item = homeState.images[index];
+                final String fileKey = item.link;
+
+                // Kontrolde 'link' değil 'id' alanını kıyasla:
+                final bool isFavoriteImage = favState.favoriteFolders.any(
+                  (fav) => fav['id'] == fileKey && fav['type'] == 'image',
+                );
+
+                return ListTile(
+                  leading: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: isFavoriteImage
+                            ? const Icon(
+                                Icons.star,
+                                color: AppColors.bgTriartry,
+                              )
+                            : const Icon(Icons.star_border),
+                        onPressed: () {
+                          if (isFavoriteImage) {
+                            favCubit.removeFavoriteImage(
+                              fileKey,
+                            ); // ← güncellenen fonksiyon
+                          } else {
+                            favCubit.addFavoriteImages(
+                              item,
+                            ); // kaydederken 'id': link
+                          }
+                        },
+                      ),
+                      const Icon(Icons.folder, color: AppColors.bgTriartry),
+                    ],
+                  ),
+                  title: Text(
+                    item.name,
+                    style: const TextStyle(
+                      color: AppColors.bgTriartry,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                );
+              },
             );
           },
         );

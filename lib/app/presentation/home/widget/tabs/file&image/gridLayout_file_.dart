@@ -4,7 +4,10 @@ import 'package:neonappscase_gradproject/app/presentation/home/widget/card/grid_
 
 class HomePageGridLayoutTabFileImage extends StatelessWidget {
   final List<FileItem> filteredItems;
-  const HomePageGridLayoutTabFileImage({super.key, required this.filteredItems,  });
+  const HomePageGridLayoutTabFileImage({
+    super.key,
+    required this.filteredItems,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +21,8 @@ class HomePageGridLayoutTabFileImage extends StatelessWidget {
       ),
       itemCount: filteredItems.length,
       itemBuilder: (context, index) {
-        return GridTile(
-          child: GridCard(file: filteredItems[index]),
-        );
+        return GridTile(child: GridListCard(file: filteredItems[index]));
       },
     );
   }
 }
-

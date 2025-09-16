@@ -17,7 +17,9 @@ class GridFolderCard extends StatelessWidget {
     return BlocBuilder<FavoriteCubit, FavoriteState>(
       builder: (context, state) {
         final cubit = context.read<FavoriteCubit>();
-
+        final isFavoriteFolder = state.favoriteFolders.any(
+          (fav) => fav['id'] == folder.fldId && fav['type'] == 'folder',
+        );
         return Card(
           borderOnForeground: true,
           elevation: 5,
@@ -71,12 +73,16 @@ class GridFolderCard extends StatelessWidget {
               ),
 
               IconButton(
-                    icon: state.isFavorite
+                    icon: isFavoriteFolder
                         ? Icon(Icons.star, color: AppColors.bgTriartry)
                         : Icon(Icons.star_border),
                     color: AppColors.bgTriartry,
                     onPressed: () {
-                      cubit.addFavoriteFolder(folder);
+                      if (isFavoriteFolder) {
+                        cubit.removeFavoriteFolder(folder.fldId);
+                      } else {
+                        cubit.addFavoriteFolder(folder);
+                      }
                     },
                   )
                   .withPadding(const EdgeInsets.fromLTRB(0, 0, 8, 0))

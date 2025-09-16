@@ -4,9 +4,9 @@ import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaq
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
 
-class GridCard extends StatelessWidget {
+class GridListCard extends StatelessWidget {
   final FileItem file;
-  const GridCard({super.key, required this.file});
+  const GridListCard({super.key, required this.file});
 
   @override
   Widget build(BuildContext context) {

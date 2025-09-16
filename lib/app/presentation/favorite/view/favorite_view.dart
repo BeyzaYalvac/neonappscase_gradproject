@@ -19,7 +19,6 @@ class FavoriteView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FavoriteCubit, FavoriteState>(
       builder: (context, state) {
-        
         return Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -58,10 +57,21 @@ class FavoriteView extends StatelessWidget {
                             icon: const Icon(Icons.delete),
                             onPressed: () {
                               // fldId ile silmek istersen:
-                              if (fav['id'] != null) {
+                              if (fav['id'] != null &&
+                                  fav['type'] == 'folder') {
                                 context
                                     .read<FavoriteCubit>()
                                     .removeFavoriteFolder(fav['id']);
+                              } else if (fav['type'] == 'file' &&
+                                  fav['id'] != null) {
+                                context
+                                    .read<FavoriteCubit>()
+                                    .removeFavoriteFile(fav['id']);
+                              } else if (fav['type'] == 'image' &&
+                                  fav['id'] != null) {
+                                context
+                                    .read<FavoriteCubit>()
+                                    .removeFavoriteImage(fav['id']);
                               }
                             },
                           ),
