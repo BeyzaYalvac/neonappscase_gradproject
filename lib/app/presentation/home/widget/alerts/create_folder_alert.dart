@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/select_roolfolder_dropdown.dart';
 
@@ -20,13 +21,13 @@ class CreateFolderAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Klasör Oluştur"),
+      title: const Text(AppStrings.createFolderText),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text("Oluşturmak istediğiniz klasörün adı nedir?"),
+          const Text(AppStrings.selectFolderNameText),
           TextField(
-            decoration: const InputDecoration(hintText: "Klasör Adı"),
+            decoration: const InputDecoration(hintText: AppStrings.selectFolderNameHintText),
             controller: _folderNameController,
           ),
           SelectRootFolderDropDownButton(
@@ -39,7 +40,7 @@ class CreateFolderAlert extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text("İptal"),
+          child: const Text(AppStrings.cancelText),
         ),
         TextButton(
           onPressed: () async {
@@ -47,7 +48,7 @@ class CreateFolderAlert extends StatelessWidget {
             context.read<HomeCubit>().addFolder(_folderNameController.text);
             _folderNameController.clear();
           },
-          child: const Text("Oluştur"),
+          child: const Text(AppStrings.createText),
         ),
       ],
     );

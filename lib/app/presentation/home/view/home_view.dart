@@ -3,6 +3,8 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
@@ -11,7 +13,6 @@ import 'package:neonappscase_gradproject/app/presentation/favorite/view/favorite
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/alerts/create_folder_alert.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/select_roolfolder_dropdown.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/container/homepage_summary_data.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/container/homepage_summary_header.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/container/homepage_white_body.dart';
@@ -29,7 +30,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _folderNameController = TextEditingController();
+    TextEditingController folderNameController = TextEditingController();
 
     return Scaffold(
       appBar: const CustomAppBar(),
@@ -46,18 +47,20 @@ class HomeView extends StatelessWidget {
               backgroundColor: isOnline ? AppColors.success : AppColors.fail,
               leading: Icon(
                 isOnline ? Icons.wifi : Icons.wifi_off,
-                color: Colors.white,
+                color: AppColors.bgPrimary,
               ),
               content: Text(
-                isOnline ? 'İnternet geri geldi' : 'İnternet bağlantısı yok',
-                style: const TextStyle(color: Colors.white),
+                isOnline
+                    ? AppStrings.internetHasCome
+                    : AppStrings.internetHasGone,
+                style: AppTextSytlyes.whiteTextStyle,
               ),
               actions: [
                 TextButton(
                   onPressed: () => messenger.hideCurrentMaterialBanner(),
                   child: const Text(
-                    'Kapat',
-                    style: TextStyle(color: Colors.white),
+                    AppStrings.closeText,
+                    style: AppTextSytlyes.whiteTextStyle,
                   ),
                 ),
               ],
@@ -110,7 +113,7 @@ class HomeView extends StatelessWidget {
                           : null;
 
                       return CreateFolderAlert(
-                        folderNameController: _folderNameController,
+                        folderNameController: folderNameController,
                         current: current,
                         items: items,
                         state: state,
@@ -162,7 +165,6 @@ class _HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.select((HomeCubit c) => c.state);
 
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {

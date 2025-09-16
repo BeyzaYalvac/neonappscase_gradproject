@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 
@@ -23,7 +24,7 @@ class SelectRootFolderDropDownButton extends StatelessWidget {
       elevation: 6,
       isExpanded: true,
       value: current,
-      hint: const Text("Seçiniz"),
+      hint: const Text(AppStrings.selectText),
       items: items,
       onChanged: state.folders.isEmpty
           ? null

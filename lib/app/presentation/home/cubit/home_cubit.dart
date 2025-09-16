@@ -5,15 +5,17 @@ import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart'
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
+  static const int _perPage = 5;
+
   HomeCubit() : super(HomeState.initial()) {
     loadProfileData();
+    loadImagesInitial();
     loadFolders();
     //loadFiles();
     // İlk yüklemede klasör ve dosyaları çekmek istersen:
     // loadContents();
-    
   }
-// Detay için: ilk frame'de loader ile başla, hiçbir auto-load yapma
+  // Detay için: ilk frame'de loader ile başla, hiçbir auto-load yapma
   HomeCubit.forDetail() : super(HomeState.initial().copyWith(isLoading: true));
 
   Future<void> loadFolders() async {
@@ -59,14 +61,82 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> loadFiles() async {
     emit(state.copyWith(isLoading: true));
     try {
-      final result = await InjectionContainerItems.contentRepository
-          .getFileList(
-            fldId: state.currentFldId,
-            nameFilter: state.qFile.isEmpty ? null : state.qFile,
-          );
-      emit(state.copyWith(isLoading: false, files: result));
+      final all = await InjectionContainerItems.contentRepository.getFileList(
+        fldId: state.currentFldId,
+        nameFilter: state.qFile.isEmpty ? null : state.qFile,
+      );
+
+      // .png / .jpg / .jpeg ile bitmeyenler
+      final nonImages = all.where((f) {
+        final name = f.name.trim().toLowerCase();
+        return !(name.endsWith('.png') ||
+            name.endsWith('.jpg') ||
+            name.endsWith('.jpeg'));
+      }).toList();
+
+      emit(state.copyWith(isLoading: false, files: nonImages));
     } catch (_) {
       emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  // 2.1) İlk sayfa (listeyi sıfırla)
+  Future<void> loadImagesInitial() async {
+    emit(state.copyWith(isLoading: true, imagesPage: 1, imagesHasMore: true));
+    try {
+      final page = 1;
+      final all = await InjectionContainerItems.contentRepository.getFileList(
+        fldId: state.currentFldId,
+        nameFilter: state.qFile.isEmpty ? null : state.qFile,
+        page: page,
+        perPage: _perPage,
+      );
+
+      final re = RegExp(r'\.(png|jpe?g)$', caseSensitive: false);
+      final images = all.where((f) => re.hasMatch(f.name)).toList();
+
+      emit(
+        state.copyWith(
+          isLoading: false,
+          images: images,
+          imagesPage: page,
+          imagesHasMore: all.length == _perPage, // < perPage ise bitti
+        ),
+      );
+    } catch (_) {
+      emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  // 2.2) Devamını getir (append)
+  Future<void> loadMoreImages() async {
+    if (state.isLoadingMore || !state.imagesHasMore) return;
+
+    emit(state.copyWith(isLoadingMore: true));
+    try {
+      final nextPage = state.imagesPage + 1;
+
+      final all = await InjectionContainerItems.contentRepository.getFileList(
+        fldId: state.currentFldId,
+        nameFilter: state.qFile.isEmpty ? null : state.qFile,
+        page: nextPage,
+        perPage: _perPage,
+      );
+
+      final re = RegExp(r'\.(png|jpe?g)$', caseSensitive: false);
+      final newImages = all.where((f) => re.hasMatch(f.name)).toList();
+
+      emit(
+        state.copyWith(
+          isLoadingMore: false,
+          images: [...state.images, ...newImages],
+          imagesPage: nextPage,
+          // ⬇️ yine ham listeye göre
+          imagesHasMore: all.length == _perPage,
+        ),
+      );
+    } catch (_) {
+      emit(state.copyWith(isLoadingMore: false));
     }
   }
 
@@ -107,9 +177,12 @@ class HomeCubit extends Cubit<HomeState> {
       setFolderQuery(query);
     } else if (tabIndex == 1) {
       emit(state.copyWith(qFile: query));
+
       _fetchFiles(query); // server-side arama varsa burada
     } else {
       emit(state.copyWith(qFile: query));
+      loadImagesInitial();
+
       _fetchFiles(query);
     }
   }

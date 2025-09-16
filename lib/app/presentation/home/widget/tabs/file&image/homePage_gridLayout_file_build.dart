@@ -19,7 +19,7 @@ class HomePageGridLayoutTabFileImage extends StatelessWidget {
       itemCount: filteredItems.length,
       itemBuilder: (context, index) {
         return GridTile(
-          child: GridCard(fileName: filteredItems[index].name),
+          child: GridCard(file: filteredItems[index]),
         );
       },
     );

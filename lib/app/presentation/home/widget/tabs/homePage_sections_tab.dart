@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 
@@ -26,9 +27,9 @@ class HomePageSectionTabs extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
           tabs: [
-            Tab(text: "Folders"),
-            Tab(text: "file"),
-            Tab(text: "image"),
+            Tab(text: AppStrings.folderTabText),
+            Tab(text: AppStrings.fileTabText),
+            Tab(text: AppStrings.imageTabText),
           ],
         ),
       ),

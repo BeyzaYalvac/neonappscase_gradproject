@@ -21,6 +21,8 @@ class AppBootstrap {
       //Hive.registerAdapter(CacheModelAdapter());
     }
 
+    //Boxes
+    final favoriteBox = await Hive.openBox('favorite_box');
     final settingsBox = await Hive.openBox('settingsBox');
     final dataBox = await Hive.openBox<String>('data_box');
     final firstControl = await Hive.openBox<bool>('first_control_box');

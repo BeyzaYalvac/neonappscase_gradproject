@@ -1,5 +1,5 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
@@ -8,19 +8,13 @@ class HomePageSummaryHeader extends StatelessWidget {
   final AccountModel accountInfos;
 
   const HomePageSummaryHeader({super.key, required this.accountInfos});
-  String _formatBytes(num bytes, [int decimals = 1]) {
-    if (bytes <= 0) return '0 B';
-    const k = 1024;
-    const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-    final i = (math.log(bytes) / math.log(k)).floor();
-    final v = bytes / math.pow(k, i);
-    return '${v.toStringAsFixed(decimals)} ${units[i]}';
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
     final stats = accountInfos;
     print(stats);
+    // ignore: dead_code, unnecessary_type_check
     final storageBytes = (stats.storageUsed is num) ? (stats.storageUsed as num) : 0;
     final usedBytes = storageBytes;
     debugPrint(storageBytes.toString());
@@ -76,7 +70,7 @@ class HomePageSummaryHeader extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Used',
+                        AppStrings.usedText,
                         style: TextStyle(color: Colors.grey.shade600),
                       ),
                     ],

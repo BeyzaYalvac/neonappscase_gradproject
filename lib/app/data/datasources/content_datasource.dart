@@ -28,89 +28,126 @@ class ContentDataSource {
       '/upload/server',
       query: {'key': AppConfig.apiKey},
     );
-
-    if (res.isSuccess && res.data != null) {
-      final model = UploadServerModel.fromMap(res.data!);
-
-      // uploadApi’yi bu URL ile yeniden kuruyoruz
-      uploadApi = ApiClient(
-        baseUrl: model.result, // örn: https://wwwNNN.ucdn.to/cgi-bin/upload.cgi
-        headers: {'Accept': 'application/json'},
-      ).safe;
-
-      return model;
-    } else {
-      throw Exception(res.error?.message ?? 'Bilinmeyen hata');
+    if (!res.isSuccess || res.data == null) {
+      throw Exception(res.error?.message ?? 'Sunucu seçilemedi');
     }
+
+    final model = UploadServerModel.fromMap(res.data!);
+
+    // Örn: https://wwwNNN.ucdn.to/cgi-bin/upload.cgi
+    uploadApi = ApiClient(
+      baseUrl: model.result,
+      headers: {'Accept': 'application/json'},
+    ).safe;
+
+    print("model.result: ${model.result}");
+    return model;
   }
 
-  /// 2) Dosya yükle
-  /// ddownload upload genelde multipart/form-data ister.
-  /// Alan adı dokümana göre değişebilir: 'file', 'files[]', vs.
-  Future<List<UploadFileModel>> uploadFile({
-    required File file,
-    int? targetFolderId, // gerekiyorsa form alanı ile gönder
-  }) async {
-    final uploadServer = await selectServerForUpload();
-
-    // FormData hazırla (alan anahtarı dokümana göre değişebilir)
-    final form = FormData.fromMap({
-      // 'files[]': await MultipartFile.fromFile(file.path, filename: p.basename(file.path)),
-      'file': await MultipartFile.fromFile(
-        file.path,
-        filename: p.basename(file.path),
-      ),
-      // Bazı servislerde sess_id form alanı olarak gerekir:
-      'sess_id': uploadServer.sessId,
-      // Klasöre yüklemek gerekiyorsa (dokümana bağlı):
-      if (targetFolderId != null) 'fld_id': targetFolderId.toString(),
-    });
-
-    // uploadApi’nin baseUrl’i tam URL olduğundan boş path ile POST atıyoruz
-    final resp = await uploadApi.post<dynamic>(
-      '',
-      data: form,
-      options: Options(contentType: 'multipart/form-data'),
-    );
-
-    if (resp.isSuccess && resp.data != null) {
-      // Bu API bazı örneklerde upload sonrası dizi döndürüyor: [{file_code, file_status}]
-      final data = resp.data;
-      if (data is List) {
-        return data
-            .map((e) => UploadFileModel.fromMap(e as Map<String, dynamic>))
-            .toList();
-      } else if (data is Map<String, dynamic>) {
-        // Tek obje dönerse
-        return [UploadFileModel.fromMap(data)];
-      } else {
-        throw Exception('Beklenmeyen upload yanıtı');
-      }
-    } else {
-      throw Exception(resp.error?.message ?? 'Upload başarısız');
-    }
-  }
-
-  /// 3) Klasör içeriğini getir (root için fld_id=0 kullan)
-  /// 1) Klasör içeriğini getir (root için fld_id=0 kullan)
   Future<List<FileFolderListModel>> getFolderList({int fldId = 0}) async {
     final res = await api.get<Map<String, dynamic>>(
       '/folder/list',
       query: {'key': AppConfig.apiKey, 'fld_id': fldId.toString()},
     );
-
     if (res.isSuccess && res.data != null) {
-      final data = res.data!;
-      // ddownload: { msg, status, result: { folders: [...], files: [...] } }
+      final data = res
+          .data!; // ddownload: { msg, status, result: { folders: [...], files: [...] } }
       final result = data['result'] as Map<String, dynamic>? ?? const {};
       final folders = (result['folders'] as List?) ?? const [];
-
       return folders
           .whereType<Map<String, dynamic>>()
           .map((e) => FileFolderListModel.fromMap(e))
           .toList();
     } else {
       throw Exception(res.error?.message ?? 'Klasör listesi alınamadı');
+    }
+  }
+
+  //load: { msg, status, result: { folders: [...], files: [...] } } final result = data['result'] as Map<String, dynamic>? ?? const {}; final folders = (result['folders'] as List?) ?? const []; return folders .whereType<Map<String, dynamic>>() .map((e) => FileFolderListModel.fromMap(e)) .toList(); } else { throw Exception(res.error?.message ?? 'Klasör listesi alınamadı'); } }
+  Future<Map<String, dynamic>> getFileInfo(String fileCode) async {
+    final res = await api.get<Map<String, dynamic>>(
+      '/file/info',
+      query: {'key': AppConfig.apiKey, 'file_code': fileCode},
+    );
+    if (!res.isSuccess || res.data == null) {
+      throw Exception(res.error?.message ?? 'file/info alınamadı');
+    }
+    final data = res.data!;
+    // Tipik ddownload cevabı: { status, msg, result: { file: {...} } } / varyasyon olabilir
+    final result = (data['result'] as Map?) ?? const {};
+    final file =
+        (result['file'] as Map?) ??
+        result; // bazı sunucular direkt file objesi döndürür
+    debugPrint('FILE INFO => $file');
+    return file.cast<String, dynamic>();
+  }
+
+  Future<int?> detectRootFolderId() async {
+    final res = await api.get<Map<String, dynamic>>(
+      '/folder/list',
+      query: {
+        'key': AppConfig.apiKey,
+        'fld_id': '0', // sistem "hesabının kökü"nün altını döndürür
+      },
+    );
+
+    if (!res.isSuccess || res.data == null) {
+      throw Exception(res.error?.message ?? 'folder/list alınamadı');
+    }
+
+    final data = res.data!;
+    final result = data['result'] as Map? ?? const {};
+    final folders = (result['folders'] as List?)?.whereType<Map>() ?? const [];
+
+    // Varsayım: Buradaki tüm üst seviye klasörlerin parent_id’si "senin gerçek root id"’indir.
+    final parentIds = folders
+        .map((f) => int.tryParse('${f['parent_id'] ?? ''}'))
+        .whereType<int>()
+        .toSet();
+
+    // En sık görülen durum: tek bir parent_id döner -> gerçek root id
+    if (parentIds.isNotEmpty) {
+      final rootId = parentIds.first;
+      debugPrint('DETECTED ROOT ID => $rootId');
+      return rootId;
+    }
+
+    // Hiç klasör yoksa parent_id çıkaramıyoruz -> null
+    debugPrint('DETECTED ROOT ID => (yok - üst seviye klasör bulunamadı)');
+    return null;
+  }
+
+  Future<UploadFileModel> uploadFile({required File file, int? fldId}) async {
+    // 1) Upload server ve sess_id al
+    final uploadServerModel = await selectServerForUpload();
+    final sessId = uploadServerModel.sessId;
+    final uploadUrl = uploadServerModel.result;
+
+    // 2) FormData hazırla
+    final formData = FormData.fromMap({
+      'sess_id': sessId,
+      'utype': 'prem',
+      'file': await MultipartFile.fromFile(
+        file.path,
+        filename: file.path.split('/').last,
+      ),
+      if (fldId != null) 'fld_id': '$fldId',
+    });
+
+    // 3) Post isteğini yap
+    final response = await uploadApi.post(uploadUrl, data: formData);
+
+    // 4) Response kontrol et
+    if (response.isSuccess && response.data != null) {
+      final data = response.data is List ? response.data[0] : response.data;
+
+      if (data['file_status'] != 'OK') {
+        throw Exception('Upload failed: ${data['file_status']}');
+      }
+
+      return UploadFileModel.fromMap(data);
+    } else {
+      throw Exception('Upload failed: ${response}');
     }
   }
 

@@ -1,21 +1,18 @@
 import 'package:equatable/equatable.dart';
 
-class FavoriteState extends Equatable{
-  final List favoriteFiles;
-  FavoriteState(this.favoriteFiles);
+class FavoriteState extends Equatable {
+  final List favoriteFolders;
+  final bool isFavorite;
+  FavoriteState(this.favoriteFolders, this.isFavorite);
 
   factory FavoriteState.initial() {
-    return FavoriteState([]);
+    return FavoriteState([], false);
   }
 
-  FavoriteState copyWith({
-    List? favoriteFiles,
-  }) {
-    return FavoriteState(
-      favoriteFiles ?? this.favoriteFiles,
-    );
+  FavoriteState copyWith({List? favorites}) {
+    return FavoriteState(favorites ?? this.favoriteFolders, isFavorite);
   }
 
   @override
-  List<Object?> get props => [favoriteFiles];
+  List<Object?> get props => [favoriteFolders, isFavorite];
 }

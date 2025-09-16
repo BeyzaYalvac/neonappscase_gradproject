@@ -4,39 +4,39 @@ import 'package:image_picker/image_picker.dart';
 
 class UploadState extends Equatable {
   final XFile? imageFile;
-  final PlatformFile? pickedFile; // Dosya yöneticisi (pdf/doc/xls ...)
+  final PlatformFile? pickedFile; // pdf/doc/xls vs.
   final String? error;
-
   final bool isLoading;
 
   const UploadState({
     this.imageFile,
-    this.isLoading = false,
     this.pickedFile,
     this.error,
+    this.isLoading = false,
   });
 
   factory UploadState.initial() => const UploadState(isLoading: false);
 
   UploadState copyWith({
-    XFile? file,
-    bool? isLoading,
+    XFile? imageFile,
     PlatformFile? pickedFile,
+    String? error,
+    bool? isLoading,
   }) {
     return UploadState(
-      imageFile: file ?? this.imageFile,
-      isLoading: isLoading ?? this.isLoading,
+      imageFile: imageFile ?? this.imageFile,
       pickedFile: pickedFile ?? this.pickedFile,
-      error: error,
+      error: error ?? this.error,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 
   @override
   List<Object?> get props => [
-    imageFile?.path,
-    pickedFile?.name,
-    pickedFile?.size,
-    isLoading,
-    error,
-  ];
+        imageFile?.path,
+        pickedFile?.name,
+        pickedFile?.size,
+        isLoading,
+        error,
+      ];
 }

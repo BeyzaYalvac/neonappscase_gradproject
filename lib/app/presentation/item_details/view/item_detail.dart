@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
@@ -53,22 +54,24 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
           appBar: CustomAppBar(),
           body: SizedBox(
             width: AppMediaQuery.screenWidth(context),
-            child: Column(
-              children: [
-                // başlık...
-                Text(
-                  "$currentFolderName",
-                  style: TextStyle(
-                    color: AppColors.textDark,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+            height: AppMediaQuery.screenHeight(context),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  // başlık...
+                  Text(
+                    "$currentFolderName",
+                    style: TextStyle(
+                      color: AppColors.textDark,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
 
-                AppPaddings.CustomHeightSizedBox(context, 0.02),
-                Expanded(
-                  child: Container(
+                  AppPaddings.CustomHeightSizedBox(context, 0.02),
+                  Container(
                     width: AppMediaQuery.screenWidth(context) * 0.9,
+                    height: AppMediaQuery.screenHeight(context) * 0.7,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       color: AppColors.bgPrimary,
@@ -83,7 +86,7 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
                         if (total == 0) {
                           return Center(
                             child: Text(
-                              "Bu klasörde öğe yok.",
+                             AppStrings.emptyFolderText,
                               style: TextStyle(color: AppColors.textDark),
                             ),
                           );
@@ -147,8 +150,8 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
                       },
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

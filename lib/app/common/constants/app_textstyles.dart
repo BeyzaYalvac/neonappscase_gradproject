@@ -7,6 +7,8 @@ class AppTextSytlyes {
     fontWeight: FontWeight.bold,
     color: AppColors.textBej,
   );
+
+  //splash
   static const TextStyle splashSubtitleStyle = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.normal,
@@ -34,4 +36,7 @@ class AppTextSytlyes {
     fontWeight: FontWeight.bold,
     fontSize: 14,
   );
+
+  //home page
+  static const TextStyle whiteTextStyle = TextStyle(color: AppColors.textWhite);
 }

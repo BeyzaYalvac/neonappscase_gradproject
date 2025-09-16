@@ -30,7 +30,7 @@ class HomePageFolderGridLayoutTabFolder extends StatelessWidget {
                 ItemDetailRoute(item: filteredFolders[index]),
               );
             },
-            child: GridFolderCard(folderName: filteredFolders[index].name),
+            child: GridFolderCard(folder: filteredFolders[index]),
           ),
         );
       },

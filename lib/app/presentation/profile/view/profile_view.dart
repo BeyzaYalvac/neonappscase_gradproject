@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -76,7 +75,7 @@ class ProfileView extends StatelessWidget {
                       padding: EdgeInsets.only(top: h * 0.06),
                       child: Center(
                         child: Text(
-                          account.email ?? '',
+                          account.email,
                           style: TextStyle(
                             fontSize: w * 0.04,
                             fontWeight: FontWeight.bold,

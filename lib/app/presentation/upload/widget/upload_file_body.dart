@@ -35,7 +35,7 @@ class UploadFileBody extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'Dosya Yükle',
+                    AppStrings.uploadFileText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color:

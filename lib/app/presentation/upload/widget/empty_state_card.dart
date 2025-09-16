@@ -19,7 +19,7 @@ class photoUploadColumn extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
-          onTap: () => context.read<UploadCubit>().UploadImage(),
+          onTap: () => context.read<UploadCubit>().uploadImageFromGallery(),
 
           child:
               Container(
@@ -35,7 +35,7 @@ class photoUploadColumn extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'Resim Yükle',
+                    AppStrings.uploadImageText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color:

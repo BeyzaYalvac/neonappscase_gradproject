@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
@@ -40,6 +41,7 @@ class HomePageSummmaryData extends StatelessWidget {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
@@ -47,18 +49,22 @@ class HomePageSummmaryData extends StatelessWidget {
             AppPaddings.CustomWidthSizedBox(context, 0.01),
 
             Text(
-              "Total ${storageCanUsed.toStringAsFixed(3)} GB",
+              " Total ${storageCanUsed.toStringAsFixed(3)} GB",
               style: TextStyle(color: AppColors.textBej),
             ),
           ],
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+          crossAxisAlignment: CrossAxisAlignment.start,
+
           children: [
             const Icon(Icons.donut_large, color: AppColors.textBej, size: 8),
             AppPaddings.CustomWidthSizedBox(context, 0.1),
             Text(
-              'Used ${_formatBytes(storageBytes)}',
-              style: TextStyle(color: AppColors.textWhite),
+              ' Used  ${_formatBytes(storageBytes)}',
+              style: AppTextSytlyes.whiteTextStyle,
             ),
           ],
         ),

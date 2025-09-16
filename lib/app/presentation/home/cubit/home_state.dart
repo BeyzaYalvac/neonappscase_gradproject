@@ -1,4 +1,6 @@
 // lib/app/presentation/home/cubit/home_state.dart
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
@@ -21,12 +23,17 @@ class HomeState extends Equatable {
   final String selectedFolder;
   final List<FileFolderListModel> folders; // filtrelenmiş klasörler
   final List<FileItem> files; // dosyalar  <-- DÜZELTİLDİ
+  final List<FileItem> images; // dosyalar  <-- DÜZELTİLDİ
 
   /// Aramalar
   final String qFolder;
   final String qFile;
 
-  const HomeState( {
+  final int imagesPage;
+  final bool imagesHasMore;
+  final bool isLoadingMore;
+
+  const HomeState({
     this.isLoading = false,
     this.isGridView = false,
     this.selectedIndex = 0,
@@ -35,10 +42,14 @@ class HomeState extends Equatable {
     this.breadcrumbFldIds = const [0],
     this.folders = const [],
     this.files = const [], // <-- DÜZELTİLDİ
+    this.images = const [], // <-- DÜZELTİLDİ
     this.qFolder = '',
     this.qFile = '',
     this.allFolders = const [],
     this.selectedFolder = '',
+    this.imagesPage = 1,
+    this.imagesHasMore = true,
+    this.isLoadingMore = false,
   });
 
   factory HomeState.initial() => const HomeState();
@@ -51,12 +62,15 @@ class HomeState extends Equatable {
     int? currentFldId,
     List<int>? breadcrumbFldIds,
     List<FileFolderListModel>? folders,
-    List<FileItem>? files, // <-- DÜZELTİLDİ
-    String? qFolder, // <-- EKLENDİ
-    String? qFile,
+    List<FileItem>? files,
     List<FileFolderListModel>? allFolders,
     String? selectedFolder,
-    // <-- EKLENDİ
+    List<FileItem>? images,
+    String? qFolder,
+    String? qFile,
+    int? imagesPage,
+    bool? imagesHasMore,
+    bool? isLoadingMore,
   }) {
     return HomeState(
       isLoading: isLoading ?? this.isLoading,
@@ -67,10 +81,14 @@ class HomeState extends Equatable {
       breadcrumbFldIds: breadcrumbFldIds ?? this.breadcrumbFldIds,
       folders: folders ?? this.folders,
       files: files ?? this.files,
-      qFolder: qFolder ?? this.qFolder, // <-- EKLENDİ
+      allFolders: allFolders ?? this.allFolders,
+      selectedFolder: selectedFolder ?? this.selectedFolder,
+      images: images ?? this.images,
+      qFolder: qFolder ?? this.qFolder,
       qFile: qFile ?? this.qFile,
-      allFolders: allFolders ?? this.allFolders, // <-- EKLENDİ
-      selectedFolder: selectedFolder ?? this.selectedFolder, // <-- EKLENDİ
+      imagesPage: imagesPage ?? this.imagesPage,
+      imagesHasMore: imagesHasMore ?? this.imagesHasMore,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     );
   }
 
@@ -85,8 +103,12 @@ class HomeState extends Equatable {
     folders,
     allFolders,
     files,
+    images,
     qFolder,
     qFile,
     selectedFolder,
+    imagesPage,
+    imagesHasMore,
+    isLoadingMore,
   ];
 }

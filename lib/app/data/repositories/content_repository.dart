@@ -20,7 +20,7 @@ abstract class ContentRepository {
   });
 
   /// Dosya yükle (opsiyonel klasöre)
-  Future<List<UploadFileModel>> uploadFileContent(File file, {int? folderId});
+  Future<UploadFileModel> uploadFileContent(File file, {int? folderId});
 
   /// Klasör oluştur
   Future<CreateFolderModel> createFolder(
@@ -57,10 +57,10 @@ class ContentRepositoryImpl extends ContentRepository {
   }
 
   @override
-  Future<List<UploadFileModel>> uploadFileContent(File file, {int? folderId}) {
+  Future<UploadFileModel> uploadFileContent(File file, {int? folderId}) {
     return InjectionContainerItems.contentDataSource.uploadFile(
       file: file,
-      targetFolderId: folderId,
+      fldId: folderId,
     );
   }
 

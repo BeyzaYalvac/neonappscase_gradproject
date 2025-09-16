@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
-import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
+import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/folder/listview/folder_listile.dart';
 
 class HomePageFolderListLayoutTabFolder extends StatelessWidget {
   final List<FileFolderListModel> filteredFolders;
@@ -18,17 +20,11 @@ class HomePageFolderListLayoutTabFolder extends StatelessWidget {
       ),
       itemCount: filteredFolders.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          leading: const Icon(Icons.folder, color: AppColors.bgTriartry),
-          title: Text(
-            filteredFolders[index].name,
-            style: TextStyle(
-              color: AppColors.bgTriartry,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          subtitle: Text('Size: ${index * 10 + 5} MB'),
-          trailing: Text('Modified: ${index + 1} days ago'),
+        return GestureDetector(
+          onTap: () {
+            context.router.push(ItemDetailRoute(item: filteredFolders[index]));
+          },
+          child: FolderListile(filteredFolders: filteredFolders, index: index),
         );
       },
     );
