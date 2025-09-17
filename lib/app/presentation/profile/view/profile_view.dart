@@ -12,21 +12,19 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final h = AppMediaQuery.screenHeight(context);
-    final w = AppMediaQuery.screenWidth(context);
-    final avatarRadius = w * 0.14;
-
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final account = state.acountInfos;
 
         if (account == null) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.textBej),
+          );
         }
 
         // Güvenli tipler ve hesap
-        final int used = account.storageUsed ?? 0;
-        final int left = account.storageLeft ?? 0;
+        final int used = account.storageUsed;
+        final int left = account.storageLeft;
         final int total = used + left;
         double progress = total > 0 ? used / total : 0.0;
         // Gürültülü veriye karşı clamp

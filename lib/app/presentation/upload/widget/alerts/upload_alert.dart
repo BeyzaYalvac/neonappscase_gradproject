@@ -3,36 +3,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/select_roolfolder_dropdown.dart';
+import 'package:neonappscase_gradproject/app/presentation/upload/cubit/upload_cubit.dart';
 
-class CreateFolderAlert extends StatelessWidget {
-  final state;
-  const CreateFolderAlert({
+class UploadFileAlert extends StatelessWidget {
+  const UploadFileAlert({
     super.key,
-    required TextEditingController folderNameController,
     required this.current,
     required this.items,
-    this.state,
-  }) : _folderNameController = folderNameController;
+  });
 
-  final TextEditingController _folderNameController;
   final String? current;
   final List<DropdownMenuItem<String>> items;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(AppStrings.createFolderText),
+      title: const Text("Upload File"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(AppStrings.selectFolderNameText),
-          TextField(
-            decoration: const InputDecoration(
-              hintText: AppStrings.selectFolderNameHintText,
-            ),
-            controller: _folderNameController,
-          ),
-          SelectRootFolderDropDownButton( items: items),
+          const Text("upload edeceğim file'ın root'unu seç"),
+          SelectRootFolderDropDownButton(items: items),
         ],
       ),
       actions: [
@@ -42,9 +33,13 @@ class CreateFolderAlert extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
+            if (items.isEmpty) return;
+
+            // Dropdown seçiminden sonra güncel folderId’yi al
+            final selectedId = context.read<HomeCubit>().state.selectedFolder;
+
+            await context.read<UploadCubit>().uploadFile(folderId: selectedId);
             Navigator.of(context).pop();
-            context.read<HomeCubit>().addFolder(_folderNameController.text);
-            _folderNameController.clear();
           },
           child: const Text(AppStrings.createText),
         ),

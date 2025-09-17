@@ -1,5 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:neonappscase_gradproject/app/common/cache/hive_cache_model.dart';
 import 'package:neonappscase_gradproject/app/common/config/app_config.dart';
 import 'package:neonappscase_gradproject/app/common/injections/injection_container.dart';
 
@@ -12,13 +13,13 @@ class BootResult {
 class AppBootstrap {
   static Future<BootResult> init() async {
     await dotenv.load(fileName: ".env");
-    InjectionContainer.setUp();
 
     await Hive.initFlutter();
     const cacheTypeId =
         0; // CacheModelAdapter.typeId (senin adapter’in typeId’si) cacheTypeId hatası alıyorduk daha önce id ver.lmediğine emşn oldum
+
     if (!Hive.isAdapterRegistered(cacheTypeId)) {
-      //Hive.registerAdapter(CacheModelAdapter());
+      Hive.registerAdapter(CacheModelAdapter());
     }
 
     //Boxes
@@ -29,6 +30,9 @@ class AppBootstrap {
     if (!firstControl.containsKey(AppConfig.isFirstKey)) {
       await firstControl.put(AppConfig.isFirstKey, true);
     }
+
+    InjectionContainer.setUp();
+
     return BootResult(settingsBox: settingsBox, dataBox: dataBox);
   }
 }

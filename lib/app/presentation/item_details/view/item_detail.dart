@@ -80,7 +80,7 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
                       builder: (_) {
                         if (state.isLoading) {
                           return const Center(
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(color: AppColors.textBej),
                           );
                         }
                         if (total == 0) {

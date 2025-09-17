@@ -7,7 +7,6 @@ import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart'
 import 'package:neonappscase_gradproject/app/domain/model/upload_file_model.dart';
 import 'package:neonappscase_gradproject/app/domain/model/upload_server_model.dart';
 import 'package:neonappscase_gradproject/core/dio_manager/api_client.dart';
-import 'package:path/path.dart' as p;
 
 class ContentDataSource {
   // API (hesap/folder/file list vb. için)
@@ -117,7 +116,7 @@ class ContentDataSource {
     return null;
   }
 
-  Future<UploadFileModel> uploadFile({required File file, int? fldId}) async {
+  Future<UploadFileModel> uploadFile({required File file, String? fldId}) async {
     // 1) Upload server ve sess_id al
     final uploadServerModel = await selectServerForUpload();
     final sessId = uploadServerModel.sessId;
@@ -131,8 +130,11 @@ class ContentDataSource {
         file.path,
         filename: file.path.split('/').last,
       ),
-      if (fldId != null) 'fld_id': '$fldId',
+      if (fldId != null) 'fld_id': fldId,
     });
+
+    print("UPLOAD FORM FIELDS: ${formData.fields}");
+
 
     // 3) Post isteğini yap
     final response = await uploadApi.post(uploadUrl, data: formData);

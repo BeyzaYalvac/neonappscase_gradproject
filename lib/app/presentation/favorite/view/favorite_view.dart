@@ -66,7 +66,7 @@ class FavoriteView extends StatelessWidget {
                                   fav['id'] != null) {
                                 context
                                     .read<FavoriteCubit>()
-                                    .removeFavoriteFile(fav['id']);
+                                    .removeFavoriteFileByKey(fav['id']);
                               } else if (fav['type'] == 'image' &&
                                   fav['id'] != null) {
                                 context

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
@@ -23,12 +24,14 @@ class HomePageListLayoutTabFile extends StatelessWidget {
           ),
           itemCount: filteredFiles.length,
           itemBuilder: (context, index) {
-            final file = filteredFiles[index];
-            final String fileKey = file.link; // ✅ benzersiz anahtar olarak link
 
-            final bool isFavoriteFile = state.favoriteFolders.any(
-          (fav) => fav['id'] == fileKey && fav['type'] == 'file',
-        );
+            // Dosyanın favori olup olmadığını kontrol et
+            final key = filteredFiles[index].link;
+            final box = Hive.box('favorite_box');
+            final isFavoriteFile = box.values.any(
+              (v) => v is Map && v['type'] == 'file' && v['id'] == key,
+            );
+
             return ListTile(
               leading: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -41,7 +44,9 @@ class HomePageListLayoutTabFile extends StatelessWidget {
                     color: AppColors.bgTriartry,
                     onPressed: () {
                       if (isFavoriteFile) {
-                        cubit.removeFavoriteFile(filteredFiles[index].link);
+                        cubit.removeFavoriteFileByKey(
+                          filteredFiles[index].link,
+                        );
                       } else {
                         cubit.addFavoriteFile(filteredFiles[index]);
                       }

@@ -120,7 +120,7 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
                       onChanged: (v) {
                         final tabIndex = DefaultTabController.of(
                           context,
-                        )!.index;
+                        ).index;
                         context.read<HomeCubit>().setSearchQueryForTab(
                           tabIndex,
                           v,

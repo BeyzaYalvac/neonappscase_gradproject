@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
@@ -15,10 +17,15 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     emit(state.copyWith(favorites: box.values.toList()));
   }
 
-  void addFavoriteFile(FileItem file) {
-    final String fileKey = file.link; // ✅ benzersiz kabul ediyoruz
-    box.add({'id': fileKey, 'name': file.name, 'type': 'file'});
+  void _refreshState() {
     emit(state.copyWith(favorites: box.values.toList()));
+  }
+
+  // --- FILE favorites ---
+  void addFavoriteFile(FileItem file) {
+    box.add({'id': file.link, 'name': file.name, 'type': 'file'});
+    emit(state.copyWith(favorites: box.values.toList()));
+    _refreshState();
   }
 
   void addFavoriteImages(FileItem image) {
@@ -45,16 +52,16 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     emit(state.copyWith(favorites: box.values.toList()));
   }
 
-  void removeFavoriteFile(String fileKey) {
+  void removeFavoriteFileByKey(String key) {
     final entries = box.toMap();
-    for (var e in entries.entries) {
+    for (final e in entries.entries) {
       final v = e.value;
-      if (v is Map && v['link'] == fileKey && v['type'] == 'file') {
+      if (v is Map && v['type'] == 'file' && v['id'] == key) {
         box.delete(e.key);
         break;
       }
     }
-    emit(state.copyWith(favorites: box.values.toList()));
+    _refreshState();
   }
 
   bool isFavoriteFolder(String fldId) {

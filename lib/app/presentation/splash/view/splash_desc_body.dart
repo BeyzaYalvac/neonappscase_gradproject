@@ -25,7 +25,7 @@ class SplashDescriptionBody extends StatelessWidget {
                       style: AppTextSytlyes.splashWelcomeStyle,
                       textAlign: TextAlign.center,
                     ).withCenter(),
-                    containerColor: AppColors.bgTriartry,
+                    containerColor: AppColors.bgfourtary,
                   )
                   .withAlignment(Alignment.topLeft)
                   .withPadding(const EdgeInsets.only(top: 150)),

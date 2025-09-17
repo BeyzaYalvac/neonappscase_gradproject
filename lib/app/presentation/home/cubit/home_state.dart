@@ -1,5 +1,4 @@
 // lib/app/presentation/home/cubit/home_state.dart
-import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';

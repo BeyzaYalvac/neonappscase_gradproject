@@ -28,8 +28,11 @@ class LoggerInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
+    final fromCache = response.extra['fromCache'] == true;
     dev.log(
-      '[RESPONSE] ${response.statusCode} ${response.requestOptions.method} ${response.requestOptions.uri}',
+      '[RESPONSE] ${response.statusCode} '
+      '${response.requestOptions.method} ${response.requestOptions.uri} '
+      '${fromCache ? "(CACHE)" : "(NETWORK)"}',
       name: 'HTTP',
     );
     handler.next(response);

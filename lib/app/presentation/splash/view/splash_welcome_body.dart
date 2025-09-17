@@ -19,7 +19,7 @@ class SplashWelcomeBody extends StatelessWidget {
         Column(
           children: [
             SplashContainerToLeft(
-                  containerColor: AppColors.bgTriartry,
+                  containerColor: AppColors.bgfourtary,
                   textW: Text(
                     AppStrings.appName,
                     style: AppTextSytlyes.splashWelcomeStyle,

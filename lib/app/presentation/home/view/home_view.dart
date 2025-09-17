@@ -165,12 +165,13 @@ class _HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         final account = state.acountInfos;
         if (account == null) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.textBej),
+          );
         }
         return LiquidPullToRefresh(
           color: AppColors.bgPrimary,

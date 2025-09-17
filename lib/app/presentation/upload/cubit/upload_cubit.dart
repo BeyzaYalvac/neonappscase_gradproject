@@ -7,14 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:neonappscase_gradproject/app/common/injections/injection_container_items.dart';
 import 'upload_state.dart';
 
-import 'dart:io';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as p;
-import 'package:neonappscase_gradproject/app/common/injections/injection_container_items.dart';
-import 'upload_state.dart';
 
 class UploadCubit extends Cubit<UploadState> {
   final ImagePicker _picker = ImagePicker();
@@ -35,7 +27,7 @@ class UploadCubit extends Cubit<UploadState> {
   }
 
   /// Sadece galeriden seçip YÜKLER (tek adım)
-  Future<void> uploadImageFromGallery({int? folderId}) async {
+  Future<void> uploadImageFromGallery({String? folderId}) async {
     await pickFromGallery();
     final img = state.imageFile;
     if (img == null) return;
@@ -62,7 +54,7 @@ class UploadCubit extends Cubit<UploadState> {
   }
 
   /// Sadece kamera ile çekip YÜKLER
-  Future<void> uploadImageFromCamera({int? folderId}) async {
+  Future<void> uploadImageFromCamera({String? folderId}) async {
     await pickFromCamera();
     final img = state.imageFile;
     if (img == null) return;
@@ -104,7 +96,7 @@ class UploadCubit extends Cubit<UploadState> {
   }
 
   /// Dosya yöneticisinden seçip YÜKLER
-  Future<void> uploadFile({int? folderId}) async {
+  Future<void> uploadFile({String? folderId}) async {
     await _pickFile();
     final pf = state.pickedFile;
     if (pf == null) return;

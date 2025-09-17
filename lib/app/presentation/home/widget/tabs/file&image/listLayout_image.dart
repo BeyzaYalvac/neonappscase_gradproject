@@ -110,7 +110,11 @@ class _HomePageListLayoutTabImageState extends State<HomePageListLayoutTabImage>
                 if (index >= homeState.images.length) {
                   return const Padding(
                     padding: EdgeInsets.all(16),
-                    child: Center(child: CircularProgressIndicator()),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.textBej,
+                      ),
+                    ),
                   );
                 }
 
