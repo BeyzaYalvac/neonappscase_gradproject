@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
@@ -18,6 +19,7 @@ class GridToggleTabs extends StatelessWidget {
           child: TabBar(
             padding: EdgeInsets.symmetric(
               horizontal: AppMediaQuery.screenWidth(context) / 8,
+              vertical: 8,
             ),
             dividerHeight: 0,
             indicatorSize: TabBarIndicatorSize.tab,
@@ -30,15 +32,15 @@ class GridToggleTabs extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
             tabs: [
-              Tab(icon: Icon(Icons.list)),
-              Tab(icon: Icon(Icons.grid_3x3)),
+              Tab(icon: AppIcons.list),
+              Tab(icon: AppIcons.grid),
             ],
             onTap: (index) {
               final cubit = context.read<HomeCubit>();
               if (index == 0) {
-                cubit.setGridView(false); // Liste görünümü
+                cubit.setGridView(false);
               } else if (index == 1) {
-                cubit.setGridView(true); // Grid görünümü
+                cubit.setGridView(true);
               }
             },
           ),

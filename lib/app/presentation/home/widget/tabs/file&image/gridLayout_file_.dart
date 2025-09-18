@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/card/grid_card.dart';
 
 class HomePageGridLayoutTabFileImage extends StatelessWidget {

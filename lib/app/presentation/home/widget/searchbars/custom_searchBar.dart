@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
 
 class BlueSearchBar extends StatelessWidget {
   final TextEditingController controller;
@@ -34,16 +35,16 @@ class BlueSearchBar extends StatelessWidget {
         decoration: InputDecoration(
           hintText: 'Ara...',
           hintStyle: TextStyle(color: Colors.blue.shade300),
-          prefixIcon: Icon(Icons.search, color: Colors.blue.shade400),
+          prefixIcon: AppIcons.search,
           suffixIcon: controller.text.isEmpty
               ? null
-              : IconButton(
-                  icon: Icon(Icons.clear, color: Colors.blue.shade400),
-                  onPressed: onClear,
-                ),
+              : IconButton(icon: AppIcons.clear, onPressed: onClear),
           filled: true,
           fillColor: Colors.blue.shade50,
-          contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 14,
+            horizontal: 16,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide.none,

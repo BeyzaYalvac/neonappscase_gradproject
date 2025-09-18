@@ -2,10 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
-import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/rename_iconButton.dart';
 
 class FolderListile extends StatelessWidget {
   final int index;
@@ -19,6 +21,10 @@ class FolderListile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController folderNameController = TextEditingController(
+      text: filteredFolders[index].name,
+    );
+
     return BlocBuilder<FavoriteCubit, FavoriteState>(
       builder: (context, state) {
         final cubit = context.read<FavoriteCubit>();
@@ -32,10 +38,12 @@ class FolderListile extends StatelessWidget {
           leading: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              RenameIconButton(
+                folderNameController: folderNameController,
+                folder: filteredFolders[index],
+              ),
               IconButton(
-                icon: isFavoriteFolder
-                    ? Icon(Icons.star, color: AppColors.bgTriartry)
-                    : Icon(Icons.star_border),
+                icon: isFavoriteFolder ? AppIcons.star : AppIcons.star_border,
 
                 color: AppColors.bgTriartry,
                 onPressed: () {
@@ -46,7 +54,7 @@ class FolderListile extends StatelessWidget {
                   }
                 },
               ),
-              const Icon(Icons.folder, color: AppColors.bgTriartry),
+              AppIcons.folder,
             ],
           ),
           title: Text(
@@ -56,7 +64,6 @@ class FolderListile extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          trailing: Text('Modified: ${index + 1} days ago'),
         );
       },
     );

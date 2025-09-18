@@ -10,7 +10,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i8;
 import 'package:flutter/material.dart' as _i9;
-import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart'
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart'
     as _i10;
 import 'package:neonappscase_gradproject/app/presentation/favorite/view/favorite_view.dart'
     as _i1;

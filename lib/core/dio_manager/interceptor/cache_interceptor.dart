@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/cache/build_cache_key.dart';
 import 'package:neonappscase_gradproject/app/common/cache/hive/hive_cache_store.dart';
 import 'package:neonappscase_gradproject/app/common/cache/hive_cache_model.dart';
@@ -80,7 +81,7 @@ class CacheInterceptor extends Interceptor {
       );
 
       await store.write(entry);
-      print("✅ Cache stored for key=$cacheKey");
+      debugPrint("✅ Cache stored for key=$cacheKey");
     }
     response.extra['fromCache'] = response.extra['fromCache'] ?? false;
 
@@ -99,7 +100,7 @@ class CacheInterceptor extends Interceptor {
     final entry = await store.read(key);
 
     if (entry != null) {
-      print("Cache entry bulundu, dönüyorum: $key"); // 👈 BURAYA
+      debugPrint("Cache entry bulundu, dönüyorum: $key"); // 👈 BURAYA
 
       final isNetworkish = _isNetworkOrServerSide(err);
 

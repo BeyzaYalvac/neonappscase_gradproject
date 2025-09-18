@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_assets.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
@@ -20,7 +21,7 @@ class FavoriteView extends StatelessWidget {
     return BlocBuilder<FavoriteCubit, FavoriteState>(
       builder: (context, state) {
         return Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               width: AppMediaQuery.screenWidth(context),
@@ -54,7 +55,7 @@ class FavoriteView extends StatelessWidget {
                           title: Text(name),
                           subtitle: Text('Size: $sizeText'),
                           trailing: IconButton(
-                            icon: const Icon(Icons.delete),
+                            icon: AppIcons.delete,
                             onPressed: () {
                               // fldId ile silmek istersen:
                               if (fav['id'] != null &&

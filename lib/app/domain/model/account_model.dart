@@ -8,7 +8,7 @@ class AccountModel extends Equatable {
   final String premiumExpire;
   final String balance;
   final int trafficUsed;
-  final int trafficLeft;
+  final String trafficLeft;
   final int storageUsed;
 
   const AccountModel({
@@ -34,7 +34,7 @@ class AccountModel extends Equatable {
       premiumExpire: result['premium_expire']?.toString() ?? '',
       balance: result['balance']?.toString() ?? '',
       trafficUsed: _toInt(result['traffic_used']),
-      trafficLeft: _toInt(result['traffic_left']),
+      trafficLeft: result['traffic_left']?.toString() ?? '',
       storageUsed: _toInt(result['storage_used']),
     );
   }
@@ -66,7 +66,7 @@ class AccountModel extends Equatable {
   String get storageUsedFormatted => formatBytes(storageUsed);
   String get storageLeftFormatted => formatBytes(storageLeft);
   String get trafficUsedFormatted => formatBytes(trafficUsed);
-  String get trafficLeftFormatted => formatBytes(trafficLeft);
+  String get trafficLeftFormatted => formatBytes(trafficLeft as num);
 
   @override
   List<Object?> get props => [

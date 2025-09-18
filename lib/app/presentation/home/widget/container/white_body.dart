@@ -12,8 +12,8 @@ import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/folder/gridview/folder_gridview.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/folder/listview/folder_listview.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/gridLayout_file_.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/homePage_sections_tab.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/homepage_grid_toggleTabs.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/sections_tabs.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/gridToggle_tabs.dart';
 import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 
 class HomePageWhiteBody extends StatefulWidget {

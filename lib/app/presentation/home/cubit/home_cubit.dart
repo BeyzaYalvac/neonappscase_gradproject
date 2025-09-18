@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/injections/injection_container_items.dart';
-import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -24,6 +24,8 @@ class HomeCubit extends Cubit<HomeState> {
       final result = await InjectionContainerItems.contentRepository
           .getFolderList(
             fldId: state.currentFldId,
+            bustCache: true,
+
             // Eğer API server-side isim filtresi destekliyorsa:
             // nameFilter: state.qFolder.isEmpty ? null : state.qFolder,
           );
@@ -157,7 +159,7 @@ class HomeCubit extends Cubit<HomeState> {
       final result = await InjectionContainerItems.contentRepository
           .getFileList(fldId: fldId);
       emit(state.copyWith(isLoading: false, files: result));
-      print(result);
+      debugPrint(result.toString());
       return result;
     } catch (_) {
       emit(state.copyWith(isLoading: false));
@@ -218,11 +220,83 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  Future<void> downloadFile(String fileLink) async {
+    try {
+      await InjectionContainerItems.contentRepository.downloadFile(fileLink);
+      // İndirme başarılı olduğunda kullanıcıya bildirim göster
+      debugPrint('File downloaded successfully: $fileLink');
+    } catch (e) {
+      // Hata durumunda kullanıcıya hata mesajı göster
+      debugPrint('Error downloading file: $e');
+    }
+  }
+
   Future<void> addFolder(String name) async {
     await InjectionContainerItems.contentRepository.createFolder(
       name,
       state.selectedFolder,
     );
     await loadFolders();
+  }
+
+  Future<void> renameFolder(String folderId, String newName) async {
+    final trimmed = newName.trim();
+    if (trimmed.isEmpty) return;
+
+    // 🟦 Tip uyumu: fldId tipin INT ise bu satırı kullan:
+    final isIntFldId =
+        state.allFolders.isNotEmpty && state.allFolders.first.fldId is int;
+
+    // 1) Optimistic update: ekranda anında yeni isim
+    final prevAll = state.allFolders;
+    final patchedAll = [
+      for (final f in prevAll)
+        if (isIntFldId
+            ? f.fldId ==
+                  int.tryParse(folderId) // fldId int ise
+            : f.fldId.toString() == folderId) // fldId string ise
+          f.copyWith(name: trimmed)
+        else
+          f,
+    ];
+    final patchedFiltered = _filterFolders(patchedAll, state.qFolder);
+    emit(state.copyWith(allFolders: patchedAll, folders: patchedFiltered));
+
+    try {
+      // 2) Sunucuya yaz
+      await InjectionContainerItems.contentRepository.renameFolder(
+        folderId,
+        trimmed,
+      );
+
+      // 3) Kesin sonuç için cache-bust ile tekrar çek
+      await _reloadFoldersBust();
+    } catch (e) {
+      // 4) Hata: optimistic update’ı geri al
+      emit(
+        state.copyWith(
+          allFolders: prevAll,
+          folders: _filterFolders(prevAll, state.qFolder),
+        ),
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> _reloadFoldersBust() async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      final result = await InjectionContainerItems.contentRepository
+          .getFolderList(
+            fldId: state.currentFldId,
+            bustCache: true, // cache’i kır
+          );
+      final filtered = _filterFolders(result, state.qFolder);
+      emit(
+        state.copyWith(isLoading: false, allFolders: result, folders: filtered),
+      );
+    } catch (_) {
+      emit(state.copyWith(isLoading: false));
+    }
   }
 }

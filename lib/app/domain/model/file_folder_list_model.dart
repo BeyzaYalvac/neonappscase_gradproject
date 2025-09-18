@@ -131,3 +131,13 @@ class FolderListResponse extends Equatable {
   @override
   List<Object?> get props => [msg, serverTime, status, result];
 }
+
+extension FileFolderListModelX on FileFolderListModel {
+  FileFolderListModel copyWith({String? name}) {
+    return FileFolderListModel(
+      fldId: fldId,
+      name: name ?? this.name,
+      // varsa diğer alanları da buraya geçir
+    );
+  }
+}

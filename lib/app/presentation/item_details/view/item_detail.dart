@@ -1,12 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
-import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
 import 'package:neonappscase_gradproject/core/widget/appBar/custom_appbar.dart';
@@ -109,10 +110,7 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
                                     width: 0.5,
                                   ),
                                 ),
-                                leading: Icon(
-                                  Icons.folder,
-                                  color: AppColors.bgQuaternary,
-                                ),
+                                leading: AppIcons.folder,
                                 title: Text(
                                   f.name,
                                   style: TextStyle(color: AppColors.textDark),

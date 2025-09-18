@@ -1,22 +1,22 @@
 import 'package:equatable/equatable.dart';
 
-class CreateFolderModel extends Equatable {
+class FolderProcessModel extends Equatable {
   final String msg;
   final String serverTime;
   final int status;
   final String fldId;
 
-  const CreateFolderModel({
+  const FolderProcessModel({
     required this.msg,
     required this.serverTime,
     required this.status,
     required this.fldId,
   });
 
-  factory CreateFolderModel.fromMap(Map<String, dynamic> map) {
-    final result = map['result'] ?? {};
+  factory FolderProcessModel.fromMap(Map<String, dynamic> map) {
+    final result = (map['result'] is Map) ? map['result'] as Map : {};
 
-    return CreateFolderModel(
+    return FolderProcessModel(
       msg: map['msg']?.toString() ?? '',
       serverTime: map['server_time']?.toString() ?? '',
       status: map['status'] is int
@@ -31,9 +31,7 @@ class CreateFolderModel extends Equatable {
       'msg': msg,
       'server_time': serverTime,
       'status': status,
-      'result': {
-        'fld_id': fldId,
-      },
+      'result': {'fld_id': fldId},
     };
   }
 

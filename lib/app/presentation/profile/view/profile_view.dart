@@ -2,10 +2,13 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/profile/cubit/profile_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/profile/cubit/profile_state.dart';
+import 'package:neonappscase_gradproject/app/presentation/profile/widget/profile_status_cards.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -15,7 +18,8 @@ class ProfileView extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final account = state.acountInfos;
-
+        final traficLeft = state.acountInfos?.storageLeftFormatted;
+        print("traficLeft: $traficLeft");
         if (account == null) {
           return const Center(
             child: CircularProgressIndicator(color: AppColors.textBej),
@@ -88,11 +92,7 @@ class ProfileView extends StatelessWidget {
                     child: CircleAvatar(
                       radius: avatarRadius,
                       backgroundColor: AppColors.bgQuaternary,
-                      child: Icon(
-                        Icons.person,
-                        size: avatarRadius,
-                        color: AppColors.textWhite,
-                      ),
+                      child: AppIcons.profile,
                     ),
                   ),
                 ],
@@ -141,20 +141,19 @@ class ProfileView extends StatelessWidget {
 
             // Stats
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: w * 0.05),
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: _StatCard(
-                      title: 'Used',
-                      value: formatBytes(used),
-                      height: h * 0.18,
-                      color: AppColors.bgQuaternary,
-                    ),
+                  StatCard(
+                    title: AppStrings.usedProfileText,
+                    value: formatBytes(used),
+                    height: h * 0.18,
+                    color: AppColors.bgQuaternary,
                   ),
-                  _StatCard(
-                    title: 'Left',
-                    value: formatBytes(left),
+                  StatCard(
+                    title: AppStrings.leftProfileText,
+                    value: traficLeft ?? 'N/A',
                     height: h * 0.18,
                     color: AppColors.bgQuaternary,
                   ),
@@ -164,46 +163,6 @@ class ProfileView extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final double height;
-  final Color color;
-
-  const _StatCard({
-    required this.title,
-    required this.value,
-    required this.height,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final w = AppMediaQuery.screenWidth(context);
-
-    return Container(
-      height: height,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              value,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: w * 0.1),
-            ),
-            const SizedBox(height: 4),
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-          ],
-        ),
-      ),
     );
   }
 }

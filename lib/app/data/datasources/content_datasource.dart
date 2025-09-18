@@ -2,11 +2,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/config/app_config.dart';
-import 'package:neonappscase_gradproject/app/domain/model/create_folder_model.dart';
-import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
+import 'package:neonappscase_gradproject/app/domain/model/folder_process_model.dart';
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/domain/model/upload_file_model.dart';
 import 'package:neonappscase_gradproject/app/domain/model/upload_server_model.dart';
 import 'package:neonappscase_gradproject/core/dio_manager/api_client.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContentDataSource {
   // API (hesap/folder/file list vb. için)
@@ -43,24 +44,38 @@ class ContentDataSource {
     return model;
   }
 
-  Future<List<FileFolderListModel>> getFolderList({int fldId = 0}) async {
-    final res = await api.get<Map<String, dynamic>>(
-      '/folder/list',
-      query: {'key': AppConfig.apiKey, 'fld_id': fldId.toString()},
-    );
-    if (res.isSuccess && res.data != null) {
-      final data = res
-          .data!; // ddownload: { msg, status, result: { folders: [...], files: [...] } }
-      final result = data['result'] as Map<String, dynamic>? ?? const {};
-      final folders = (result['folders'] as List?) ?? const [];
-      return folders
-          .whereType<Map<String, dynamic>>()
-          .map((e) => FileFolderListModel.fromMap(e))
-          .toList();
-    } else {
-      throw Exception(res.error?.message ?? 'Klasör listesi alınamadı');
-    }
+  Future<List<FileFolderListModel>> getFolderList({
+  int fldId = 0,
+  bool bustCache = false, // 👈 yenilik
+}) async {
+  // Query’yi cache-bust ile hazırla
+  final query = <String, String>{
+    'key': AppConfig.apiKey,
+    'fld_id': fldId.toString(),
+    if (bustCache) 'ts': DateTime.now().millisecondsSinceEpoch.toString(), // 👈 cache-bust
+  };
+
+  final res = await api.get<Map<String, dynamic>>(
+    '/folder/list',
+    query: query,
+    // Eğer ApiClient'in Options.extra destekliyorsa daha da garantiye al:
+    // options: Options(extra: {'cache': false, 'refresh': true}),
+  );
+
+  if (!res.isSuccess || res.data == null) {
+    throw Exception(res.error?.message ?? 'Klasör listesi alınamadı');
   }
+
+  final data = res.data!;
+  // Tipik cevap: { msg, status, result: { folders: [...], files: [...] } }
+  final result = (data['result'] as Map?) ?? const {};
+  final folders = (result['folders'] as List?) ?? const [];
+
+  return folders
+      .whereType<Map<String, dynamic>>()
+      .map((e) => FileFolderListModel.fromMap(e))
+      .toList();
+}
 
   //load: { msg, status, result: { folders: [...], files: [...] } } final result = data['result'] as Map<String, dynamic>? ?? const {}; final folders = (result['folders'] as List?) ?? const []; return folders .whereType<Map<String, dynamic>>() .map((e) => FileFolderListModel.fromMap(e)) .toList(); } else { throw Exception(res.error?.message ?? 'Klasör listesi alınamadı'); } }
   Future<Map<String, dynamic>> getFileInfo(String fileCode) async {
@@ -116,7 +131,10 @@ class ContentDataSource {
     return null;
   }
 
-  Future<UploadFileModel> uploadFile({required File file, String? fldId}) async {
+  Future<UploadFileModel> uploadFile({
+    required File file,
+    String? fldId,
+  }) async {
     // 1) Upload server ve sess_id al
     final uploadServerModel = await selectServerForUpload();
     final sessId = uploadServerModel.sessId;
@@ -133,8 +151,7 @@ class ContentDataSource {
       if (fldId != null) 'fld_id': fldId,
     });
 
-    print("UPLOAD FORM FIELDS: ${formData.fields}");
-
+    debugPrint("UPLOAD FORM FIELDS: ${formData.fields}");
 
     // 3) Post isteğini yap
     final response = await uploadApi.post(uploadUrl, data: formData);
@@ -219,7 +236,7 @@ class ContentDataSource {
   }
 
   /// 5) Klasör oluştur
-  Future<CreateFolderModel> createFolder(
+  Future<FolderProcessModel> createFolder(
     String folderName,
     String selectedFolderId,
   ) async {
@@ -233,11 +250,42 @@ class ContentDataSource {
     );
 
     if (res.isSuccess && res.data != null) {
-      final model = CreateFolderModel.fromMap(res.data!);
+      final model = FolderProcessModel.fromMap(res.data!);
       debugPrint('Klasör Oluşturma: $model');
       return model;
     } else {
       throw Exception(res.error?.message ?? 'Bilinmeyen hata');
     }
+  }
+
+  Future<void> downloadFile(String fileUrl) async {
+    final Uri url = Uri.parse(fileUrl);
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(
+        url,
+        mode: LaunchMode
+            .externalApplication, // Tarayıcı veya ilgili uygulamada açar
+      );
+    } else {
+      throw 'Bu URL açılamıyor: $fileUrl';
+    }
+  }
+
+  Future<FolderProcessModel> renameFolder(String folderId, String name) {
+    final response = api.get<Map<String, dynamic>>(
+      '/folder/rename',
+      query: {'key': AppConfig.apiKey, 'fld_id': folderId, 'name': name},
+    );
+
+    return response.then((res) {
+      if (res.isSuccess && res.data != null) {
+        final model = FolderProcessModel.fromMap(res.data!);
+        debugPrint('Klasör Yeniden Adlandırma: $model');
+        return model;
+      } else {
+        throw Exception(res.error?.message ?? 'Bilinmeyen hata');
+      }
+    });
   }
 }

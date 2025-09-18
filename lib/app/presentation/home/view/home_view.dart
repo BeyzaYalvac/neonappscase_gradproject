@@ -3,6 +3,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
@@ -140,16 +141,17 @@ class HomeView extends StatelessWidget {
         buildWhen: (p, n) => p.selectedIndex != n.selectedIndex,
         builder: (context, state) {
           return CurvedNavigationBar(
+            animationDuration: const Duration(milliseconds: 300),
             // bazı sürümlerde programatik index güncellemesi için:
             key: ValueKey(state.selectedIndex),
             color: Theme.of(context).brightness == Brightness.dark
                 ? AppColors.bgSecondary
                 : AppColors.bgPrimary,
             backgroundColor: AppColors.bgTriartry,
-            items: const [
-              Icon(Icons.home, size: 30),
-              Icon(Icons.star, size: 30),
-              Icon(Icons.person, size: 30),
+            items: [
+              AppIcons.home,
+              AppIcons.favorite,
+              AppIcons.profile,
             ],
             index: state.selectedIndex,
             onTap: (i) => context.read<HomeCubit>().setSelectedIndex(i),

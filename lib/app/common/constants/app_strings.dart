@@ -43,4 +43,8 @@ class AppStrings {
   static const String emptyFolderText = 'This folder is empty';
 
   static const String uploadFileText = 'Please upload file';
+
+  static const String usedProfileText = 'Used';
+
+  static const String leftProfileText = 'Left';
 }

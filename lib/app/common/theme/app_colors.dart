@@ -22,4 +22,5 @@ class AppColors {
   static const Color textTransparent = Color(0x00000000);
   static const Color success = Colors.green;
   static const Color fail = Colors.red;
+  static const Color star = Colors.orange;
 }

@@ -50,6 +50,7 @@ dependencies:
   image_picker: ^1.2.0
   liquid_pull_to_refresh: ^3.0.1
   file_picker: ^10.3.3
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

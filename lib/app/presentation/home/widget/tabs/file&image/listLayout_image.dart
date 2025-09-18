@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
-import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
@@ -132,11 +133,8 @@ class _HomePageListLayoutTabImageState extends State<HomePageListLayoutTabImage>
                     children: [
                       IconButton(
                         icon: isFavoriteImage
-                            ? const Icon(
-                                Icons.star,
-                                color: AppColors.bgTriartry,
-                              )
-                            : const Icon(Icons.star_border),
+                            ? AppIcons.star
+                            : AppIcons.star_border,
                         onPressed: () {
                           if (isFavoriteImage) {
                             favCubit.removeFavoriteImage(
@@ -149,8 +147,14 @@ class _HomePageListLayoutTabImageState extends State<HomePageListLayoutTabImage>
                           }
                         },
                       ),
-                      const Icon(Icons.folder, color: AppColors.bgTriartry),
+                      AppIcons.folder,
                     ],
+                  ),
+                  trailing: IconButton(
+                    icon: AppIcons.download,
+                    onPressed: () {
+                      context.read<HomeCubit>().downloadFile(item.link);
+                    },
                   ),
                   title: Text(
                     item.name,

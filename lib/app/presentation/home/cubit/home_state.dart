@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
-import 'package:neonappscase_gradproject/app/domain/model/file_folder_list.dart';
+import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 
 class HomeState extends Equatable {
   final bool isLoading;
