@@ -16,10 +16,9 @@ class AppBootstrap {
 
     await Hive.initFlutter();
     const cacheTypeId =
-        0; // CacheModelAdapter.typeId (senin adapter’in typeId’si) cacheTypeId hatası alıyorduk daha önce id ver.lmediğine emşn oldum
-
-    if (!Hive.isAdapterRegistered(cacheTypeId)) {
-      Hive.registerAdapter(CacheModelAdapter());
+        0; 
+    if (!Hive.isAdapterRegistered(cacheTypeId)) { //Typeid'lerin çakışmaması kontrolünü yapıyorum
+      Hive.registerAdapter(CacheModelAdapter()); 
     }
 
     //Boxes
@@ -27,6 +26,7 @@ class AppBootstrap {
     final settingsBox = await Hive.openBox('settingsBox');
     final dataBox = await Hive.openBox<String>('data_box');
     final firstControl = await Hive.openBox<bool>('first_control_box');
+
     if (!firstControl.containsKey(AppConfig.isFirstKey)) {
       await firstControl.put(AppConfig.isFirstKey, true);
     }

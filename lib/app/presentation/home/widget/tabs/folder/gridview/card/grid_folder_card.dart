@@ -7,7 +7,7 @@ import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorit
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/favorite_iconButton.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/favoriteFolder_iconButton.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/rename_iconButton.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/container/folderIcon_container.dart';
 import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';

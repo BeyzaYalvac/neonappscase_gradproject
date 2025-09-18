@@ -10,8 +10,8 @@ class ApiResult<T> {
   const ApiResult._({
     this.data,
     this.error,
-  }); //private constructor'un sebebi developer'ın doğrudan hata yapma ihtimalini sıfırlamak için nesnenin doğrudan newlenememesini sağladık.
-
+  }); 
+  
   /// Başarılı sonuç
   factory ApiResult.success(T data) => ApiResult._(data: data, error: null);
 

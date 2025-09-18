@@ -25,7 +25,7 @@ class FileItem extends Equatable {
   final String link;
   final String uploaded;
   final String fileCode;
-  final int fldId; // <-- int
+  final int fldId; // <-- int yaptım düzeldi :)
   final String name;
 
   const FileItem({

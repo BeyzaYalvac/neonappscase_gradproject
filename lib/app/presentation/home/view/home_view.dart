@@ -66,7 +66,6 @@ class HomeView extends StatelessWidget {
                 ),
               ],
             ),
-            // Closing the ExpandableFab widget
           );
 
           Future.delayed(Duration(seconds: isOnline ? 2 : 4), () {
@@ -98,7 +97,6 @@ class HomeView extends StatelessWidget {
                 builder: (context) {
                   return BlocBuilder<HomeCubit, HomeState>(
                     builder: (context, state) {
-                      // Items: hepsini String değere normalize et
                       final items = state.folders.map((f) {
                         final id = f.fldId.toString(); // <-- kritik
                         return DropdownMenuItem<String>(
@@ -143,16 +141,12 @@ class HomeView extends StatelessWidget {
           return CurvedNavigationBar(
             animationDuration: const Duration(milliseconds: 300),
             // bazı sürümlerde programatik index güncellemesi için:
-            key: ValueKey(state.selectedIndex),
+            //key: ValueKey(state.selectedIndex),
             color: Theme.of(context).brightness == Brightness.dark
                 ? AppColors.bgSecondary
                 : AppColors.bgPrimary,
             backgroundColor: AppColors.bgTriartry,
-            items: [
-              AppIcons.home,
-              AppIcons.favorite,
-              AppIcons.profile,
-            ],
+            items: [AppIcons.home, AppIcons.favorite, AppIcons.profile],
             index: state.selectedIndex,
             onTap: (i) => context.read<HomeCubit>().setSelectedIndex(i),
           );
@@ -172,10 +166,11 @@ class _HomeTab extends StatelessWidget {
         final account = state.acountInfos;
         if (account == null) {
           return const Center(
-            child: CircularProgressIndicator(color: AppColors.textBej),
+            child: CircularProgressIndicator(color: AppColors.bgQuaternary),
           );
         }
         return LiquidPullToRefresh(
+          springAnimationDurationInMilliseconds: 1000,
           color: AppColors.bgPrimary,
           backgroundColor: Theme.of(context).brightness == Brightness.dark
               ? AppColors.bgSecondary

@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:neonappscase_gradproject/app/common/injections/injection_container_items.dart';
 import 'upload_state.dart';
 
-
 class UploadCubit extends Cubit<UploadState> {
   final ImagePicker _picker = ImagePicker();
   UploadCubit() : super(UploadState.initial());
@@ -26,7 +25,6 @@ class UploadCubit extends Cubit<UploadState> {
     }
   }
 
-  /// Sadece galeriden seçip YÜKLER (tek adım)
   Future<void> uploadImageFromGallery({String? folderId}) async {
     await pickFromGallery();
     final img = state.imageFile;
@@ -37,10 +35,9 @@ class UploadCubit extends Cubit<UploadState> {
       final model = await InjectionContainerItems.contentRepository
           .uploadFileContent(File(img.path), folderId: folderId);
 
-      // Doğru doğrulama:
       final info = await InjectionContainerItems.contentDataSource.getFileInfo(
         model.fileCode,
-      ); // veya 65a3yjb8tsiu
+      );
       debugPrint(
         'INFO fld_id=${info['fld_id']}, owner=${info['owner'] ?? info['account_id']}, public=${info['public']}',
       );
@@ -95,7 +92,6 @@ class UploadCubit extends Cubit<UploadState> {
     emit(state.copyWith(pickedFile: result.files.single, error: null));
   }
 
-  /// Dosya yöneticisinden seçip YÜKLER
   Future<void> uploadFile({String? folderId}) async {
     await _pickFile();
     final pf = state.pickedFile;

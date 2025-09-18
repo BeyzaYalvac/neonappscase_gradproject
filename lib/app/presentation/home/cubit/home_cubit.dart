@@ -47,6 +47,7 @@ class HomeCubit extends Cubit<HomeState> {
           .getFolderList(fldId: fldId);
       emit(state.copyWith(isLoading: false, folders: result));
     } catch (_) {
+      
       emit(state.copyWith(isLoading: false));
     }
   }
@@ -168,8 +169,10 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void setGridView(bool value) => emit(state.copyWith(isGridView: value));
+
   void setSelectedIndex(int index) =>
       emit(state.copyWith(selectedIndex: index));
+
   void handleRefresh() => loadProfileData();
 
   // 🔵 ARAMA: Aktif taba göre ilgili query'yi güncelle ve gerekiyorsa server-side ara
@@ -299,4 +302,38 @@ class HomeCubit extends Cubit<HomeState> {
       emit(state.copyWith(isLoading: false));
     }
   }
+
+  Future<void> moveSelectedFile() async {
+    final code = state.fileCodeToMove;
+    final target = state.selectedFolderForMove;
+
+    if (code == null || target == null) {
+      // kullanıcıya SnackBar/Toast gösterebilirsin
+      return;
+    }
+
+    emit(state.copyWith(isLoading: true));
+    try {
+      await InjectionContainerItems.contentRepository.moveFileToFolder(
+        fileCode: code,
+        targetFolderId: target,
+      );
+
+      // başarılı -> listeyi yenile, seçimleri sıfırla
+      await loadFiles(); // veya loadContents()
+      emit(
+        state.copyWith(
+          isLoading: false,
+          fileCodeToMove: null,
+          selectedFolder: null,
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(isLoading: false));
+      // hata göster
+    }
+  }
+
+  void setFileCodeToMove(String? code) =>
+      emit(state.copyWith(fileCodeToMove: code));
 }

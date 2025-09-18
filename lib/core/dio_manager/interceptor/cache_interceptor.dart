@@ -47,8 +47,8 @@ class CacheInterceptor extends Interceptor {
             statusCode: 200,
             data: jsonDecode(entry.value),
             extra: {
-              ...options.extra, // 🔑 request extra’ları taşı
-              'fromCache': true, // 🔑 cache işareti
+              ...options.extra,
+              'fromCache': true,
               'stale': !entry.isFresh,
             },
           ),
@@ -62,9 +62,7 @@ class CacheInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) async {
     final options = response.requestOptions;
-    if (_isGet(options) &&
-        response.statusCode == 200 &&
-        ((options.extra['cache'] as bool?) ?? true)) {
+    if (_isGet(options) && response.statusCode == 200) {
       final cacheKey = _keyFor(options);
 
       // Bu çağrı için maxAge override edilebilir
@@ -91,7 +89,7 @@ class CacheInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     final o = err.requestOptions;
-    if (!_isGet(o) || ((o.extra['cache'] as bool?) == false)) {
+    if (!_isGet(o) ) {
       return handler.next(err);
     }
 

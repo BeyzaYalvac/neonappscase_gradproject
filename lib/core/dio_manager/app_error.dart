@@ -1,12 +1,13 @@
-enum AppErrorType{
+enum AppErrorType {
   network,
   server,
   unauthorized,
-  unknown, timeout, client,
-  
-} //Hataları sınıflandırdımm (Daha da çeşitlendirmeyi untuma)
+  unknown,
+  timeout,
+  client,
+} //Hataları sınıflandırdımm (Daha da çeşitlendirmeyi unutmayayım unknown'a düşerse sıkıntı)
 
-class AppError{
+class AppError {
   final AppErrorType type;
   final String? message;
 

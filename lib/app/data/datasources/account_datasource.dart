@@ -7,9 +7,7 @@ import 'package:neonappscase_gradproject/core/dio_manager/api_client.dart';
 class AccountDatasource {
   final api = ApiClient(
     baseUrl: AppConfig.apiBaseUrl,
-    headers: {
-      'Accept': 'application/json',
-    },
+    headers: {'Accept': 'application/json',},
   ).safe;
 
   Future<AccountModel> fetchAccountDetails() async {
@@ -20,10 +18,10 @@ class AccountDatasource {
     if (resForFetchAcount.isSuccess && resForFetchAcount.data != null) {
       final data = resForFetchAcount.data;
       debugPrint(data.toString());
-       final core = (data?['data'] is Map<String, dynamic>)
-        ? (data?['data'] as Map<String, dynamic>)
-        : data;
-        final model = AccountModel.fromMap(core!);
+      final core = (data?['data'] is Map<String, dynamic>)
+          ? (data?['data'] as Map<String, dynamic>)
+          : data;
+      final model = AccountModel.fromMap(core!);
       return model;
     } else {
       throw Exception(resForFetchAcount.error?.message ?? 'Bilinmeyen hata');

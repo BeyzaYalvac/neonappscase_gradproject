@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 class ContentDataSource {
   // API (hesap/folder/file list vb. için)
   final api = ApiClient(
-    baseUrl: AppConfig.apiBaseUrl, // örn: https://api-v2.ddownload.com/api
+    baseUrl: AppConfig.apiBaseUrl,
     headers: {'Accept': 'application/json'},
   ).safe;
 
@@ -22,7 +22,6 @@ class ContentDataSource {
     headers: {'Accept': 'application/json'},
   ).safe;
 
-  /// 1) Yükleme sunucusunu seç
   Future<UploadServerModel> selectServerForUpload() async {
     final res = await api.get<Map<String, dynamic>>(
       '/upload/server',
@@ -34,7 +33,6 @@ class ContentDataSource {
 
     final model = UploadServerModel.fromMap(res.data!);
 
-    // Örn: https://wwwNNN.ucdn.to/cgi-bin/upload.cgi
     uploadApi = ApiClient(
       baseUrl: model.result,
       headers: {'Accept': 'application/json'},
@@ -45,37 +43,38 @@ class ContentDataSource {
   }
 
   Future<List<FileFolderListModel>> getFolderList({
-  int fldId = 0,
-  bool bustCache = false, // 👈 yenilik
-}) async {
-  // Query’yi cache-bust ile hazırla
-  final query = <String, String>{
-    'key': AppConfig.apiKey,
-    'fld_id': fldId.toString(),
-    if (bustCache) 'ts': DateTime.now().millisecondsSinceEpoch.toString(), // 👈 cache-bust
-  };
+    int fldId = 0,
+    bool bustCache = false, // 👈 yenilik
+  }) async {
+    // Query’yi cache-bust ile hazırla
+    final query = <String, String>{
+      'key': AppConfig.apiKey,
+      'fld_id': fldId.toString(),
+      if (bustCache)
+        'ts': DateTime.now().millisecondsSinceEpoch.toString(), // 👈 cache-bust
+    };
 
-  final res = await api.get<Map<String, dynamic>>(
-    '/folder/list',
-    query: query,
-    // Eğer ApiClient'in Options.extra destekliyorsa daha da garantiye al:
-    // options: Options(extra: {'cache': false, 'refresh': true}),
-  );
+    final res = await api.get<Map<String, dynamic>>(
+      '/folder/list',
+      query: query,
+      // Eğer ApiClient'in Options.extra destekliyorsa daha da garantiye al:
+      // options: Options(extra: {'cache': false, 'refresh': true}),
+    );
 
-  if (!res.isSuccess || res.data == null) {
-    throw Exception(res.error?.message ?? 'Klasör listesi alınamadı');
+    if (!res.isSuccess || res.data == null) {
+      throw Exception(res.error?.message ?? 'Klasör listesi alınamadı');
+    }
+
+    final data = res.data!;
+    // Tipik cevap: { msg, status, result: { folders: [...], files: [...] } }
+    final result = (data['result'] as Map?) ?? const {};
+    final folders = (result['folders'] as List?) ?? const [];
+
+    return folders
+        .whereType<Map<String, dynamic>>()
+        .map((e) => FileFolderListModel.fromMap(e))
+        .toList();
   }
-
-  final data = res.data!;
-  // Tipik cevap: { msg, status, result: { folders: [...], files: [...] } }
-  final result = (data['result'] as Map?) ?? const {};
-  final folders = (result['folders'] as List?) ?? const [];
-
-  return folders
-      .whereType<Map<String, dynamic>>()
-      .map((e) => FileFolderListModel.fromMap(e))
-      .toList();
-}
 
   //load: { msg, status, result: { folders: [...], files: [...] } } final result = data['result'] as Map<String, dynamic>? ?? const {}; final folders = (result['folders'] as List?) ?? const []; return folders .whereType<Map<String, dynamic>>() .map((e) => FileFolderListModel.fromMap(e)) .toList(); } else { throw Exception(res.error?.message ?? 'Klasör listesi alınamadı'); } }
   Future<Map<String, dynamic>> getFileInfo(String fileCode) async {
@@ -287,5 +286,36 @@ class ContentDataSource {
         throw Exception(res.error?.message ?? 'Bilinmeyen hata');
       }
     });
+  }
+
+  Future<FolderProcessModel> moveFileToFolder({
+    required String fileCode,
+    required int targetFolderId,
+  }) async {
+    // DİKKAT: api client (uploadApi değil)
+    final res = await api.get<Map<String, dynamic>>(
+      '/file/set_folder',
+      query: {
+        // <- query değil, queryParameters
+        'key': AppConfig.apiKey,
+        'file_code': fileCode, // tek code veya "a,b,c"
+        'fld_id': targetFolderId.toString(), // string olarak gönder
+      },
+    );
+
+    if (res.isSuccess && res.data != null) {
+      final data = res.data!;
+      // status !== 200 ise server mesajını fırlat
+      final status = data['status'];
+      if (status is int && status != 200) {
+        throw Exception(data['msg']?.toString() ?? 'Taşıma başarısız');
+      }
+      return FolderProcessModel.fromMap(data);
+    } else {
+      // burada genelde domain/endpoint hatası ya da param gitmemiş olur
+      throw Exception(
+        res.error?.message ?? 'Dosya taşıma başarısız (null response)',
+      );
+    }
   }
 }

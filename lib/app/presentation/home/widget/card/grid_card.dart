@@ -8,7 +8,8 @@ import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
-import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/alerts/moveFile_alert.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/favoriteFile_iconButton.dart';
 
 class GridListCard extends StatelessWidget {
   final FileItem file;
@@ -80,24 +81,50 @@ class GridListCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  IconButton(
-                    icon: isFavoriteFile ? AppIcons.star : AppIcons.star_border,
-                    color: AppColors.bgTriartry,
-                    onPressed: () {
-                      if (isFavoriteFile) {
-                        cubit.removeFavoriteFileByKey(file.link);
-                      } else {
-                        cubit.addFavoriteFile(file);
-                      }
-                    },
+                  FavoriteFileIconButton(
+                    isFavoriteFile: isFavoriteFile,
+                    cubit: cubit,
+                    file: file,
                   ),
                   Positioned(
-                    right: 0,
+                    right: 50,
                     child: IconButton(
                       onPressed: () {
                         context.read<HomeCubit>().downloadFile(file.link);
                       },
                       icon: AppIcons.download,
+                    ),
+                  ),
+                  Positioned(
+                    right: 0,
+                    child: IconButton(
+                      onPressed: () {
+                        context.read<HomeCubit>().setFileCodeToMove(
+                          file.fileCode,
+                        );
+
+                        final home = context.read<HomeCubit>().state;
+                        final items = context
+                            .read<HomeCubit>()
+                            .state
+                            .folders
+                            .map(
+                              (f) => DropdownMenuItem<String>(
+                                value: f.fldId.toString(),
+                                child: Text(
+                                  f.name,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            )
+                            .toList();
+
+                        showDialog(
+                          context: context,
+                          builder: (context) => MoveFileAlert(items: items),
+                        );
+                      },
+                      icon: Icon(Icons.move_up),
                     ),
                   ),
                 ],

@@ -118,9 +118,7 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
                     BlueSearchBar(
                       controller: _searchController,
                       onChanged: (v) {
-                        final tabIndex = DefaultTabController.of(
-                          context,
-                        ).index;
+                        final tabIndex = DefaultTabController.of(context).index;
                         context.read<HomeCubit>().setSearchQueryForTab(
                           tabIndex,
                           v,
@@ -132,35 +130,36 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
                         _searchController.clear();
                       },
                     ),
-                    // 🔵 BURASI: Expanded yerine SizedBox
-                    SizedBox(
-                      height: AppMediaQuery.screenHeight(context) * 0.5,
-                      child: TabBarView(
-                        children: [
-                          widget.isGrid
-                              ? HomePageFolderGridLayoutTabFolder(
-                                  filteredFolders: state.folders,
-                                )
-                              : HomePageFolderListLayoutTabFolder(
-                                  filteredFolders: state.folders,
-                                ),
-                          widget.isGrid
-                              ? HomePageGridLayoutTabFileImage(
-                                  filteredItems: state.files,
-                                )
-                              : HomePageListLayoutTabFile(
-                                  filteredFiles: state.files,
-                                ),
-                          widget.isGrid
-                              ? HomePageGridLayoutTabFileImage(
-                                  filteredItems: state.images,
-                                )
-                              : HomePageListLayoutTabImage(
-                                  filteredImages: state.images,
-                                ),
-                        ],
-                      ),
-                    ),
+                    state.folders.isEmpty
+                        ? CircularProgressIndicator()
+                        : SizedBox(
+                            height: AppMediaQuery.screenHeight(context) * 0.5,
+                            child: TabBarView(
+                              children: [
+                                widget.isGrid
+                                    ? HomePageFolderGridLayoutTabFolder(
+                                        filteredFolders: state.folders,
+                                      )
+                                    : HomePageFolderListLayoutTabFolder(
+                                        filteredFolders: state.folders,
+                                      ),
+                                widget.isGrid
+                                    ? HomePageGridLayoutTabFileImage(
+                                        filteredItems: state.files,
+                                      )
+                                    : HomePageListLayoutTabFile(
+                                        filteredFiles: state.files,
+                                      ),
+                                widget.isGrid
+                                    ? HomePageGridLayoutTabFileImage(
+                                        filteredItems: state.images,
+                                      )
+                                    : HomePageListLayoutTabImage(
+                                        filteredImages: state.images,
+                                      ),
+                              ],
+                            ),
+                          ),
                   ],
                 );
               },

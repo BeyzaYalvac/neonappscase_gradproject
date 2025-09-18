@@ -61,7 +61,7 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
                 children: [
                   // başlık...
                   Text(
-                    "$currentFolderName",
+                    currentFolderName,
                     style: TextStyle(
                       color: AppColors.textDark,
                       fontSize: 20,

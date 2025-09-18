@@ -12,38 +12,34 @@ class GridToggleTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: SizedBox(
-        width: AppMediaQuery.screenWidth(context) * 0.5,
-
-        child: Expanded(
-          child: TabBar(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppMediaQuery.screenWidth(context) / 8,
-              vertical: 8,
-            ),
-            dividerHeight: 0,
-            indicatorSize: TabBarIndicatorSize.tab,
-            isScrollable: true,
-            labelColor: AppColors.textWhite,
-            unselectedLabelColor: AppColors.bgQuaternary,
-            indicator: BoxDecoration(
-              shape: BoxShape.rectangle,
-              color: AppColors.bgTriartry,
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-            ),
-            tabs: [
-              Tab(icon: AppIcons.list),
-              Tab(icon: AppIcons.grid),
-            ],
-            onTap: (index) {
-              final cubit = context.read<HomeCubit>();
-              if (index == 0) {
-                cubit.setGridView(false);
-              } else if (index == 1) {
-                cubit.setGridView(true);
-              }
-            },
+      child: Expanded(
+        child: TabBar(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppMediaQuery.screenWidth(context) / 8,
+            vertical: 8,
           ),
+          dividerHeight: 0,
+          indicatorSize: TabBarIndicatorSize.tab,
+          isScrollable: true,
+          labelColor: AppColors.textWhite,
+          unselectedLabelColor: AppColors.bgQuaternary,
+          indicator: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: AppColors.bgTriartry,
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          tabs: [
+            Tab(icon: AppIcons.list),
+            Tab(icon: AppIcons.grid),
+          ],
+          onTap: (index) {
+            final cubit = context.read<HomeCubit>();
+            if (index == 0) {
+              cubit.setGridView(false);
+            } else if (index == 1) {
+              cubit.setGridView(true);
+            }
+          },
         ),
       ),
     );

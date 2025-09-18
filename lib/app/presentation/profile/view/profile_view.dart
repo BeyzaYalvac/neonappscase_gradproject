@@ -18,8 +18,9 @@ class ProfileView extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final account = state.acountInfos;
-        final traficLeft = state.acountInfos?.storageLeftFormatted;
-        print("traficLeft: $traficLeft");
+        final storageLeft = state.acountInfos?.storageLeftFormatted;
+        final storageUsed = state.acountInfos?.storageUsedFormatted;
+        print("traficLeft: $storageLeft");
         if (account == null) {
           return const Center(
             child: CircularProgressIndicator(color: AppColors.textBej),
@@ -33,18 +34,6 @@ class ProfileView extends StatelessWidget {
         double progress = total > 0 ? used / total : 0.0;
         // Gürültülü veriye karşı clamp
         progress = progress.clamp(0.0, 1.0);
-
-        String formatBytes(num bytes) {
-          if (bytes <= 0) return "0 B";
-          const k = 1024;
-          const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-          final i = (math.log(bytes) / math.log(k)).floor().clamp(
-            0,
-            sizes.length - 1,
-          );
-          final v = bytes / math.pow(k, i);
-          return "${v.toStringAsFixed(1)} ${sizes[i]}";
-        }
 
         final h = AppMediaQuery.screenHeight(context);
         final w = AppMediaQuery.screenWidth(context);
@@ -117,7 +106,7 @@ class ProfileView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Current Storage: ${formatBytes(used)} / ${formatBytes(total)}  (${(progress * 100).toStringAsFixed(1)}%)",
+                      "Current Storage: ${storageUsed != null && storageLeft != null ? storageUsed : 'N/A'}",
                       style: TextStyle(
                         fontSize: w * 0.035,
                         fontWeight: FontWeight.w600,
@@ -147,13 +136,13 @@ class ProfileView extends StatelessWidget {
                 children: [
                   StatCard(
                     title: AppStrings.usedProfileText,
-                    value: formatBytes(used),
+                    value: storageUsed ?? 'N/A',
                     height: h * 0.18,
                     color: AppColors.bgQuaternary,
                   ),
                   StatCard(
                     title: AppStrings.leftProfileText,
-                    value: traficLeft ?? 'N/A',
+                    value: storageLeft ?? 'N/A',
                     height: h * 0.18,
                     color: AppColors.bgQuaternary,
                   ),

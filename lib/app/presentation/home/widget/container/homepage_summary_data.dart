@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
@@ -14,26 +12,13 @@ class HomePageSummmaryData extends StatelessWidget {
     return (bytes / (1024 * 1024 * 1024));
   }
 
-  String _formatBytes(num bytes, [int decimals = 1]) {
-    if (bytes <= 0) return '0 B';
-    const k = 1024;
-    const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-    final i = (math.log(bytes) / math.log(k)).floor();
-    final v = bytes / math.pow(k, i);
-    return '${v.toStringAsFixed(decimals)} ${units[i]}';
-  }
-
   @override
   Widget build(BuildContext context) {
-    // Güvenli okuma
 
     final stats = acountInfos;
     print(stats);
-    final storageBytes = stats.storageUsed;
-    final storageGb = bytoToGb(storageBytes);
-    final storageLeft = stats.storageLeft;
-    final storageLeftGB = bytoToGb(storageLeft);
-    final storageCanUsed = storageGb + storageLeftGB;
+    final storageUsed = stats.storageUsedFormatted;
+    final storageLeft = stats.storageLeftFormatted;
 
     //debugPrint('ROOT keys: ${acountInfos.keys}');
     //debugPrint('data type : ${acountInfos['data']?.runtimeType}');
@@ -49,7 +34,7 @@ class HomePageSummmaryData extends StatelessWidget {
             AppPaddings.CustomWidthSizedBox(context, 0.01),
 
             Text(
-              " Total ${storageCanUsed.toStringAsFixed(3)} GB",
+              " Total $storageUsed",
               style: TextStyle(color: AppColors.textBej),
             ),
           ],
@@ -62,10 +47,7 @@ class HomePageSummmaryData extends StatelessWidget {
           children: [
             const Icon(Icons.donut_large, color: AppColors.textBej, size: 8),
             AppPaddings.CustomWidthSizedBox(context, 0.1),
-            Text(
-              ' Used  ${_formatBytes(storageBytes)}',
-              style: AppTextSytlyes.whiteTextStyle,
-            ),
+            Text(' Used  $storageUsed', style: AppTextSytlyes.whiteTextStyle),
           ],
         ),
       ],

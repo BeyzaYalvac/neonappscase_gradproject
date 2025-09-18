@@ -1,14 +1,5 @@
-/*
-
-
-
-
-
-
-
-*/
-
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 import 'api_result.dart';
 import 'app_error.dart';
 import 'dio_error_mapper.dart';
@@ -34,9 +25,15 @@ class SafeDio {
     String path, {
     Map<String, dynamic>? query,
     Options? options,
-  }) => _wrap<T>(
-    () => _dio.get<T>(path, queryParameters: query, options: options),
-  );
+  }) => _wrap<T>(() async {
+    final response = await _dio.get<T>(
+      path,
+      queryParameters: query,
+      options: options,
+    );
+    debugPrint('---${response.statusCode.toString()}---');
+    return response;
+  });
 
   Future<ApiResult<T>> post<T>(String path, {dynamic data, Options? options}) =>
       _wrap<T>(() => _dio.post<T>(path, data: data, options: options));

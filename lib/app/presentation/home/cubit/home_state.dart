@@ -15,14 +15,15 @@ class HomeState extends Equatable {
 
   /// Gezinim
   final int currentFldId; // açık klasör
-  final List<int> breadcrumbFldIds; // örn: [0, 24, 31]
+  final List<int> breadcrumbFldIds;
 
   /// İçerik
   final List<FileFolderListModel> allFolders; // ham veri
   final String selectedFolder;
+  final int selectedFolderForMove;
   final List<FileFolderListModel> folders; // filtrelenmiş klasörler
-  final List<FileItem> files; // dosyalar  <-- DÜZELTİLDİ
-  final List<FileItem> images; // dosyalar  <-- DÜZELTİLDİ
+  final List<FileItem> files;
+  final List<FileItem> images;
 
   /// Aramalar
   final String qFolder;
@@ -31,6 +32,8 @@ class HomeState extends Equatable {
   final int imagesPage;
   final bool imagesHasMore;
   final bool isLoadingMore;
+
+  final String? fileCodeToMove;
 
   const HomeState({
     this.isLoading = false,
@@ -49,9 +52,11 @@ class HomeState extends Equatable {
     this.imagesPage = 1,
     this.imagesHasMore = true,
     this.isLoadingMore = false,
+    this.fileCodeToMove,
+    this.selectedFolderForMove = 0,
   });
 
-  factory HomeState.initial() => const HomeState();
+  factory HomeState.initial() => const HomeState(fileCodeToMove: null);
 
   HomeState copyWith({
     bool? isLoading,
@@ -70,6 +75,8 @@ class HomeState extends Equatable {
     int? imagesPage,
     bool? imagesHasMore,
     bool? isLoadingMore,
+    String? fileCodeToMove,
+    int? selectedFolderForMove,
   }) {
     return HomeState(
       isLoading: isLoading ?? this.isLoading,
@@ -88,6 +95,8 @@ class HomeState extends Equatable {
       imagesPage: imagesPage ?? this.imagesPage,
       imagesHasMore: imagesHasMore ?? this.imagesHasMore,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      fileCodeToMove: fileCodeToMove ?? this.fileCodeToMove,
+      selectedFolderForMove: selectedFolderForMove ?? this.selectedFolderForMove,
     );
   }
 
@@ -109,5 +118,7 @@ class HomeState extends Equatable {
     imagesPage,
     imagesHasMore,
     isLoadingMore,
+    fileCodeToMove,
+    selectedFolderForMove,
   ];
 }

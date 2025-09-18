@@ -29,6 +29,19 @@ class LoggerInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     final fromCache = response.extra['fromCache'] == true;
+
+    if (response.statusCode! < 200 || response.statusCode! > 299){
+      dev.log(
+        '[RESPONSE-ERROR] ${response.statusCode} '
+        '${response.requestOptions.method} ${response.requestOptions.uri} '
+        '${fromCache ? "(CACHE)" : "(NETWORK)"}',
+        name: 'HTTP',
+      );
+    }
+
+    else if( response.statusCode==200 || response.statusCode!<=299){
+
+    }
     dev.log(
       '[RESPONSE] ${response.statusCode} '
       '${response.requestOptions.method} ${response.requestOptions.uri} '
