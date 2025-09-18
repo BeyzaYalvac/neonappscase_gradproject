@@ -149,13 +149,17 @@ class ProfileView extends StatelessWidget {
                     title: AppStrings.usedProfileText,
                     value: formatBytes(used),
                     height: h * 0.18,
-                    color: AppColors.bgQuaternary,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColors.bgSecondary
+                        : AppColors.bgQuaternary,
                   ),
                   StatCard(
                     title: AppStrings.leftProfileText,
                     value: traficLeft ?? 'N/A',
                     height: h * 0.18,
-                    color: AppColors.bgQuaternary,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColors.bgSecondary
+                        : AppColors.bgQuaternary,
                   ),
                 ],
               ),

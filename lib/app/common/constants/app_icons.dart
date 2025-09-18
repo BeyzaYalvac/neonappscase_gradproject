@@ -74,6 +74,8 @@ class AppIcons {
   }
 
   static final create = Icon(Icons.add);
+
+  static final create_folder_IconData = Icons.create_new_folder;
 }
 
 class IconSizes {

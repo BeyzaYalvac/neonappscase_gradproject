@@ -19,7 +19,6 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
 
 void main() async {
   final bindings = WidgetsFlutterBinding.ensureInitialized();
-  // Native splash ekranda kalsın:
   FlutterNativeSplash.preserve(widgetsBinding: bindings);
 
   final boot = await AppBootstrap.init();
@@ -55,7 +54,7 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: state.themeMode,
-            scaffoldMessengerKey: rootScaffoldMessengerKey, // ✅ kritik
+            scaffoldMessengerKey: rootScaffoldMessengerKey, 
             //home: MoviesHomepage(),
             routerConfig: InjectionContainerItems.appRouter.config(),
           );

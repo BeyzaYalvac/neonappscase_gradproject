@@ -34,7 +34,6 @@ class ThemeCubit extends Cubit<ThemeState> {
     }
   }
 
-  //Doğrudan theme Set(?)
   void setTheme(ThemeMode mode) {
     emit(state.copyWith(themeMode: mode));
     _box.put(_themeKey, _modeToString(mode));

@@ -8,6 +8,8 @@ import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/moveFile_dialog.dart';
 
 class HomePageListLayoutTabFile extends StatelessWidget {
   final List<FileItem> filteredFiles;
@@ -37,7 +39,6 @@ class HomePageListLayoutTabFile extends StatelessWidget {
               leading: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  
                   IconButton(
                     icon: isFavoriteFile ? AppIcons.star : AppIcons.star_border,
 
@@ -63,13 +64,30 @@ class HomePageListLayoutTabFile extends StatelessWidget {
                 ),
               ),
               subtitle: Text('Size: ${index * 10 + 5} MB'),
-              trailing: IconButton(
-                icon: AppIcons.download,
-                onPressed: () {
-                  context.read<HomeCubit>().downloadFile(
-                    filteredFiles[index].link,
-                  );
-                },
+              trailing: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  BlocBuilder<HomeCubit, HomeState>(
+                    builder: (context, state) => Positioned(
+                      right: 0,
+                      child: IconButton(
+                        icon: Icon(Icons.move_up),
+                        onPressed: () {
+                          MoveFileDialog(context, state, filteredFiles[index]);
+                        },
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: AppIcons.download,
+                    onPressed: () {
+                      context.read<HomeCubit>().downloadFile(
+                        filteredFiles[index].link,
+                      );
+                    },
+                  ),
+                ],
               ),
             );
           },

@@ -7,7 +7,7 @@ import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorit
 
 class FavoriteCubit extends Cubit<FavoriteState> {
   FavoriteCubit() : super(FavoriteState.initial()) {
-    // Uygulama açılır açılmaz Hive'daki verileri state'e yaz
+    // Uygulama açılır açılmaz Hive'daki verileri state'e yazdımm
     emit(state.copyWith(favorites: box.values.toList()));
   }
   Box get box => Hive.box('favorite_box');
@@ -21,7 +21,6 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     emit(state.copyWith(favorites: box.values.toList()));
   }
 
-  // --- FILE favorites ---
   void addFavoriteFile(FileItem file) {
     box.add({'id': file.link, 'name': file.name, 'type': 'file'});
     emit(state.copyWith(favorites: box.values.toList()));
@@ -40,7 +39,6 @@ class FavoriteCubit extends Cubit<FavoriteState> {
   }
 
   void removeFavoriteImage(String fileKey) {
-    // (ismi de netleştirdim)
     final entries = box.toMap();
     for (var e in entries.entries) {
       final v = e.value;

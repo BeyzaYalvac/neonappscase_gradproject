@@ -26,7 +26,6 @@ class NetworkCubit extends Cubit<net.NetworkState> {
   }
 
   Future<void> start() async {
-    // 1) Başlangıç durumu
     final initialRaw = await _connectivity.checkConnectivity();
     final initial = _normalize(initialRaw);
     final online = await _checker.hasInternetAccess;
@@ -36,7 +35,6 @@ class NetworkCubit extends Cubit<net.NetworkState> {
       status: online ? net.NetworkStatus.online : net.NetworkStatus.offline,
     ));
 
-    // 2) Arayüz değişimini dinle (wifi/mobil/none)
     _connSub = _connectivity.onConnectivityChanged.listen((event) async {
       final result = _normalize(event);
       final online = await _checker.hasInternetAccess;
@@ -46,7 +44,6 @@ class NetworkCubit extends Cubit<net.NetworkState> {
       ));
     });
 
-    // 3) Gerçek internet değişimini dinle
     _checkSub = _checker.onStatusChange.listen((status) {
       emit(state.copyWith(
         status: status == InternetStatus.connected

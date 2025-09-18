@@ -36,7 +36,6 @@ class HomePageSummaryHeader extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Boş daire
                   SizedBox.expand(
                     child: CircularProgressIndicator(
                       value: 1, // full circle background

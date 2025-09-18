@@ -10,19 +10,16 @@ import 'package:neonappscase_gradproject/core/dio_manager/api_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContentDataSource {
-  // API (hesap/folder/file list vb. için)
   final api = ApiClient(
-    baseUrl: AppConfig.apiBaseUrl, // örn: https://api-v2.ddownload.com/api
+    baseUrl: AppConfig.apiBaseUrl, 
     headers: {'Accept': 'application/json'},
   ).safe;
 
-  // Upload için ayrı client
   late var uploadApi = ApiClient(
-    baseUrl: '', // seçilen upload server geldikten sonra set edilecek
+    baseUrl: '',
     headers: {'Accept': 'application/json'},
   ).safe;
 
-  /// 1) Yükleme sunucusunu seç
   Future<UploadServerModel> selectServerForUpload() async {
     final res = await api.get<Map<String, dynamic>>(
       '/upload/server',
@@ -39,26 +36,22 @@ class ContentDataSource {
       headers: {'Accept': 'application/json'},
     ).safe;
 
-    print("model.result: ${model.result}");
+    //debugPrint("model.result: ${model.result}");
     return model;
   }
 
   Future<List<FileFolderListModel>> getFolderList({
     int fldId = 0,
-    bool bustCache = false, // 👈 yenilik
+    bool bustCache = false,
   }) async {
-    // Query’yi cache-bust ile hazırla
     final query = <String, String>{
       'key': AppConfig.apiKey,
       'fld_id': fldId.toString(),
-      //if (bustCache) 'ts': "123", // 👈 cache-bust
     };
 
     final res = await api.get<Map<String, dynamic>>(
       '/folder/list',
       query: query,
-      // Eğer ApiClient'in Options.extra destekliyorsa daha da garantiye al:
-      // options: Options(extra: {'cache': false, 'refresh': true}),
     );
 
     if (!res.isSuccess || res.data == null) {
@@ -66,7 +59,6 @@ class ContentDataSource {
     }
 
     final data = res.data!;
-    // Tipik cevap: { msg, status, result: { folders: [...], files: [...] } }
     final result = (data['result'] as Map?) ?? const {};
     final folders = (result['folders'] as List?) ?? const [];
 
@@ -235,7 +227,6 @@ class ContentDataSource {
     return const <FileItem>[];
   }
 
-  /// 5) Klasör oluştur
   Future<FolderProcessModel> createFolder(
     String folderName,
     String selectedFolderId,
@@ -265,7 +256,7 @@ class ContentDataSource {
       await launchUrl(
         url,
         mode: LaunchMode
-            .externalApplication, // Tarayıcı veya ilgili uygulamada açar
+            .externalApplication,
       );
     } else {
       throw 'Bu URL açılamıyor: $fileUrl';

@@ -132,7 +132,6 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
                         _searchController.clear();
                       },
                     ),
-                    // 🔵 BURASI: Expanded yerine SizedBox
                     SizedBox(
                       height: AppMediaQuery.screenHeight(context) * 0.5,
                       child: TabBarView(

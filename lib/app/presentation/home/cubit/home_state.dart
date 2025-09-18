@@ -13,16 +13,14 @@ class HomeState extends Equatable {
 
   final AccountModel? acountInfos;
 
-  /// Gezinim
-  final int currentFldId; // açık klasör
-  final List<int> breadcrumbFldIds; // örn: [0, 24, 31]
+  final int currentFldId; 
+  final List<int> breadcrumbFldIds;
 
-  /// İçerik
-  final List<FileFolderListModel> allFolders; // ham veri
+  final List<FileFolderListModel> allFolders; //bütün klasörlerrr
   final String selectedFolder;
   final List<FileFolderListModel> folders; // filtrelenmiş klasörler
-  final List<FileItem> files; // dosyalar  <-- DÜZELTİLDİ
-  final List<FileItem> images; // dosyalar  <-- DÜZELTİLDİ
+  final List<FileItem> files; 
+  final List<FileItem> images; 
 
   /// Aramalar
   final String qFolder;
@@ -40,8 +38,8 @@ class HomeState extends Equatable {
     this.currentFldId = 0,
     this.breadcrumbFldIds = const [0],
     this.folders = const [],
-    this.files = const [], // <-- DÜZELTİLDİ
-    this.images = const [], // <-- DÜZELTİLDİ
+    this.files = const [], 
+    this.images = const [], 
     this.qFolder = '',
     this.qFile = '',
     this.allFolders = const [],

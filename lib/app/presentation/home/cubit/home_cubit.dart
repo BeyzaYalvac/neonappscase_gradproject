@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/injections/injection_container_items.dart';
@@ -20,14 +19,8 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(isLoading: true));
     try {
       final result = await InjectionContainerItems.contentRepository
-          .getFolderList(
-            fldId: state.currentFldId,
-            bustCache: true,
-
-            // Eğer API server-side isim filtresi destekliyorsa:
-            // nameFilter: state.qFolder.isEmpty ? null : state.qFolder,
-          );
-      debugPrint('-----------$result------------');
+          .getFolderList(fldId: state.currentFldId, bustCache: true);
+      //debugPrint('-----------$result------------');
       // Ham listeyi sakla ve aktif qFolder’a göre ekrana yansıt
       final filtered = _filterFolders(result, state.qFolder);
       emit(
@@ -188,19 +181,17 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void setFolderQuery(String v) {
-    // allFolders -> ham liste; qFolder değişince client-side filtre uygula
     final filtered = _filterFolders(state.allFolders, v);
     emit(state.copyWith(qFolder: v, folders: filtered));
   }
 
-  //folder create ederken selected folder seçmek
   setSelectedFolder(String v) => emit(state.copyWith(selectedFolder: v));
 
   void setFileQuery(String v) => emit(state.copyWith(qFile: v));
 
   void clearSearch(int tabIndex) => setSearchQueryForTab(tabIndex, '');
 
-  // 🔵 Sunucu taraflı isim filtreli dosya çekme
+  //isim filtreli file çekme
   Future<void> _fetchFiles(String nameFilter) async {
     debugPrint('Files: ${state.files.length}');
 
@@ -221,10 +212,8 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> downloadFile(String fileLink) async {
     try {
       await InjectionContainerItems.contentRepository.downloadFile(fileLink);
-      // İndirme başarılı olduğunda kullanıcıya bildirim göster
       debugPrint('File downloaded successfully: $fileLink');
     } catch (e) {
-      // Hata durumunda kullanıcıya hata mesajı göster
       debugPrint('Error downloading file: $e');
     }
   }
@@ -287,8 +276,10 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> moveFileToFolders(String fileCode, int fileId) async {
     try {
-      await InjectionContainerItems.contentRepository
-          .moveFileToFolders(fileCode, fileId);
+      await InjectionContainerItems.contentRepository.moveFileToFolders(
+        fileCode,
+        fileId,
+      );
       debugPrint('File moved successfully: $fileCode');
     } catch (e) {
       debugPrint('Error moving file: $e');

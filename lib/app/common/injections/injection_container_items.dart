@@ -15,6 +15,6 @@ final class InjectionContainerItems {
       InjectionContainer.read<AccountRepositoryImpl>();
   static ContentDataSource get contentDataSource =>
       InjectionContainer.read<ContentDataSource>();
-  static ContentRepositoryImpl get contentRepository =>
+  static ContentRepository get contentRepository =>
       InjectionContainer.read<ContentRepositoryImpl>();
 }

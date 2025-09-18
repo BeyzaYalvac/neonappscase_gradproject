@@ -29,20 +29,18 @@ class MoveFileAlert extends StatelessWidget {
           child: const Text('Cancel'),
         ),
 
-        // <-- HATANIN OLDUĞU YER: closure'ı güvenli hale getiriyoruz
         BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
-            final selectedStr = state.selectedFolder ?? '';
-            final selectedId = int.tryParse(selectedStr); // güveli parse
+            final selectedStr = state.selectedFolder;
+            final selectedId = int.tryParse(selectedStr);
             final canMove = selectedId != null && selectedId > 0;
 
             return TextButton(
               onPressed: !canMove
                   ? null
                   : () async {
-                      final targetFldId = selectedId!;
+                      final targetFldId = selectedId;
 
-                      // fileCode boşsa da erken çık
                       if ((file.fileCode).toString().isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('fileCode yok')),
@@ -52,7 +50,7 @@ class MoveFileAlert extends StatelessWidget {
 
                       try {
                         await context.read<HomeCubit>().moveFileToFolders(
-                          file.fileCode, // link değil!
+                          file.fileCode,
                           targetFldId,
                         );
                         if (context.mounted) Navigator.of(context).pop();

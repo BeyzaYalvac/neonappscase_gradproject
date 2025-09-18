@@ -7,6 +7,7 @@ import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorit
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/moveFile_dialog.dart';
 
 class HomePageListLayoutTabImage extends StatefulWidget {
   final List<FileItem> filteredImages;
@@ -150,11 +151,28 @@ class _HomePageListLayoutTabImageState extends State<HomePageListLayoutTabImage>
                       AppIcons.folder,
                     ],
                   ),
-                  trailing: IconButton(
-                    icon: AppIcons.download,
-                    onPressed: () {
-                      context.read<HomeCubit>().downloadFile(item.link);
-                    },
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      BlocBuilder<HomeCubit, HomeState>(
+                        builder: (context, state) => Positioned(
+                          right: 0,
+                          child: IconButton(
+                            icon: Icon(Icons.move_up),
+                            onPressed: () {
+                              MoveFileDialog(context, state, item);
+                            },
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: AppIcons.download,
+                        onPressed: () {
+                          context.read<HomeCubit>().downloadFile(item.link);
+                        },
+                      ),
+                    ],
                   ),
                   title: Text(
                     item.name,

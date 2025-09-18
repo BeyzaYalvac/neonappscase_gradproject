@@ -1,15 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
-import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
+import 'package:neonappscase_gradproject/app/presentation/item_details/widget/listView/itemDetail_listview.dart';
 import 'package:neonappscase_gradproject/core/widget/appBar/custom_appbar.dart';
 
 @RoutePage()
@@ -31,11 +30,10 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
     return BlocProvider<HomeCubit>(
       create: (_) {
         final c =
-            HomeCubit.forDetail(); // <-- Detay için sade kurucu (auto-load YOK)
+            HomeCubit.forDetail();
         Future.microtask(() async {
           await c.getFoldersInFolder(id);
           await c.getFilesInFolder(id);
-          // veya tek metot yazdıysan: await c.openFolder(id);
         });
         return c;
       },
@@ -59,11 +57,10 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // başlık...
                   Text(
-                    "$currentFolderName",
+                    currentFolderName,
                     style: TextStyle(
-                      color: AppColors.textDark,
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -75,76 +72,30 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
                     height: AppMediaQuery.screenHeight(context) * 0.7,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      color: AppColors.bgPrimary,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? AppColors.bgPrimary
+                          : Colors.grey.shade600,
                     ),
                     child: Builder(
                       builder: (_) {
                         if (state.isLoading) {
                           return const Center(
-                            child: CircularProgressIndicator(color: AppColors.textBej),
+                            child: CircularProgressIndicator(
+                              color: AppColors.textBej,
+                            ),
                           );
                         }
                         if (total == 0) {
                           return Center(
                             child: Text(
-                             AppStrings.emptyFolderText,
+                              AppStrings.emptyFolderText,
                               style: TextStyle(color: AppColors.textDark),
                             ),
                           );
                         }
 
                         // Önce klasörler, sonra dosyalar
-                        return ListView.separated(
-                          itemCount: total,
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(height: 8),
-                          itemBuilder: (context, index) {
-                            if (index < folders.length) {
-                              final f = folders[index];
-                              return ListTile(
-                                tileColor: AppColors.bgTriartry,
-                                shape: BeveledRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                  side: const BorderSide(
-                                    color: Colors.grey,
-                                    width: 0.5,
-                                  ),
-                                ),
-                                leading: AppIcons.folder,
-                                title: Text(
-                                  f.name,
-                                  style: TextStyle(color: AppColors.textDark),
-                                ),
-                                onTap: () => context.pushRoute(
-                                  ItemDetailRoute(
-                                    item: f,
-                                    oldFolderName: item?.name ?? "",
-                                  ),
-                                ),
-                              );
-                            } else {
-                              final file = files[index - folders.length];
-                              return ListTile(
-                                tileColor: AppColors.bgTriartry,
-                                shape: BeveledRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                  side: const BorderSide(
-                                    color: Colors.grey,
-                                    width: 0.5,
-                                  ),
-                                ),
-                                leading: Icon(
-                                  Icons.insert_drive_file,
-                                  color: AppColors.bgQuaternary,
-                                ),
-                                title: Text(
-                                  file.name,
-                                  style: TextStyle(color: AppColors.textDark),
-                                ),
-                              );
-                            }
-                          },
-                        );
+                        return ItemDetailListView(total: total, folders: folders, item: item, files: files);
                       },
                     ),
                   ),

@@ -3,7 +3,7 @@ import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 
 class AppTheme {
   // Tek bir yardımcı: AppColors'tan ColorScheme üret
-  static ColorScheme _lightScheme =
+  static final ColorScheme _lightScheme =
       ColorScheme.fromSeed(
         seedColor: AppColors.bgPrimary,
         brightness: Brightness.light,
@@ -15,7 +15,7 @@ class AppTheme {
         background: AppColors.bgTriartry,
       );
 
-  static ColorScheme _darkScheme =
+  static final ColorScheme _darkScheme =
       ColorScheme.fromSeed(
         seedColor: AppColors.bgSecondary,
         brightness: Brightness.dark,
@@ -29,17 +29,15 @@ class AppTheme {
 
   static ThemeData lightTheme = ThemeData(
     snackBarTheme: const SnackBarThemeData(
-      behavior: SnackBarBehavior.fixed, // ✅ floating değil
+      behavior: SnackBarBehavior.fixed,
       insetPadding: EdgeInsets.zero,
     ),
 
     useMaterial3: true,
     colorScheme: _lightScheme,
     scaffoldBackgroundColor: _lightScheme.background,
-    // AppBar’ı sabitleme! Varsayılanı ColorScheme’den gelsin:
     appBarTheme: const AppBarTheme(centerTitle: true),
-    // Scaffold’u da sabitleme; ColorScheme.surface kullansın:
-    // scaffoldBackgroundColor: Colors.white,  <-- SİL
+    // scaffoldBackgroundColor: Colors.white,
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: AppColors.textDark),
       bodyMedium: TextStyle(color: AppColors.textMedium),
@@ -49,15 +47,14 @@ class AppTheme {
 
   static ThemeData darkTheme = ThemeData(
     snackBarTheme: const SnackBarThemeData(
-      behavior: SnackBarBehavior.fixed, // ✅ floating değil
+      behavior: SnackBarBehavior.fixed,
       insetPadding: EdgeInsets.zero,
     ),
     useMaterial3: true,
     colorScheme: _darkScheme,
     appBarTheme: const AppBarTheme(centerTitle: true),
-    // scaffoldBackgroundColor: AppColors.bgSecondary,  <-- SİL
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: AppColors.textMedium),
+      bodyLarge: TextStyle(color: AppColors.textLight),
       bodyMedium: TextStyle(color: AppColors.textLight),
       bodySmall: TextStyle(color: AppColors.bgPrimary),
     ),

@@ -13,10 +13,10 @@ import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/view/favorite_view.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/alerts/createFolder_alert.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/container/homepage_summary_data.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/container/homepage_summary_header.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/container/white_body.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/createFolder_dialog.dart';
 import 'package:neonappscase_gradproject/app/presentation/profile/view/profile_view.dart';
 import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 import 'package:neonappscase_gradproject/core/network/cubit/network_cubit.dart';
@@ -31,8 +31,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController folderNameController = TextEditingController();
-
     return Scaffold(
       appBar: const CustomAppBar(),
 
@@ -66,7 +64,6 @@ class HomeView extends StatelessWidget {
                 ),
               ],
             ),
-            // Closing the ExpandableFab widget
           );
 
           Future.delayed(Duration(seconds: isOnline ? 2 : 4), () {
@@ -91,38 +88,9 @@ class HomeView extends StatelessWidget {
         distance: 120,
         children: [
           ActionFab(
-            icon: Icons.create_new_folder,
+            icon: AppIcons.create_folder_IconData,
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return BlocBuilder<HomeCubit, HomeState>(
-                    builder: (context, state) {
-                      // Items: hepsini String değere normalize et
-                      final items = state.folders.map((f) {
-                        final id = f.fldId.toString(); // <-- kritik
-                        return DropdownMenuItem<String>(
-                          value: id,
-                          child: Text(f.name, overflow: TextOverflow.ellipsis),
-                        );
-                      }).toList();
-
-                      // Geçerli value: sadece items'ta varsa ata, yoksa null kalsın
-                      final current =
-                          items.any((e) => e.value == state.selectedFolder)
-                          ? state.selectedFolder
-                          : null;
-
-                      return CreateFolderAlert(
-                        folderNameController: folderNameController,
-                        current: current,
-                        items: items,
-                        state: state,
-                      );
-                    },
-                  );
-                },
-              );
+              createFolderDialog(context);
             },
           ),
 
@@ -142,17 +110,12 @@ class HomeView extends StatelessWidget {
         builder: (context, state) {
           return CurvedNavigationBar(
             animationDuration: const Duration(milliseconds: 300),
-            // bazı sürümlerde programatik index güncellemesi için:
             key: ValueKey(state.selectedIndex),
             color: Theme.of(context).brightness == Brightness.dark
                 ? AppColors.bgSecondary
                 : AppColors.bgPrimary,
             backgroundColor: AppColors.bgTriartry,
-            items: [
-              AppIcons.home,
-              AppIcons.favorite,
-              AppIcons.profile,
-            ],
+            items: [AppIcons.home, AppIcons.favorite, AppIcons.profile],
             index: state.selectedIndex,
             onTap: (i) => context.read<HomeCubit>().setSelectedIndex(i),
           );
