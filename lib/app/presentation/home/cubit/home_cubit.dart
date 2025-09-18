@@ -12,9 +12,6 @@ class HomeCubit extends Cubit<HomeState> {
     loadProfileData();
     loadImagesInitial();
     loadFolders();
-    //loadFiles();
-    // İlk yüklemede klasör ve dosyaları çekmek istersen:
-    // loadContents();
   }
   // Detay için: ilk frame'de loader ile başla, hiçbir auto-load yapma
   HomeCubit.forDetail() : super(HomeState.initial().copyWith(isLoading: true));
@@ -288,4 +285,13 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
- }
+  Future<void> moveFileToFolders(String fileCode, int fileId) async {
+    try {
+      await InjectionContainerItems.contentRepository
+          .moveFileToFolders(fileCode, fileId);
+      debugPrint('File moved successfully: $fileCode');
+    } catch (e) {
+      debugPrint('Error moving file: $e');
+    }
+  }
+}

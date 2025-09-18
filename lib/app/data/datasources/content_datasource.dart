@@ -288,4 +288,18 @@ class ContentDataSource {
       }
     });
   }
+
+  Future<void> moveFileToFolders(String fileCode, int fileId) async {
+    final response = await api.get<Map<String, dynamic>>(
+      '/file/set_folder',
+      query: {'key': AppConfig.apiKey, 'fld_id': fileId, 'file_code': fileCode},
+    );
+
+    if (response.isSuccess && response.data != null) {
+      final model = FolderProcessModel.fromMap(response.data!);
+      debugPrint('Dosya Taşıma: $model');
+    } else {
+      throw Exception(response.error?.message ?? 'Bilinmeyen hata');
+    }
+  }
 }

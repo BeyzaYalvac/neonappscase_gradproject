@@ -8,7 +8,8 @@ import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
-import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/alerts/moveFile_alert.dart';
 
 class GridListCard extends StatelessWidget {
   final FileItem file;
@@ -92,12 +93,40 @@ class GridListCard extends StatelessWidget {
                     },
                   ),
                   Positioned(
-                    right: 0,
+                    right: 50,
                     child: IconButton(
                       onPressed: () {
                         context.read<HomeCubit>().downloadFile(file.link);
                       },
                       icon: AppIcons.download,
+                    ),
+                  ),
+
+                  BlocBuilder<HomeCubit, HomeState>(
+                    builder: (context, state) => Positioned(
+                      right: 0,
+                      child: IconButton(
+                        icon: Icon(Icons.move_up),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              final items = state.folders.map((f) {
+                                final id = f.fldId.toString();
+                                return DropdownMenuItem<String>(
+                                  value: id,
+                                  child: Text(
+                                    f.name,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              }).toList();
+
+                              return MoveFileAlert(items: items, file: file);
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],

@@ -34,6 +34,8 @@ abstract class ContentRepository {
   Future<void> downloadFile(String fileUrl);
 
   Future<FolderProcessModel> renameFolder(String folderId, String name);
+
+  Future<void> moveFileToFolders(String fileCode, int fileId);
 }
 
 class ContentRepositoryImpl extends ContentRepository {
@@ -97,5 +99,10 @@ class ContentRepositoryImpl extends ContentRepository {
       folderId,
       name9,
     );
+  }
+  
+  @override
+  Future<void> moveFileToFolders(String fileCode, int fileId) {
+    return InjectionContainerItems.contentDataSource.moveFileToFolders(fileCode, fileId);
   }
 }
