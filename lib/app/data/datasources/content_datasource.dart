@@ -34,7 +34,6 @@ class ContentDataSource {
 
     final model = UploadServerModel.fromMap(res.data!);
 
-    // Örn: https://wwwNNN.ucdn.to/cgi-bin/upload.cgi
     uploadApi = ApiClient(
       baseUrl: model.result,
       headers: {'Accept': 'application/json'},
@@ -45,37 +44,37 @@ class ContentDataSource {
   }
 
   Future<List<FileFolderListModel>> getFolderList({
-  int fldId = 0,
-  bool bustCache = false, // 👈 yenilik
-}) async {
-  // Query’yi cache-bust ile hazırla
-  final query = <String, String>{
-    'key': AppConfig.apiKey,
-    'fld_id': fldId.toString(),
-    if (bustCache) 'ts': DateTime.now().millisecondsSinceEpoch.toString(), // 👈 cache-bust
-  };
+    int fldId = 0,
+    bool bustCache = false, // 👈 yenilik
+  }) async {
+    // Query’yi cache-bust ile hazırla
+    final query = <String, String>{
+      'key': AppConfig.apiKey,
+      'fld_id': fldId.toString(),
+      //if (bustCache) 'ts': "123", // 👈 cache-bust
+    };
 
-  final res = await api.get<Map<String, dynamic>>(
-    '/folder/list',
-    query: query,
-    // Eğer ApiClient'in Options.extra destekliyorsa daha da garantiye al:
-    // options: Options(extra: {'cache': false, 'refresh': true}),
-  );
+    final res = await api.get<Map<String, dynamic>>(
+      '/folder/list',
+      query: query,
+      // Eğer ApiClient'in Options.extra destekliyorsa daha da garantiye al:
+      // options: Options(extra: {'cache': false, 'refresh': true}),
+    );
 
-  if (!res.isSuccess || res.data == null) {
-    throw Exception(res.error?.message ?? 'Klasör listesi alınamadı');
+    if (!res.isSuccess || res.data == null) {
+      //throw Exception(res.error?.message ?? 'Klasör listesi alınamadı');
+    }
+
+    final data = res.data!;
+    // Tipik cevap: { msg, status, result: { folders: [...], files: [...] } }
+    final result = (data['result'] as Map?) ?? const {};
+    final folders = (result['folders'] as List?) ?? const [];
+
+    return folders
+        .whereType<Map<String, dynamic>>()
+        .map((e) => FileFolderListModel.fromMap(e))
+        .toList();
   }
-
-  final data = res.data!;
-  // Tipik cevap: { msg, status, result: { folders: [...], files: [...] } }
-  final result = (data['result'] as Map?) ?? const {};
-  final folders = (result['folders'] as List?) ?? const [];
-
-  return folders
-      .whereType<Map<String, dynamic>>()
-      .map((e) => FileFolderListModel.fromMap(e))
-      .toList();
-}
 
   //load: { msg, status, result: { folders: [...], files: [...] } } final result = data['result'] as Map<String, dynamic>? ?? const {}; final folders = (result['folders'] as List?) ?? const []; return folders .whereType<Map<String, dynamic>>() .map((e) => FileFolderListModel.fromMap(e)) .toList(); } else { throw Exception(res.error?.message ?? 'Klasör listesi alınamadı'); } }
   Future<Map<String, dynamic>> getFileInfo(String fileCode) async {
@@ -197,6 +196,7 @@ class ContentDataSource {
     }
 
     final data = res.data;
+    print('-------------------${data.toString()}-----------------');
     // Güvenli loglar:
     debugPrint('file/list dataType=${data.runtimeType}');
     // debugPrint('file/list body=$data'); // istersen aç

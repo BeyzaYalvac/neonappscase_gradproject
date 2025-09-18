@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/injections/injection_container_items.dart';
@@ -29,13 +30,13 @@ class HomeCubit extends Cubit<HomeState> {
             // Eğer API server-side isim filtresi destekliyorsa:
             // nameFilter: state.qFolder.isEmpty ? null : state.qFolder,
           );
-
+      debugPrint('-----------$result------------');
       // Ham listeyi sakla ve aktif qFolder’a göre ekrana yansıt
       final filtered = _filterFolders(result, state.qFolder);
       emit(
         state.copyWith(isLoading: false, allFolders: result, folders: filtered),
       );
-    } catch (_) {
+    } catch (e) {
       emit(state.copyWith(isLoading: false));
     }
   }
@@ -243,12 +244,16 @@ class HomeCubit extends Cubit<HomeState> {
     final trimmed = newName.trim();
     if (trimmed.isEmpty) return;
 
-    // 🟦 Tip uyumu: fldId tipin INT ise bu satırı kullan:
-    final isIntFldId =
-        state.allFolders.isNotEmpty && state.allFolders.first.fldId is int;
+    final newList = state.allFolders.map<FileFolderListModel>((e) {
+      if (e.fldId == folderId) {
+        return e.copyWith(name: newName);
+      }
+      return e;
+    }).toList();
 
-    // 1) Optimistic update: ekranda anında yeni isim
-    final prevAll = state.allFolders;
+    emit(state.copyWith(allFolders: newList));
+
+    /* final prevAll = state.allFolders;
     final patchedAll = [
       for (final f in prevAll)
         if (isIntFldId
@@ -258,9 +263,8 @@ class HomeCubit extends Cubit<HomeState> {
           f.copyWith(name: trimmed)
         else
           f,
-    ];
-    final patchedFiltered = _filterFolders(patchedAll, state.qFolder);
-    emit(state.copyWith(allFolders: patchedAll, folders: patchedFiltered));
+    ]; */
+    final patchedFiltered = _filterFolders(newList, state.qFolder);
 
     try {
       // 2) Sunucuya yaz
@@ -270,33 +274,18 @@ class HomeCubit extends Cubit<HomeState> {
       );
 
       // 3) Kesin sonuç için cache-bust ile tekrar çek
-      await _reloadFoldersBust();
+      //await _reloadFoldersBust();
+      emit(state.copyWith(allFolders: newList, folders: patchedFiltered));
     } catch (e) {
       // 4) Hata: optimistic update’ı geri al
       emit(
         state.copyWith(
-          allFolders: prevAll,
-          folders: _filterFolders(prevAll, state.qFolder),
+          allFolders: state.allFolders,
+          folders: _filterFolders(state.allFolders, state.qFolder),
         ),
       );
       rethrow;
     }
   }
 
-  Future<void> _reloadFoldersBust() async {
-    emit(state.copyWith(isLoading: true));
-    try {
-      final result = await InjectionContainerItems.contentRepository
-          .getFolderList(
-            fldId: state.currentFldId,
-            bustCache: true, // cache’i kır
-          );
-      final filtered = _filterFolders(result, state.qFolder);
-      emit(
-        state.copyWith(isLoading: false, allFolders: result, folders: filtered),
-      );
-    } catch (_) {
-      emit(state.copyWith(isLoading: false));
-    }
-  }
-}
+ }

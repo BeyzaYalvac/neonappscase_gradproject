@@ -66,6 +66,9 @@ class CacheInterceptor extends Interceptor {
         response.statusCode == 200 &&
         ((options.extra['cache'] as bool?) ?? true)) {
       final cacheKey = _keyFor(options);
+      print(
+        '-------------| response key oluşturuldu: $cacheKey |----------------------',
+      );
 
       // Bu çağrı için maxAge override edilebilir
       final override = options.extra['maxAge'];
@@ -83,7 +86,6 @@ class CacheInterceptor extends Interceptor {
       await store.write(entry);
       debugPrint("✅ Cache stored for key=$cacheKey");
     }
-    response.extra['fromCache'] = response.extra['fromCache'] ?? false;
 
     handler.next(response);
   }
@@ -97,6 +99,7 @@ class CacheInterceptor extends Interceptor {
 
     final staleOnError = (o.extra['staleOnError'] as bool?) ?? true;
     final key = _keyFor(o);
+    print('--------| $key |----------');
     final entry = await store.read(key);
 
     if (entry != null) {
@@ -121,6 +124,9 @@ class CacheInterceptor extends Interceptor {
           ),
         );
       }
+    } else {
+      print(entry.toString());
+      print('folder gelmedi');
     }
 
     // Cache yoksa ya da politika izin vermiyorsa hatayı devam ettir

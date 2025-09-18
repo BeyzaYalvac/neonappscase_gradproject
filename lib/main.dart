@@ -22,13 +22,11 @@ void main() async {
   // Native splash ekranda kalsın:
   FlutterNativeSplash.preserve(widgetsBinding: bindings);
 
-  // Burada sadece en minimal şeyleri yap (çok ağır işleri SplashAnimated’a bırak)
-  // Örn. hiçbir şey veya sadece kritik 10-50ms işler.
+  final boot = await AppBootstrap.init();
 
   // Native splash’i kapat ve uygulamayı göster:
   FlutterNativeSplash.remove();
-  // AĞIR İŞLERİ BURADA YAP ⬇️
-  final boot = await AppBootstrap.init(); // settingsBox vs burada hazır
+  
   runApp(MyApp(settingsBox: boot.settingsBox));
 }
 
