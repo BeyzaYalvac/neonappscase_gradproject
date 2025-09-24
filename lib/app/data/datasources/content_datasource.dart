@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ContentDataSource {
   final api = ApiClient(
-    baseUrl: AppConfig.apiBaseUrl, 
+    baseUrl: AppConfig.apiBaseUrl,
     headers: {'Accept': 'application/json'},
   ).safe;
 
@@ -90,10 +90,7 @@ class ContentDataSource {
   Future<int?> detectRootFolderId() async {
     final res = await api.get<Map<String, dynamic>>(
       '/folder/list',
-      query: {
-        'key': AppConfig.apiKey,
-        'fld_id': '0', // sistem "hesabının kökü"nün altını döndürür
-      },
+      query: {'key': AppConfig.apiKey, 'fld_id': '0'},
     );
 
     if (!res.isSuccess || res.data == null) {
@@ -126,7 +123,6 @@ class ContentDataSource {
     required File file,
     String? fldId,
   }) async {
-    // 1) Upload server ve sess_id al
     final uploadServerModel = await selectServerForUpload();
     final sessId = uploadServerModel.sessId;
     final uploadUrl = uploadServerModel.result;
@@ -144,10 +140,8 @@ class ContentDataSource {
 
     debugPrint("UPLOAD FORM FIELDS: ${formData.fields}");
 
-    // 3) Post isteğini yap
     final response = await uploadApi.post(uploadUrl, data: formData);
-
-    // 4) Response kontrol et
+    
     if (response.isSuccess && response.data != null) {
       final data = response.data is List ? response.data[0] : response.data;
 
@@ -188,9 +182,9 @@ class ContentDataSource {
     }
 
     final data = res.data;
-    print('-------------------${data.toString()}-----------------');
+    //print('-------------------${data.toString()}-----------------');
     // Güvenli loglar:
-    debugPrint('file/list dataType=${data.runtimeType}');
+    //debugPrint('file/list dataType=${data.runtimeType}');
     // debugPrint('file/list body=$data'); // istersen aç
 
     if (data is Map<String, dynamic>) {
@@ -205,11 +199,11 @@ class ContentDataSource {
             .map((e) => FileItem.fromMap(e, fldIdOverride: fldId))
             .toList();
 
-        debugPrint('Parsed files count: ${items.length}');
+        //debugPrint('Parsed files count: ${items.length}');
         return items;
       } else {
         throw Exception(
-          '${status}: ${data['msg'] ?? data['message'] ?? 'Bilinmeyen hata'}',
+          '$status: ${data['msg'] ?? data['message'] ?? 'Bilinmeyen hata'}',
         );
       }
     }
@@ -220,7 +214,7 @@ class ContentDataSource {
           .whereType<Map<String, dynamic>>()
           .map((e) => FileItem.fromMap(e, fldIdOverride: fldId))
           .toList();
-      debugPrint('Parsed files count (list root): ${items.length}');
+      //debugPrint('Parsed files count (list root): ${items.length}');
       return items;
     }
 
@@ -253,11 +247,7 @@ class ContentDataSource {
     final Uri url = Uri.parse(fileUrl);
 
     if (await canLaunchUrl(url)) {
-      await launchUrl(
-        url,
-        mode: LaunchMode
-            .externalApplication,
-      );
+      await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
       throw 'Bu URL açılamıyor: $fileUrl';
     }

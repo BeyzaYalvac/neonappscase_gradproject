@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:neonappscase_gradproject/app/common/config/app_config.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_assets.dart';
 import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/common/boot/app_bootstrap.dart';
@@ -47,13 +48,11 @@ class _SplashViewState extends State<SplashView>
     debugPrint("isFirst değişkeni: ${isFirst.toString()}");
 
     if (isFirst) {
-      // İlk giriş: DESC'i atla → direkt Home
       //await boxFirst.put(AppConfig.isFirstKey, false);
       context.router.replace(const SplashDescriptionRoute());
     } else if (!isFirst) {
       context.router.replace(const HomeRoute());
     } else {
-      // Sonraki girişler: Onboarding'e git (istersen yine Home yapabilirsin)
       if (!mounted) return;
       context.router.replace(const HomeRoute());
     }
@@ -84,10 +83,9 @@ class _SplashViewState extends State<SplashView>
                     duration: const Duration(milliseconds: 600),
                     opacity: _readyToNavigate ? 0.0 : 1.0,
                     child: Lottie.asset(
-                      'assets/animations/theme_toggle.json',
+                      AppAssets.THEME_TOGGLE_ANIMATION,
                       controller: _ctrl,
                       onLoaded: (comp) {
-                        // Döngü istersen:
                         _ctrl
                           ..duration = comp.duration
                           ..repeat();

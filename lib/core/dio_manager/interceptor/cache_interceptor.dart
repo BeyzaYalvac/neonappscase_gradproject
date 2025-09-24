@@ -28,7 +28,7 @@ class CacheInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    // Sadece GET isteklerde çalışalım
+    // Sadece GET isteklerde çalışıyorum :)
     if (!_isGet(options)) return handler.next(options);
 
     final useCache = (options.extra['cache'] as bool?) ?? true;
@@ -40,15 +40,14 @@ class CacheInterceptor extends Interceptor {
       final key = _keyFor(options);
       final entry = await store.read(key);
       if (entry != null) {
-        // preferCache: ağ vurmadan cache dön
         return handler.resolve(
           Response(
             requestOptions: options,
             statusCode: 200,
             data: jsonDecode(entry.value),
             extra: {
-              ...options.extra, // 🔑 request extra’ları taşı
-              'fromCache': true, // 🔑 cache işareti
+              ...options.extra, 
+              'fromCache': true, 
               'stale': !entry.isFresh,
             },
           ),
@@ -66,9 +65,9 @@ class CacheInterceptor extends Interceptor {
         response.statusCode == 200 &&
         ((options.extra['cache'] as bool?) ?? true)) {
       final cacheKey = _keyFor(options);
-      print(
-        '-------------| response key oluşturuldu: $cacheKey |----------------------',
-      );
+      /*print(
+        '-------------| response key oluşturulduuu: $cacheKey |----------------------',
+      );*/
 
       // Bu çağrı için maxAge override edilebilir
       final override = options.extra['maxAge'];
@@ -84,7 +83,7 @@ class CacheInterceptor extends Interceptor {
       );
 
       await store.write(entry);
-      debugPrint("✅ Cache stored for key=$cacheKey");
+      debugPrint("Cache stored for key=$cacheKey");
     }
 
     handler.next(response);
@@ -99,11 +98,11 @@ class CacheInterceptor extends Interceptor {
 
     final staleOnError = (o.extra['staleOnError'] as bool?) ?? true;
     final key = _keyFor(o);
-    print('--------| $key |----------');
+    //print('--------| $key |----------'); 
     final entry = await store.read(key);
 
     if (entry != null) {
-      debugPrint("Cache entry bulundu, dönüyorum: $key"); // 👈 BURAYA
+      debugPrint("Cache entry bulundu, dönüyorum: $key"); 
 
       final isNetworkish = _isNetworkOrServerSide(err);
 
@@ -129,7 +128,7 @@ class CacheInterceptor extends Interceptor {
       print('folder gelmedi');
     }
 
-    // Cache yoksa ya da politika izin vermiyorsa hatayı devam ettir
+    /// Cache yoksa ya da politika izin vermiyorsa hatayı devam ettir
     handler.next(err);
   }
 

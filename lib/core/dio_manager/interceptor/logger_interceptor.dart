@@ -3,7 +3,7 @@ Neden Logger Interceptor yazıyoruz?
 
 Dio tek başına log yazmıyor (ya da sadece print ile çok basit bilgi veriyor).
 
-Senin amacın: .get() veya .post() çağırırken try/catch ile uğraşmadan
+.get() veya .post() çağırırken try/catch ile uğraşmadan
 
 hangi URL’e istek atıldığını,
 

@@ -22,9 +22,8 @@ class HomeState extends Equatable {
   final List<FileItem> files; 
   final List<FileItem> images; 
 
-  /// Aramalar
-  final String qFolder;
-  final String qFile;
+  /// Arama sorgularım
+  final String qsearch;
 
   final int imagesPage;
   final bool imagesHasMore;
@@ -40,8 +39,7 @@ class HomeState extends Equatable {
     this.folders = const [],
     this.files = const [], 
     this.images = const [], 
-    this.qFolder = '',
-    this.qFile = '',
+    this.qsearch = '',
     this.allFolders = const [],
     this.selectedFolder = '',
     this.imagesPage = 1,
@@ -63,8 +61,7 @@ class HomeState extends Equatable {
     List<FileFolderListModel>? allFolders,
     String? selectedFolder,
     List<FileItem>? images,
-    String? qFolder,
-    String? qFile,
+    String? qsearch,   
     int? imagesPage,
     bool? imagesHasMore,
     bool? isLoadingMore,
@@ -81,8 +78,7 @@ class HomeState extends Equatable {
       allFolders: allFolders ?? this.allFolders,
       selectedFolder: selectedFolder ?? this.selectedFolder,
       images: images ?? this.images,
-      qFolder: qFolder ?? this.qFolder,
-      qFile: qFile ?? this.qFile,
+      qsearch: qsearch ?? this.qsearch,
       imagesPage: imagesPage ?? this.imagesPage,
       imagesHasMore: imagesHasMore ?? this.imagesHasMore,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
@@ -101,8 +97,7 @@ class HomeState extends Equatable {
     allFolders,
     files,
     images,
-    qFolder,
-    qFile,
+    qsearch,
     selectedFolder,
     imagesPage,
     imagesHasMore,

@@ -6,11 +6,7 @@ import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 
 class ItemDetailListTile extends StatelessWidget {
-  const ItemDetailListTile({
-    super.key,
-    required this.f,
-    required this.item,
-  });
+  const ItemDetailListTile({super.key, required this.f, required this.item});
 
   final FileFolderListModel f;
   final FileFolderListModel? item;
@@ -21,21 +17,14 @@ class ItemDetailListTile extends StatelessWidget {
       tileColor: AppColors.bgTriartry,
       shape: BeveledRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(
-          color: Colors.grey,
-          width: 0.5,
-        ),
+        side: const BorderSide(color: Colors.grey, width: 0.5),
       ),
-      leading: AppIcons.folder,
-      title: Text(
-        f.name,
-        style: TextStyle(color: AppColors.textDark),
-      ),
+      leading: Theme.of(context).brightness == Brightness.light
+          ? AppIcons.folder_blue(context)
+          : AppIcons.folder(context),
+      title: Text(f.name, style: TextStyle(color: AppColors.textDark)),
       onTap: () => context.pushRoute(
-        ItemDetailRoute(
-          item: f,
-          oldFolderName: item?.name ?? "",
-        ),
+        ItemDetailRoute(item: f, oldFolderName: item?.name ?? ""),
       ),
     );
   }

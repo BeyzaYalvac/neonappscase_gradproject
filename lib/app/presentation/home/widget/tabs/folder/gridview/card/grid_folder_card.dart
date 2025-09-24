@@ -30,7 +30,7 @@ class GridFolderCard extends StatelessWidget {
         return Card(
           borderOnForeground: true,
           elevation: 5,
-          shadowColor: AppColors.bgTriartry,
+          shadowColor: AppColors.bgSmoothLight,
           child: Stack(
             children: [
               FolderIconContainer(),
@@ -42,12 +42,10 @@ class GridFolderCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppPaddings.CustomHeightSizedBox(context, 0.072),
-                    // İsim kısmındaki BlocBuilder'da ŞUNU KULLAN:
                     BlocBuilder<HomeCubit, HomeState>(
                       buildWhen: (prev, next) =>
                           prev.folders != next.folders ||
-                          prev.allFolders !=
-                              next.allFolders, // 👈 allFolders’ı da dinle
+                          prev.allFolders != next.allFolders,
                       builder: (context, state) {
                         final idx = state.allFolders.indexWhere(
                           (f) => f.fldId.toString() == folder.fldId.toString(),
@@ -58,28 +56,32 @@ class GridFolderCard extends StatelessWidget {
                         return Text(
                           updated.name,
                           style: const TextStyle(fontWeight: FontWeight.bold),
-                        );
+                        ).withAlignment(Alignment.center);
                       },
                     ),
-
-                    Text('Modified: 15 days ago'),
                   ],
-                ).withPadding(const EdgeInsets.fromLTRB(8, 4, 8, 1)),
+                ).withPadding(const EdgeInsets.fromLTRB(8, 4, 8, 8)),
               ),
 
-              FavoriteIconButton(isFavoriteFolder: isFavoriteFolder, cubit: cubit, folder: folder)
+              FavoriteIconButton(
+                    isFavoriteFolder: isFavoriteFolder,
+                    cubit: cubit,
+                    folder: folder,
+                  )
                   .withPadding(const EdgeInsets.fromLTRB(0, 0, 8, 0))
                   .withAlignment(Alignment.topLeft),
 
-              RenameIconButton(folderNameController: folderNameController, folder: folder).withAlignment(Alignment.topRight),
+              RenameIconButton(
+                folderNameController: folderNameController,
+                folder: folder,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? AppColors.bgTriartry
+                    : AppColors.bgPrimary,
+              ).withAlignment(Alignment.topRight),
             ],
           ),
         );
       },
     );
   }
-
-  }
-
-
-
+}

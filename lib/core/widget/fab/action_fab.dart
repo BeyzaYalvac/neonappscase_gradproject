@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 
 class ActionFab extends StatelessWidget {
   const ActionFab({
@@ -17,8 +18,8 @@ class ActionFab extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final bg = scheme.primary;
     final fg = ThemeData.estimateBrightnessForColor(bg) == Brightness.dark
-        ? Colors.white
-        : Colors.black;
+        ? AppColors.bgPrimary
+        : AppColors.bgSecondary;
 
     return Material(
       color: bg,

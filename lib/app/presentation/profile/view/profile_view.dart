@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
@@ -19,7 +17,11 @@ class ProfileView extends StatelessWidget {
       builder: (context, state) {
         final account = state.acountInfos;
         final traficLeft = state.acountInfos?.storageLeftFormatted;
-        print("traficLeft: $traficLeft");
+
+        byteToGB(double byte) {
+          return (byte / (1024 * 1024 * 1024)).toStringAsFixed(4);
+        }
+
         if (account == null) {
           return const Center(
             child: CircularProgressIndicator(color: AppColors.textBej),
@@ -27,144 +29,144 @@ class ProfileView extends StatelessWidget {
         }
 
         // Güvenli tipler ve hesap
-        final int used = account.storageUsed;
-        final int left = account.storageLeft;
-        final int total = used + left;
-        double progress = total > 0 ? used / total : 0.0;
-        // Gürültülü veriye karşı clamp
-        progress = progress.clamp(0.0, 1.0);
-
-        String formatBytes(num bytes) {
-          if (bytes <= 0) return "0 B";
-          const k = 1024;
-          const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-          final i = (math.log(bytes) / math.log(k)).floor().clamp(
-            0,
-            sizes.length - 1,
-          );
-          final v = bytes / math.pow(k, i);
-          return "${v.toStringAsFixed(1)} ${sizes[i]}";
-        }
+        final String used = byteToGB(account.storageUsed.toDouble());
+        //final int left = account.storageLeft; kullanmıycam
+        final int total = 5;
+        double progress = total > 0
+            ? (double.tryParse(used) ?? 0) / total
+            : 0.0;
+        print("progress: ${progress.toStringAsFixed(4)}");
 
         final h = AppMediaQuery.screenHeight(context);
         final w = AppMediaQuery.screenWidth(context);
         final avatarRadius = w * 0.14;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // HEADER + AVATAR STACK
-            SizedBox(
-              height: h * 0.20,
-              child: Stack(
-                alignment: Alignment.topCenter,
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    height: h * 0.12,
-                    width: w * 0.9,
-                    margin: EdgeInsets.fromLTRB(
-                      w * 0.05,
-                      h * 0.08,
-                      w * 0.05,
-                      0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.bgPrimary,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(top: h * 0.06),
-                      child: Center(
-                        child: Text(
-                          account.email,
-                          style: TextStyle(
-                            fontSize: w * 0.04,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textMedium,
+        return Container(
+          width: w,
+          height: h,
+          color: Theme.of(context).brightness == Brightness.light
+              ? AppColors.bgTriartry
+              : Theme.of(context).colorScheme.background,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // HEADER + AVATAR STACK
+              SizedBox(
+                height: h * 0.20,
+                child: Stack(
+                  alignment: Alignment.topCenter,
+                  clipBehavior: Clip.none,
+                  children: [
+                    Container(
+                      height: h * 0.12,
+                      width: w * 0.9,
+                      margin: EdgeInsets.fromLTRB(
+                        w * 0.05,
+                        h * 0.08,
+                        w * 0.05,
+                        0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? AppColors.bgSmoothDark
+                            : AppColors.bgPrimary,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.only(top: h * 0.06),
+                        child: Center(
+                          child: Text(
+                            account.email,
+                            style: TextStyle(
+                              fontSize: w * 0.04,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textMedium,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: h * 0.01,
-                    child: CircleAvatar(
-                      radius: avatarRadius,
-                      backgroundColor: AppColors.bgQuaternary,
-                      child: AppIcons.profile,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            SizedBox(height: h * 0.02),
-
-            // STORAGE BAR
-            Container(
-              height: h * 0.10,
-              width: w * 0.9,
-              decoration: BoxDecoration(
-                color: AppColors.bgPrimary,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.bgQuaternary),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Current Storage: ${formatBytes(used)} / ${formatBytes(total)}  (${(progress * 100).toStringAsFixed(1)}%)",
-                      style: TextStyle(
-                        fontSize: w * 0.035,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    LinearProgressIndicator(
-                      minHeight: h * 0.02,
-                      value: progress, // ✅ doğru 0..1 aralığı
-                      backgroundColor: AppColors.bgQuaternary,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        AppColors.bgTriartry,
+                    Positioned(
+                      top: h * 0.01,
+                      child: CircleAvatar(
+                        radius: avatarRadius,
+                        backgroundColor: AppColors.bgQuaternary,
+                        child: AppIcons.profile_xxl,
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
 
-            SizedBox(height: h * 0.02),
+              SizedBox(height: h * 0.02),
 
-            // Stats
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  StatCard(
-                    title: AppStrings.usedProfileText,
-                    value: formatBytes(used),
-                    height: h * 0.18,
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? AppColors.bgSecondary
-                        : AppColors.bgQuaternary,
+              // STORAGE BAR
+              Container(
+                height: h * 0.10,
+                width: w * 0.9,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppColors.bgSmoothDark
+                      : AppColors.bgPrimary,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.bgQuaternary),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Current Storage: ${progress.toStringAsFixed(4)}GB / 5GB ",
+                        style: TextStyle(
+                          fontSize: w * 0.035,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      LinearProgressIndicator(
+                        minHeight: h * 0.02,
+                        value: progress,
+                        backgroundColor: AppColors.bgQuaternary,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.bgTriartry,
+                        ),
+                      ),
+                    ],
                   ),
-                  StatCard(
-                    title: AppStrings.leftProfileText,
-                    value: traficLeft ?? 'N/A',
-                    height: h * 0.18,
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? AppColors.bgSecondary
-                        : AppColors.bgQuaternary,
-                  ),
-                ],
+                ),
               ),
-            ),
-          ],
+
+              SizedBox(height: h * 0.02),
+
+              // Stats
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    StatCard(
+                      title: AppStrings.usedProfileText,
+                      value: used,
+                      height: h * 0.18,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.bgSmoothDark
+                          : AppColors.bgPrimary,
+                    ),
+                    StatCard(
+                      title: AppStrings.leftProfileText,
+                      value: traficLeft ?? 'N/A',
+                      height: h * 0.18,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.bgSmoothDark
+                          : AppColors.bgPrimary,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

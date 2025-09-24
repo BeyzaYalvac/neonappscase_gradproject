@@ -11,6 +11,7 @@ import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddin
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
+import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 
 @RoutePage()
 class FavoriteView extends StatelessWidget {
@@ -20,67 +21,74 @@ class FavoriteView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FavoriteCubit, FavoriteState>(
       builder: (context, state) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: AppMediaQuery.screenWidth(context),
-              height: AppMediaQuery.screenHeight(context) * 0.65,
+        return Container(
+          width: AppMediaQuery.screenWidth(context),
+          height: AppMediaQuery.screenHeight(context),
+          color: Theme.of(context).brightness == Brightness.light
+              ? AppColors.bgTriartry
+              : Theme.of(context).colorScheme.background,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: AppMediaQuery.screenWidth(context),
+                height: AppMediaQuery.screenHeight(context) * 0.65,
 
-              decoration: BoxDecoration(
-                color: AppColors.bgPrimary,
-                borderRadius: BorderRadius.circular(16),
-              ),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? AppColors.bgPrimary
+                      : AppColors.bgSmoothDark,
+                  borderRadius: BorderRadius.circular(16),
+                ),
 
-              child: state.favoriteFolders.isEmpty
-                  ? const FavoritesEmpty()
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: state.favoriteFolders.length,
-                      itemBuilder: (context, index) {
-                        final fav =
-                            state.favoriteFolders[index]
-                                as Map; // <-- Map olarak al
-                        final isFolder = fav['type'] == 'folder';
-                        final name = (fav['name'] ?? '').toString();
-                        final sizeText = (fav['size'] != null)
-                            ? '${fav['size']} MB'
-                            : '—';
+                child: state.favoriteFolders.isEmpty
+                    ? const FavoritesEmpty()
+                    : ListView.builder(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: state.favoriteFolders.length,
+                        itemBuilder: (context, index) {
+                          final fav = state.favoriteFolders[index] as Map;
+                          final isFolder = fav['type'] == 'folder';
+                          final name = (fav['name'] ?? '').toString();
 
-                        return ListTile(
-                          leading: Icon(
-                            isFolder ? Icons.folder : Icons.insert_drive_file,
-                            color: AppColors.bgTriartry,
-                          ),
-                          title: Text(name),
-                          subtitle: Text('Size: $sizeText'),
-                          trailing: IconButton(
-                            icon: AppIcons.delete,
-                            onPressed: () {
-                              // fldId ile silmek istersen:
-                              if (fav['id'] != null &&
-                                  fav['type'] == 'folder') {
-                                context
-                                    .read<FavoriteCubit>()
-                                    .removeFavoriteFolder(fav['id']);
-                              } else if (fav['type'] == 'file' &&
-                                  fav['id'] != null) {
-                                context
-                                    .read<FavoriteCubit>()
-                                    .removeFavoriteFileByKey(fav['id']);
-                              } else if (fav['type'] == 'image' &&
-                                  fav['id'] != null) {
-                                context
-                                    .read<FavoriteCubit>()
-                                    .removeFavoriteImage(fav['id']);
-                              }
-                            },
-                          ),
-                        );
-                      },
-                    ),
-            ),
-          ],
+                          return ListTile(
+                            leading: Icon(
+                              isFolder ? Icons.folder : Icons.insert_drive_file,
+                              color:
+                                  Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? AppColors.bgTriartry
+                                  : AppColors.bgPrimary,
+                            ),
+                            title: Text(name),
+                            trailing: IconButton(
+                              icon: AppIcons.delete,
+                              onPressed: () {
+                                // fldId ile silmek istersemmm:
+                                if (fav['id'] != null &&
+                                    fav['type'] == 'folder') {
+                                  context
+                                      .read<FavoriteCubit>()
+                                      .removeFavoriteFolder(fav['id']);
+                                } else if (fav['type'] == 'file' &&
+                                    fav['id'] != null) {
+                                  context
+                                      .read<FavoriteCubit>()
+                                      .removeFavoriteFileByKey(fav['id']);
+                                } else if (fav['type'] == 'image' &&
+                                    fav['id'] != null) {
+                                  context
+                                      .read<FavoriteCubit>()
+                                      .removeFavoriteImage(fav['id']);
+                                }
+                              },
+                            ),
+                          );
+                        },
+                      ),
+              ).withPadding(const EdgeInsets.all(16)),
+            ],
+          ),
         );
       },
     );
@@ -96,7 +104,16 @@ class FavoritesEmpty extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         AppPaddings.CustomHeightSizedBox(context, 0.08),
-        Lottie.asset(AppAssets.FAVORITE_ANIMATION),
+        Center(
+          child: Transform.scale(
+            scale: 4, // 1.0 = orijinal
+            child: Lottie.asset(
+              AppAssets.FAVORITE_ANIMATION,
+              width: AppMediaQuery.screenWidth(context) * 0.8,
+              height: AppMediaQuery.screenWidth(context) * 0.8,
+            ),
+          ),
+        ),
         Text(
           AppStrings.FavoriteFileText,
           style: AppTextSytlyes.favoriteFileTextStyle,

@@ -9,6 +9,7 @@ import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/item_details/widget/listView/itemDetail_listview.dart';
+import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 import 'package:neonappscase_gradproject/core/widget/appBar/custom_appbar.dart';
 
 @RoutePage()
@@ -29,8 +30,7 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
 
     return BlocProvider<HomeCubit>(
       create: (_) {
-        final c =
-            HomeCubit.forDetail();
+        final c = HomeCubit.forDetail();
         Future.microtask(() async {
           await c.getFoldersInFolder(id);
           await c.getFilesInFolder(id);
@@ -60,7 +60,11 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
                   Text(
                     currentFolderName,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
+                      color:
+                          Theme.of(context).colorScheme.brightness ==
+                              Brightness.light
+                          ? AppColors.textWhite
+                          : AppColors.textBej,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -95,7 +99,12 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
                         }
 
                         // Önce klasörler, sonra dosyalar
-                        return ItemDetailListView(total: total, folders: folders, item: item, files: files);
+                        return ItemDetailListView(
+                          total: total,
+                          folders: folders,
+                          item: item,
+                          files: files,
+                        );
                       },
                     ),
                   ),

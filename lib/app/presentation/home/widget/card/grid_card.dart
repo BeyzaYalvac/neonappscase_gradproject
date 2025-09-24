@@ -19,7 +19,7 @@ class GridListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FavoriteCubit, FavoriteState>(
       builder: (context, state) {
-        // Dosyanın favori olup olmadığını kontrol et
+        // Dosyanın favori olup olmadığını kontrol ediyorumm
         final cubit = context.read<FavoriteCubit>();
         final key = file.link;
         final box = Hive.box('favorite_box');
@@ -37,21 +37,22 @@ class GridListCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(4),
               child: Stack(
                 children: [
-                  // ARKAPLAN (görsel ise resim; değilse gri alan + ikon)
                   Positioned.fill(
                     child: Image.network(
                       file.link,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
-                          color: Colors.grey[300],
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.bgfourtary
+                              : AppColors.bgPrimary,
                           child: AppIcons.not_fount_image,
                         );
                       },
                     ),
                   ),
 
-                  // ALT SOL: İsim ve tarih
+                  // İsim ve tarih
                   Positioned(
                     left: 8,
                     right: 8,
@@ -66,23 +67,34 @@ class GridListCard extends StatelessWidget {
                               .replaceAll('&amp;', '&'),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.bgTriartry,
+                          ),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           'Modified: ${file.uploaded}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: Colors.black54,
+                            color:
+                                (Theme.of(context).brightness ==
+                                    Brightness.light)
+                                ? AppColors.textMedium
+                                : AppColors.bgSmoothDark,
                           ),
                         ),
                       ],
                     ),
                   ),
                   IconButton(
-                    icon: isFavoriteFile ? AppIcons.star : AppIcons.star_border,
+                    icon: isFavoriteFile
+                        ? AppIcons.star(context)
+                        : Theme.of(context).brightness == Brightness.light
+                        ? AppIcons.star_border(context)
+                        : AppIcons.star_border_blue(context),
                     color: AppColors.bgTriartry,
                     onPressed: () {
                       if (isFavoriteFile) {

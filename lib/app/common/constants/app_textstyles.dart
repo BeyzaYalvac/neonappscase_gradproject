@@ -39,4 +39,17 @@ class AppTextSytlyes {
 
   //home page
   static const TextStyle whiteTextStyle = TextStyle(color: AppColors.textWhite);
+  static const TextStyle primaryColorTextStyle = TextStyle(
+    color: AppColors.textMedium,
+  );
+
+  static TextStyle fileNameTextStyle(BuildContext context) {
+    return TextStyle(
+      color: Theme.of(context).brightness == Brightness.light
+          ? AppColors.textBej
+          : AppColors.bgSmoothLight,
+      fontWeight: FontWeight.bold,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
 }

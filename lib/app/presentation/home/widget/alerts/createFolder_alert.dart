@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
+import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/selectRootFolder_dropdown.dart';
 
@@ -21,6 +22,7 @@ class CreateFolderAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: Border.all(color: AppColors.bgQuaternary, width: 2),
       title: const Text(AppStrings.createFolderText),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -32,13 +34,21 @@ class CreateFolderAlert extends StatelessWidget {
             ),
             controller: _folderNameController,
           ),
-          SelectRootFolderDropDownButton( items: items),
+          SelectRootFolderDropDownButton(items: items),
         ],
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text(AppStrings.cancelText),
+          child: Text(
+            AppStrings.cancelText,
+            style: TextStyle(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? AppColors.textSmoothDark
+                  : AppColors.bgwhiteBlue,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
         ),
         TextButton(
           onPressed: () async {
@@ -46,7 +56,10 @@ class CreateFolderAlert extends StatelessWidget {
             context.read<HomeCubit>().addFolder(_folderNameController.text);
             _folderNameController.clear();
           },
-          child: const Text(AppStrings.createText),
+          child: const Text(
+            AppStrings.createText,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
       ],
     );

@@ -19,7 +19,7 @@ class AccountDatasource {
 
     if (resForFetchAcount.isSuccess && resForFetchAcount.data != null) {
       final data = resForFetchAcount.data;
-      debugPrint(data.toString());
+      //debugPrint(data.toString());
        final core = (data?['data'] is Map<String, dynamic>)
         ? (data?['data'] as Map<String, dynamic>)
         : data;

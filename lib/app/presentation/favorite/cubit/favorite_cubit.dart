@@ -40,14 +40,14 @@ class FavoriteCubit extends Cubit<FavoriteState> {
 
   void removeFavoriteImage(String fileKey) {
     final entries = box.toMap();
-    for (var e in entries.entries) {
+    for (final e in entries.entries) {
       final v = e.value;
-      if (v is Map && v['id'] == fileKey && v['type'] == 'image') {
+      if (v is Map && v['type'] == 'image' && v['id'] == fileKey) {
         box.delete(e.key);
         break;
       }
     }
-    emit(state.copyWith(favorites: box.values.toList()));
+    _refreshState();
   }
 
   void removeFavoriteFileByKey(String key) {
@@ -71,6 +71,12 @@ class FavoriteCubit extends Cubit<FavoriteState> {
   bool isFavoriteFile(String fileId) {
     return state.favoriteFolders.any(
       (fav) => fav['id'] == fileId && fav['type'] == 'file',
+    );
+  }
+
+  bool isFavoriteImage(String fileId) {
+    return state.favoriteFolders.any(
+      (fav) => fav['id'] == fileId && fav['type'] == 'image',
     );
   }
 

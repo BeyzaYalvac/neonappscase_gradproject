@@ -6,4 +6,5 @@ class AppAssets {
       'assets/animations/Uploading_to_cloud.json';
   static final String UPLOAD_FILE_ANIMATION =
       'assets/animations/uploading_file.json';
+  static final THEME_TOGGLE_ANIMATION = 'assets/animations/theme_toggle.json';
 }

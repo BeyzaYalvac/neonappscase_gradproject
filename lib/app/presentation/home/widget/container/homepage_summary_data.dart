@@ -1,7 +1,6 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
+import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
@@ -14,21 +13,10 @@ class HomePageSummmaryData extends StatelessWidget {
     return (bytes / (1024 * 1024 * 1024));
   }
 
-  String _formatBytes(num bytes, [int decimals = 1]) {
-    if (bytes <= 0) return '0 B';
-    const k = 1024;
-    const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-    final i = (math.log(bytes) / math.log(k)).floor();
-    final v = bytes / math.pow(k, i);
-    return '${v.toStringAsFixed(decimals)} ${units[i]}';
-  }
-
   @override
   Widget build(BuildContext context) {
-    // Güvenli okuma
-
     final stats = acountInfos;
-    print(stats);
+    //print(stats);
     final storageBytes = stats.storageUsed;
     final storageGb = bytoToGb(storageBytes);
     final storageLeft = stats.storageLeft;
@@ -42,30 +30,36 @@ class HomePageSummmaryData extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
       children: [
         Row(
           children: [
-            const Icon(Icons.donut_large, color: AppColors.textBej, size: 8),
+            Icon(
+              Icons.donut_large,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? AppColors.bgfourtary
+                  : AppColors.bgSecondary,
+              size: 16,
+            ),
             AppPaddings.CustomWidthSizedBox(context, 0.01),
 
             Text(
               " Total ${storageCanUsed.toStringAsFixed(3)} GB",
-              style: TextStyle(color: AppColors.textBej),
+              style: AppTextSytlyes.primaryColorTextStyle,
             ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-          crossAxisAlignment: CrossAxisAlignment.start,
-
-          children: [
-            const Icon(Icons.donut_large, color: AppColors.textBej, size: 8),
-            AppPaddings.CustomWidthSizedBox(context, 0.1),
+            SizedBox(width: AppMediaQuery.screenWidth(context) * 0.27),
+            Icon(
+              Icons.donut_large,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? AppColors.bgSmoothLight
+                  : AppColors.bgQuaternary,
+              size: 16,
+            ),
             Text(
-              ' Used  ${_formatBytes(storageBytes)}',
-              style: AppTextSytlyes.whiteTextStyle,
+              ' Used  ${storageGb.toStringAsFixed(3)} GB',
+              style: AppTextSytlyes.primaryColorTextStyle,
             ),
+            AppPaddings.CustomWidthSizedBox(context, 0.01),
           ],
         ),
       ],

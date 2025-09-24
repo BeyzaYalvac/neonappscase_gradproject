@@ -8,14 +8,15 @@ class HomePageSummaryHeader extends StatelessWidget {
   final AccountModel accountInfos;
 
   const HomePageSummaryHeader({super.key, required this.accountInfos});
- 
 
   @override
   Widget build(BuildContext context) {
     final stats = accountInfos;
     print(stats);
     // ignore: dead_code, unnecessary_type_check
-    final storageBytes = (stats.storageUsed is num) ? (stats.storageUsed as num) : 0;
+    final storageBytes = (stats.storageUsed is num)
+        ? (stats.storageUsed as num)
+        : 0;
     final usedBytes = storageBytes;
     debugPrint(storageBytes.toString());
     // Sabit kapasite örneği: 5 GB
@@ -23,7 +24,7 @@ class HomePageSummaryHeader extends StatelessWidget {
     final percent = usedBytes / totalBytes; // 0.0 ile 1.0 arası
     print((percent * 100).toStringAsFixed(8)); // yüzde formatı için
 
-    final percentText = (percent).toStringAsFixed(8);
+    final percentText = (percent).toStringAsFixed(4);
     return Column(
       children: [
         SizedBox(
@@ -38,21 +39,20 @@ class HomePageSummaryHeader extends StatelessWidget {
                 children: [
                   SizedBox.expand(
                     child: CircularProgressIndicator(
-                      value: 1, // full circle background
-                      strokeWidth: 12,
+                      value: 1,
+                      strokeWidth: 16,
                       valueColor: const AlwaysStoppedAnimation(
-                        AppColors.bgQuaternary,
+                        AppColors.bgTriartry,
                       ),
                     ),
                   ),
-                  // Kullanılan alan
                   SizedBox.expand(
                     child: CircularProgressIndicator(
                       value: percent,
-                      strokeWidth: 12,
+                      strokeWidth: 16,
                       backgroundColor: Colors.transparent,
                       valueColor: const AlwaysStoppedAnimation(
-                        AppColors.bgPrimary,
+                        AppColors.bgSmoothLight,
                       ),
                     ),
                   ),
@@ -61,16 +61,22 @@ class HomePageSummaryHeader extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '${percentText}%',
-                        style: const TextStyle(
+                        '$percentText%',
+                        style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textWhite,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.textWhite
+                              : AppColors.textMedium,
                         ),
                       ),
                       Text(
                         AppStrings.usedText,
-                        style: TextStyle(color: Colors.grey.shade600),
+                        style: TextStyle(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.textWhite
+                              : AppColors.textMedium,
+                        ),
                       ),
                     ],
                   ),

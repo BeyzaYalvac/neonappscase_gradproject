@@ -21,11 +21,11 @@ class GridToggleTabs extends StatelessWidget {
           dividerHeight: 0,
           indicatorSize: TabBarIndicatorSize.tab,
           isScrollable: true,
-          labelColor: AppColors.textWhite,
-          unselectedLabelColor: AppColors.bgQuaternary,
+          labelColor: AppColors.textMedium,
+          unselectedLabelColor: AppColors.textBej,
           indicator: BoxDecoration(
             shape: BoxShape.rectangle,
-            color: AppColors.bgTriartry,
+            color: AppColors.bgPrimary,
             borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
           tabs: [

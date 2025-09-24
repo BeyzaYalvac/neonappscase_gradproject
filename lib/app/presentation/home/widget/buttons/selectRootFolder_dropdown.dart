@@ -6,12 +6,11 @@ import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
 
 class SelectRootFolderDropDownButton extends StatelessWidget {
-  const SelectRootFolderDropDownButton({
-    super.key,
-    required this.items,
-  });
+  const SelectRootFolderDropDownButton({super.key, required this.items});
 
   final List<DropdownMenuItem<String>> items;
+
+  static const String createNewFolderId = "0";
 
   @override
   Widget build(BuildContext context) {
@@ -21,19 +20,48 @@ class SelectRootFolderDropDownButton extends StatelessWidget {
             ? state.selectedFolder
             : null;
 
+        final extendedItems = [
+          ...items,
+          const DropdownMenuItem<String>(
+            value: createNewFolderId,
+            child: Text(
+              "Create New Folder",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ];
+
         return DropdownButton<String>(
-          dropdownColor: AppColors.bgQuaternary,
-          style: const TextStyle(color: AppColors.textWhite),
+          dropdownColor: AppColors.bgwhiteBlue,
+          style: const TextStyle(color: AppColors.textMedium),
           elevation: 6,
           isExpanded: true,
           value: safeValue,
-          hint: const Text(AppStrings.selectText),
-          items: items,
-          onChanged: items.isEmpty
+          hint: Text(
+            AppStrings.selectText,
+            style: TextStyle(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? AppColors.textMedium
+                  : AppColors.textWhite,
+            ),
+          ),
+          items: extendedItems,
+          onChanged: extendedItems.isEmpty
               ? null
               : (String? id) {
                   if (id == null) return;
-                  context.read<HomeCubit>().setSelectedFolder(id);
+
+                  if (id == createNewFolderId) {
+                    // burada Cubit'e özel 0 değeri set ediyorsun
+                    context.read<HomeCubit>().setSelectedFolder(
+                      createNewFolderId,
+                    );
+
+                    // ekstra olarak hemen create dialog açabilirsin
+                    // showDialog(...);
+                  } else {
+                    context.read<HomeCubit>().setSelectedFolder(id);
+                  }
                 },
         );
       },

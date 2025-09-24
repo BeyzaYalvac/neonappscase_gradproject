@@ -12,8 +12,8 @@ class FolderIconContainer extends StatelessWidget {
       height: AppMediaQuery.screenHeight(context) * 0.11,
       width: AppMediaQuery.screenWidth(context) * 0.5,
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.bgTriartry, width: 2),
-        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: AppColors.bgSmoothLight, width: 2),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: AppIcons.folder_large,
     );

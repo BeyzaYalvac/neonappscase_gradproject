@@ -5,7 +5,7 @@ class UploadServerModel extends Equatable {
   final String serverTime;
   final int status;
   final String sessId;
-  final String result; // upload için kullanılacak URL
+  final String result;
 
   const UploadServerModel({
     required this.msg,

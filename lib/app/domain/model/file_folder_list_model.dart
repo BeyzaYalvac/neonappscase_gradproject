@@ -137,7 +137,6 @@ extension FileFolderListModelX on FileFolderListModel {
     return FileFolderListModel(
       fldId: fldId,
       name: name ?? this.name,
-      // varsa diğer alanları da buraya geçir
     );
   }
 }

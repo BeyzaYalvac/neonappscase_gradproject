@@ -41,11 +41,12 @@ class _LottieThemeToggleState extends State<LottieThemeToggle>
 
   Future<void> _onTap() async {
     final cubit = context.read<ThemeCubit>();
+    cubit.toggle();
+
     final goingDark = cubit.state.themeMode != ThemeMode.dark;
     // 1) önce animasyon
     await _animateTo(goingDark ? 1.0 : 0.0);
     // 2) sonra temayı kalıcı değiştir
-    cubit.toggle();
     // Artık controller hedefte kaldı, loop etmeyecek.
   }
 

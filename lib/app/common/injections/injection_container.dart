@@ -24,19 +24,19 @@ class InjectionContainer {
         AccountRepositoryImpl()..fetchAccountDetails(),
       );
     }
-    
+
     if (!_instance.isRegistered<ContentDataSource>()) {
       _instance.registerLazySingleton<ContentDataSource>(
         () => ContentDataSource(),
       );
-    }
+      // }
 
-    if (!_instance.isRegistered<ContentRepositoryImpl>()) {
-      _instance.registerSingleton<ContentRepositoryImpl>(
-        ContentRepositoryImpl(),
-      );
+      if (!_instance.isRegistered<ContentRepositoryImpl>()) {
+        _instance.registerSingleton<ContentRepositoryImpl>(
+          ContentRepositoryImpl(),
+        );
+      }
     }
-    
   }
 
   static T read<T extends Object>() => _instance<T>();

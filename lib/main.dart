@@ -23,9 +23,8 @@ void main() async {
 
   final boot = await AppBootstrap.init();
 
-  // Native splash’i kapat ve uygulamayı göster:
   FlutterNativeSplash.remove();
-  
+
   runApp(MyApp(settingsBox: boot.settingsBox));
 }
 
@@ -54,7 +53,7 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: state.themeMode,
-            scaffoldMessengerKey: rootScaffoldMessengerKey, 
+            scaffoldMessengerKey: rootScaffoldMessengerKey,
             //home: MoviesHomepage(),
             routerConfig: InjectionContainerItems.appRouter.config(),
           );

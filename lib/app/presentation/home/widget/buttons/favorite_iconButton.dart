@@ -19,7 +19,9 @@ class FavoriteIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: isFavoriteFolder ? AppIcons.star : AppIcons.star_border,
+      icon: isFavoriteFolder
+          ? AppIcons.star(context)
+          : AppIcons.star_border(context),
       color: AppColors.bgTriartry,
       onPressed: () {
         if (isFavoriteFolder) {

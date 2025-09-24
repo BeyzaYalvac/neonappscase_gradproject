@@ -1,8 +1,8 @@
 class AppStrings {
   static const String appName = 'CloudIt';
-  static const String appSplashParagraph = 'Cloud it, Just Drop it, just Do it';
+  static const String appSplashParagraph = 'Cloud it, Drop it, just Do it';
   static const String appSplashParagraph2 =
-      ' This app can make your  dreawddewd\nedewdwededewdwedewdewdewdeds cosdfsdfsdfme true';
+      ' This is your personal cloud storage solution.';
   static const String appSplashParagraph3 = 'Let\'s get started!';
   static const String appSplashWelcome = ' Welcome!';
 
@@ -28,7 +28,8 @@ class AppStrings {
   static const String closeText = 'Close ';
 
   static const String createFolderText = 'create folder';
-  static const String selectFolderNameText = 'What is your folder name of your folder?';
+  static const String selectFolderNameText =
+      'What is your folder name of your folder?';
   static const String selectFolderNameHintText = 'Folder name';
 
   static const String cancelText = 'Cancel';
@@ -47,4 +48,15 @@ class AppStrings {
   static const String usedProfileText = 'Used';
 
   static const String leftProfileText = 'Left';
+
+  //homepage dropdown
+  static const String removeFavorites = 'Remove from Favorites';
+  static const String addFavorites = 'Add to Favorites';
+  static const String folderProcesses = 'Klasör işlemleri';
+
+  //file dropdown
+  static const String moveText = 'Move';
+  static const String downloadText= 'Download';
+  static const String fileProcesses= 'Dosya işlemleri';
+
 }
