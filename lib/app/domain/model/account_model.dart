@@ -25,17 +25,17 @@ class AccountModel extends Equatable {
   factory AccountModel.fromMap(Map<String, dynamic> map) {
     final result = map['result'] ?? map;
 
-    int _toInt(dynamic v) => int.tryParse(v?.toString() ?? '') ?? 0;
+    int toInt(dynamic v) => int.tryParse(v?.toString() ?? '') ?? 0;
 
     return AccountModel(
-      storageLeft: _toInt(result['storage_left']),
-      premiumTrafficLeft: _toInt(result['premium_traffic_left']),
+      storageLeft: toInt(result['storage_left']),
+      premiumTrafficLeft: toInt(result['premium_traffic_left']),
       email: result['email']?.toString() ?? '',
       premiumExpire: result['premium_expire']?.toString() ?? '',
       balance: result['balance']?.toString() ?? '',
-      trafficUsed: _toInt(result['traffic_used']),
+      trafficUsed: toInt(result['traffic_used']),
       trafficLeft: result['traffic_left']?.toString() ?? '',
-      storageUsed: _toInt(result['storage_used']),
+      storageUsed: toInt(result['storage_used']),
     );
   }
 

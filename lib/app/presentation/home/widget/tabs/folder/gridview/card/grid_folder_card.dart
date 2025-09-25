@@ -7,9 +7,9 @@ import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorit
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/favorite_iconButton.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/rename_iconButton.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/container/folderIcon_container.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/favoriteicon_button.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/renameicon_button.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/container/foldericon_container.dart';
 import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 
 class GridFolderCard extends StatelessWidget {
@@ -41,7 +41,7 @@ class GridFolderCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AppPaddings.CustomHeightSizedBox(context, 0.072),
+                    AppPaddings.customHeightSizedBox(context, 0.072),
                     BlocBuilder<HomeCubit, HomeState>(
                       buildWhen: (prev, next) =>
                           prev.folders != next.folders ||

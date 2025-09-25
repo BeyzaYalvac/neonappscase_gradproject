@@ -3,16 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/selectRootFolder_dropdown.dart';
 
 class CreateFolderAlert extends StatelessWidget {
-  final state;
+  final HomeState state;
   const CreateFolderAlert({
     super.key,
     required TextEditingController folderNameController,
     required this.current,
     required this.items,
-    this.state,
+    required this.state,
   }) : _folderNameController = folderNameController;
 
   final TextEditingController _folderNameController;

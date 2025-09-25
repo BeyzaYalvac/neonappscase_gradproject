@@ -3,11 +3,11 @@ import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 
 class ActionFab extends StatelessWidget {
   const ActionFab({
-    Key? key,
+    super.key,
     required this.icon,
     this.onPressed,
     this.size = 56,
-  }) : super(key: key);
+  });
 
   final IconData icon;
   final VoidCallback? onPressed;

@@ -41,9 +41,9 @@ class SplashDescriptionView extends StatelessWidget {
                 // Dots + Button
                 Column(
                       children: [
-                        AppPaddings.CustomHeightSizedBox(context, 0.17),
+                        AppPaddings.customHeightSizedBox(context, 0.17),
                         SplashDots(),
-                        AppPaddings.CustomHeightSizedBox(context, 0.01),
+                        AppPaddings.customHeightSizedBox(context, 0.01),
                         SplashButton(
                           text: state.index == state.totalPages - 1
                               ? "Başla"

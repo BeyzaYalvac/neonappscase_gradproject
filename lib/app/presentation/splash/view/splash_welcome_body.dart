@@ -19,7 +19,7 @@ class SplashWelcomeBody extends StatelessWidget {
         Column(
           children: [
             SplashContainerToLeft(
-                  containerColor: AppColors.bgfourtary,
+                  containerColor: AppColors.bgSmoothDark,
                   textW: Text(
                     AppStrings.appName,
                     style: AppTextSytlyes.splashWelcomeStyle,
@@ -29,7 +29,7 @@ class SplashWelcomeBody extends StatelessWidget {
                 .withAlignment(Alignment.topRight)
                 .withPadding(const EdgeInsets.only(top: 150)),
             SplashContainerToRight(
-                  containerColor: AppColors.textLight,
+                  containerColor: AppColors.bgPrimary,
                   textW: Text(
                     AppStrings.appSplashParagraph,
                     style: AppTextSytlyes.splashWelcomeSubtitleStyle,
@@ -40,7 +40,7 @@ class SplashWelcomeBody extends StatelessWidget {
                 .withPadding(const EdgeInsets.only(top: 60)),
           ],
         ),
-        splash_gradient_bg(),
+        SplashGradientBg(),
       ],
     );
   }

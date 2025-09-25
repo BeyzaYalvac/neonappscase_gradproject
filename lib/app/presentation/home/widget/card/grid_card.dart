@@ -9,7 +9,7 @@ import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorit
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/moveFile_dialog.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/movefile_dialog.dart';
 
 class GridListCard extends StatelessWidget {
   final FileItem file;
@@ -46,7 +46,7 @@ class GridListCard extends StatelessWidget {
                           color: Theme.of(context).brightness == Brightness.dark
                               ? AppColors.bgfourtary
                               : AppColors.bgPrimary,
-                          child: AppIcons.not_fount_image,
+                          child: AppIcons.notFountImage,
                         );
                       },
                     ),
@@ -93,8 +93,8 @@ class GridListCard extends StatelessWidget {
                     icon: isFavoriteFile
                         ? AppIcons.star(context)
                         : Theme.of(context).brightness == Brightness.light
-                        ? AppIcons.star_border(context)
-                        : AppIcons.star_border_blue(context),
+                        ? AppIcons.starBorder(context)
+                        : AppIcons.starBorderBlue(context),
                     color: AppColors.bgTriartry,
                     onPressed: () {
                       if (isFavoriteFile) {
@@ -120,7 +120,7 @@ class GridListCard extends StatelessWidget {
                       child: IconButton(
                         icon: Icon(Icons.move_up),
                         onPressed: () {
-                          MoveFileDialog(context, state, file);
+                          moveFileDialog(context, state, file);
                         },
                       ),
                     ),

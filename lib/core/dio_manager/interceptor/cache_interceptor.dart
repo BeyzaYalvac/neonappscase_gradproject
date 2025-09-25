@@ -124,8 +124,8 @@ class CacheInterceptor extends Interceptor {
         );
       }
     } else {
-      print(entry.toString());
-      print('folder gelmedi');
+      debugPrint(entry.toString());
+      debugPrint('folder gelmedi');
     }
 
     /// Cache yoksa ya da politika izin vermiyorsa hatayı devam ettir

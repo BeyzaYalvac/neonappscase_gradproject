@@ -26,7 +26,7 @@ class FavoriteView extends StatelessWidget {
           height: AppMediaQuery.screenHeight(context),
           color: Theme.of(context).brightness == Brightness.light
               ? AppColors.bgTriartry
-              : Theme.of(context).colorScheme.background,
+              : Theme.of(context).colorScheme.surface,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -103,19 +103,19 @@ class FavoritesEmpty extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        AppPaddings.CustomHeightSizedBox(context, 0.08),
+        AppPaddings.customHeightSizedBox(context, 0.08),
         Center(
           child: Transform.scale(
             scale: 4, // 1.0 = orijinal
             child: Lottie.asset(
-              AppAssets.FAVORITE_ANIMATION,
+              AppAssets.favoriteAnimation,
               width: AppMediaQuery.screenWidth(context) * 0.8,
               height: AppMediaQuery.screenWidth(context) * 0.8,
             ),
           ),
         ),
         Text(
-          AppStrings.FavoriteFileText,
+          AppStrings.favoriteFileText,
           style: AppTextSytlyes.favoriteFileTextStyle,
         ),
       ],

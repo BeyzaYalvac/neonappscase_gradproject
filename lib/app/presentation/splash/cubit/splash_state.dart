@@ -4,10 +4,7 @@ class SplashState extends Equatable {
   final int index;
   final int totalPages;
 
-  SplashState({
-    required this.index,
-    required this.totalPages,
-  });
+  const SplashState({required this.index, required this.totalPages});
 
   SplashState copyWith({
     int? totalPages,

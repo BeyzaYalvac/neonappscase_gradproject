@@ -8,14 +8,14 @@ class AppIcons {
     Icons.drive_file_rename_outline,
     color: AppColors.bgwhiteBlue,
   );
-  static final rename_blue = Icon(
+  static final renameBlue = Icon(
     Icons.drive_file_rename_outline,
     color: AppColors.bgTriartry,
   );
 
   static final search = Icon(Icons.search, color: Colors.blue.shade400);
 
-  static final not_fount_image = Icon(
+  static final notFountImage = Icon(
     Icons.broken_image,
     size: 50,
     color: Colors.grey,
@@ -24,20 +24,20 @@ class AppIcons {
   static final clear = Icon(Icons.clear, color: Colors.blue.shade400);
 
   //more_vert icon
-  static final more_horiz = Icon(Icons.more_horiz, color: AppColors.bgPrimary);
+  static final moreHoriz = Icon(Icons.more_horiz, color: AppColors.bgPrimary);
 
-  static final more_horiz_blue = Icon(
+  static final moreHorizBlue = Icon(
     Icons.more_horiz,
     color: AppColors.bgwhiteBlue,
   );
 
   //file move icons
-  static final file_move = Icon(
+  static final fileMove = Icon(
     Icons.move_to_inbox,
     color: AppColors.bgwhiteBlue,
   );
 
-  static final file_move_blue = Icon(
+  static final fileMoveBlue = Icon(
     Icons.move_to_inbox,
     color: AppColors.bgTriartry,
   );
@@ -51,14 +51,14 @@ class AppIcons {
     size: IconSizes.iconMedium,
     color: AppColors.bgPrimary,
   );
-  static final folder_blue = (BuildContext context) => Icon(
+  static Icon Function(BuildContext context) folderBlue = (BuildContext context) => Icon(
     Icons.folder,
     size: IconSizes.iconMedium,
     color: AppColors.bgTriartry,
   );
 
   // - Large size
-  static const folder_large = Icon(
+  static const folderLarge = Icon(
     Icons.folder,
     size: IconSizes.iconExtraLarge,
     color: AppColors.bgSmoothLight,
@@ -72,7 +72,7 @@ class AppIcons {
     );
   }
 
-  static Icon file_Large(BuildContext context) {
+  static Icon fileLarge(BuildContext context) {
     return Icon(
       Icons.file_copy,
       size: IconSizes.iconMedium,
@@ -92,18 +92,18 @@ class AppIcons {
   }
 
   //star border icon
-  static Icon star_border(BuildContext context) {
+  static Icon starBorder(BuildContext context) {
     return Icon(Icons.star_border, color: AppColors.bgTriartry);
   }
 
-  static Icon star_border_blue(BuildContext context) {
+  static Icon starBorderBlue(BuildContext context) {
     return Icon(Icons.star_border, color: AppColors.bgwhiteBlue);
   }
 
   //bottomnavbar
   static final home = Icon(Icons.home, size: IconSizes.iconLarge);
   static final favorite = Icon(Icons.star, size: IconSizes.iconLarge);
-  static final profile_xxl = Icon(Icons.person, size: IconSizes.iconXXL);
+  static final profileXxl = Icon(Icons.person, size: IconSizes.iconXXL);
   static final profile = Icon(Icons.person, size: IconSizes.iconLarge);
 
   //favorite page
@@ -128,7 +128,7 @@ class AppIcons {
 
   static final create = Icon(Icons.add);
 
-  static final create_folder_IconData = Icons.create_new_folder;
+  static final createFolderIconData = Icons.create_new_folder;
 }
 
 class IconSizes {

@@ -7,7 +7,6 @@ import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model
 import 'package:neonappscase_gradproject/app/domain/model/upload_file_model.dart';
 import 'package:neonappscase_gradproject/app/domain/model/upload_server_model.dart';
 import 'package:neonappscase_gradproject/core/dio_manager/api_client.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ContentDataSource {
   final api = ApiClient(
@@ -70,21 +69,38 @@ class ContentDataSource {
 
   //load: { msg, status, result: { folders: [...], files: [...] } } final result = data['result'] as Map<String, dynamic>? ?? const {}; final folders = (result['folders'] as List?) ?? const []; return folders .whereType<Map<String, dynamic>>() .map((e) => FileFolderListModel.fromMap(e)) .toList(); } else { throw Exception(res.error?.message ?? 'Klasör listesi alınamadı'); } }
   Future<Map<String, dynamic>> getFileInfo(String fileCode) async {
-    final res = await api.get<Map<String, dynamic>>(
+    final res = await api.get<dynamic>(
       '/file/info',
       query: {'key': AppConfig.apiKey, 'file_code': fileCode},
     );
+
     if (!res.isSuccess || res.data == null) {
       throw Exception(res.error?.message ?? 'file/info alınamadı');
     }
-    final data = res.data!;
-    // Tipik ddownload cevabı: { status, msg, result: { file: {...} } } / varyasyon olabilir
-    final result = (data['result'] as Map?) ?? const {};
-    final file =
-        (result['file'] as Map?) ??
-        result; // bazı sunucular direkt file objesi döndürür
-    debugPrint('FILE INFO => $file');
-    return file.cast<String, dynamic>();
+
+    final data = res.data;
+
+    if (data is Map) {
+      // tipik cevap: { status, msg, result: { file: {...} } }
+      final result = data['result'];
+      if (result is Map && result['file'] is Map) {
+        return Map<String, dynamic>.from(result['file'] as Map);
+      }
+      if (result is Map) {
+        return Map<String, dynamic>.from(result);
+      }
+      return Map<String, dynamic>.from(data);
+    }
+
+    if (data is List && data.isNotEmpty) {
+      // bazı serverlar düz liste dönebiliyor
+      final first = data.first;
+      if (first is Map) {
+        return Map<String, dynamic>.from(first);
+      }
+    }
+
+    throw Exception('Beklenmeyen file/info response: ${data.runtimeType}');
   }
 
   Future<int?> detectRootFolderId() async {
@@ -141,7 +157,7 @@ class ContentDataSource {
     debugPrint("UPLOAD FORM FIELDS: ${formData.fields}");
 
     final response = await uploadApi.post(uploadUrl, data: formData);
-    
+
     if (response.isSuccess && response.data != null) {
       final data = response.data is List ? response.data[0] : response.data;
 
@@ -151,7 +167,7 @@ class ContentDataSource {
 
       return UploadFileModel.fromMap(data);
     } else {
-      throw Exception('Upload failed: ${response}');
+      throw Exception('Upload failed: $response');
     }
   }
 
@@ -240,16 +256,6 @@ class ContentDataSource {
       return model;
     } else {
       throw Exception(res.error?.message ?? 'Bilinmeyen hata');
-    }
-  }
-
-  Future<void> downloadFile(String fileUrl) async {
-    final Uri url = Uri.parse(fileUrl);
-
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
-      throw 'Bu URL açılamıyor: $fileUrl';
     }
   }
 

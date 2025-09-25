@@ -12,7 +12,7 @@ class AppTheme {
         secondary: AppColors.bgSecondary,
         tertiary: AppColors.bgTriartry,
         onPrimary: AppColors.textLight,
-        background: AppColors.bgTriartry,
+        surface: AppColors.bgTriartry,
       );
 
   static final ColorScheme _darkScheme =
@@ -24,7 +24,7 @@ class AppTheme {
         secondary: AppColors.bgSecondary,
         tertiary: AppColors.bgTriartry,
         onPrimary: Colors.white,
-        background: AppColors.bgSecondary,
+        surface: AppColors.bgSecondary,
       );
 
   static ThemeData lightTheme = ThemeData(
@@ -35,7 +35,7 @@ class AppTheme {
 
     useMaterial3: true,
     colorScheme: _lightScheme,
-    scaffoldBackgroundColor: _lightScheme.background,
+    scaffoldBackgroundColor: _lightScheme.surface,
     appBarTheme: const AppBarTheme(centerTitle: true),
     // scaffoldBackgroundColor: Colors.white,
     textTheme: const TextTheme(

@@ -15,7 +15,7 @@ class FolderIconContainer extends StatelessWidget {
         border: Border.all(color: AppColors.bgSmoothLight, width: 2),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: AppIcons.folder_large,
+      child: AppIcons.folderLarge,
     );
   }
 }

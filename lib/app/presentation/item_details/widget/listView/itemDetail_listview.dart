@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
-import 'package:neonappscase_gradproject/app/presentation/item_details/widget/listile/itemDetail_listile.dart';
+import 'package:neonappscase_gradproject/app/presentation/item_details/widget/listile/itemdetail_listile.dart';
 
 class ItemDetailListView extends StatelessWidget {
   const ItemDetailListView({

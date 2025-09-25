@@ -12,17 +12,14 @@ class HomePageSummaryHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stats = accountInfos;
-    print(stats);
-    // ignore: dead_code, unnecessary_type_check
-    final storageBytes = (stats.storageUsed is num)
-        ? (stats.storageUsed as num)
-        : 0;
+    final storageBytes = stats.storageUsed;
+
     final usedBytes = storageBytes;
     debugPrint(storageBytes.toString());
-    // Sabit kapasite örneği: 5 GB
+    // Sabit kapasite: 5 GB
     const totalBytes = 5 * 1024 * 1024 * 1024;
     final percent = usedBytes / totalBytes; // 0.0 ile 1.0 arası
-    print((percent * 100).toStringAsFixed(8)); // yüzde formatı için
+    debugPrint(percent.clamp(0, 1).toString()); // yüzde formatı için
 
     final percentText = (percent).toStringAsFixed(4);
     return Column(
@@ -42,7 +39,7 @@ class HomePageSummaryHeader extends StatelessWidget {
                       value: 1,
                       strokeWidth: 16,
                       valueColor: const AlwaysStoppedAnimation(
-                        AppColors.bgTriartry,
+                        AppColors.bgSmoothLight,
                       ),
                     ),
                   ),
@@ -52,11 +49,10 @@ class HomePageSummaryHeader extends StatelessWidget {
                       strokeWidth: 16,
                       backgroundColor: Colors.transparent,
                       valueColor: const AlwaysStoppedAnimation(
-                        AppColors.bgSmoothLight,
+                        AppColors.bgTriartry,
                       ),
                     ),
                   ),
-                  // Ortadaki yazılar
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

@@ -7,13 +7,10 @@ class AppStrings {
   static const String appSplashWelcome = ' Welcome!';
 
   //Favorite Page Strings
-  static const String FavoriteFileText = 'You don\'t have any favorites?';
+  static const String favoriteFileText = 'You don\'t have any favorites?';
 
   //Upload Image Page Strings
   static const String uploadImageText = 'Please upload an image';
-
-  //Upload file Page Strings
-  static const String uploadFileext = 'Please upload a file';
 
   //tabs
   static const String folderTabText = 'Folders';
@@ -56,7 +53,20 @@ class AppStrings {
 
   //file dropdown
   static const String moveText = 'Move';
-  static const String downloadText= 'Download';
-  static const String fileProcesses= 'Dosya işlemleri';
+  static const String downloadText = 'Download';
+  static const String fileProcesses = 'Dosya işlemleri';
 
+  //move File
+  static const String moveFileText = 'Move File';
+  static const String folderChooseText =
+      'Which folder do you want to move this file to?';
+  static const String noFileCodeText = 'No FileCode';
+
+  //rename folder
+  static const String renameFolderText = 'Rename Folder';
+  static const String enterFolderName = 'Enter your new folder name';
+  static const String renameText = 'Rename';
+
+  //upload File
+  static const String uploadText = 'Upload File';
 }

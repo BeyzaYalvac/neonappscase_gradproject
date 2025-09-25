@@ -6,14 +6,14 @@ import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddin
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/searchbars/custom_searchBar.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/listview_file/listLayout_file.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/listview_image/listLayout_image.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/searchbars/custom_searchbar.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/listview_file/listlayout_file.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/listview_image/listlayout_image.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/folder/gridview/folder_gridview.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/folder/listview/folder_listview.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/gridview%20file_image/gridLayout_file_.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/gridview%20file_image/file_gridlayout.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/sections_tabs.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/gridToggle_tabs.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/gridtoggle_tabs.dart';
 import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 
 class HomePageWhiteBody extends StatefulWidget {
@@ -41,7 +41,6 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
 
   @override
   Widget build(BuildContext context) {
-    // 1) DefaultTabController artık DIŞARIDA
     return DefaultTabController(
       length: 3,
       child: BlocBuilder<HomeCubit, HomeState>(
@@ -65,7 +64,7 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
             decoration: BoxDecoration(
               color: Theme.of(context).brightness == Brightness.light
                   ? AppColors.bgTriartry
-                  : Theme.of(context).colorScheme.background,
+                  : Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(32),
                 topRight: Radius.circular(32),
@@ -73,7 +72,7 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
             ),
             child: Column(
               children: [
-                AppPaddings.CustomHeightSizedBox(context, 0.02),
+                AppPaddings.customHeightSizedBox(context, 0.02),
                 Row(
                   children: [
                     Text(
@@ -84,8 +83,7 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
                                 ? AppColors.textWhite
                                 : AppColors.bgSmoothLight,
                             fontWeight: FontWeight.bold,
-                            fontSize:
-                                MediaQuery.textScaleFactorOf(context) * 20,
+                            fontSize: AppMediaQuery.screenWidth(context) * 0.05,
                           ),
                         )
                         .withAlignment(Alignment.centerLeft)

@@ -5,7 +5,7 @@ import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dar
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/listview_image/listile_image/imageActions_dropdown.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/listview_image/listile_image/imageactions_dropdown.dart';
 import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 
 class ImageListile extends StatelessWidget {

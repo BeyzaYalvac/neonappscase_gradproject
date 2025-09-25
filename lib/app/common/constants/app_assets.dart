@@ -1,10 +1,10 @@
 class AppAssets {
-  static final String LOGO_PATH = 'assets/';
-  static final String FAVORITE_ANIMATION =
+  static final String logoPath = 'assets/';
+  static final String favoriteAnimation =
       'assets/animations/favorite_heart.json';
-  static final String UPLOAD_ANIMATION =
+  static final String uploadAnimation =
       'assets/animations/Uploading_to_cloud.json';
-  static final String UPLOAD_FILE_ANIMATION =
+  static final String uploadFileAnimation =
       'assets/animations/uploading_file.json';
-  static final THEME_TOGGLE_ANIMATION = 'assets/animations/theme_toggle.json';
+  static final themeToggleAnimation = 'assets/animations/theme_toggle.json';
 }

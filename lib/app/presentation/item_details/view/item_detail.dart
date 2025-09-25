@@ -8,8 +8,7 @@ import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/item_details/widget/listView/itemDetail_listview.dart';
-import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
+import 'package:neonappscase_gradproject/app/presentation/item_details/widget/listView/itemdetail_listview.dart';
 import 'package:neonappscase_gradproject/core/widget/appBar/custom_appbar.dart';
 
 @RoutePage()
@@ -70,7 +69,7 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
                     ),
                   ),
 
-                  AppPaddings.CustomHeightSizedBox(context, 0.02),
+                  AppPaddings.customHeightSizedBox(context, 0.02),
                   Container(
                     width: AppMediaQuery.screenWidth(context) * 0.9,
                     height: AppMediaQuery.screenHeight(context) * 0.7,

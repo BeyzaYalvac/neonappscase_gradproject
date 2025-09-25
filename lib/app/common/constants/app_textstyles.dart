@@ -5,14 +5,14 @@ class AppTextSytlyes {
   static const TextStyle appNameTextStyle = TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.bold,
-    color: AppColors.textBej,
+    color: AppColors.textWhite,
   );
 
   //splash
   static const TextStyle splashSubtitleStyle = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.normal,
-    color: AppColors.textBej,
+    color: AppColors.textWhite,
   );
   static const TextStyle splashWelcomeStyle = TextStyle(
     fontSize: 40,
@@ -20,9 +20,9 @@ class AppTextSytlyes {
     color: AppColors.textBej,
   );
   static const TextStyle splashWelcomeSubtitleStyle = TextStyle(
-    fontSize: 16,
+    fontSize: 28,
     fontWeight: FontWeight.normal,
-    color: AppColors.textBej,
+    color: AppColors.textDark,
   );
 
   //Favorite Page

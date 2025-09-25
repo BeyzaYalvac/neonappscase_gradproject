@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
+import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
@@ -14,19 +16,19 @@ class MoveFileAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Move File'),
+      title: const Text(AppStrings.moveFileText),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('Which folder do you want to move this file to?'),
-          const SizedBox(height: 8),
+          const Text(AppStrings.folderChooseText),
+          const SizedBox(height: AppPaddings.small),
           SelectRootFolderDropDownButton(items: items),
         ],
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: const Text(AppStrings.cancelText),
         ),
 
         BlocBuilder<HomeCubit, HomeState>(
@@ -43,7 +45,9 @@ class MoveFileAlert extends StatelessWidget {
 
                       if ((file.fileCode).toString().isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('fileCode yok')),
+                          const SnackBar(
+                            content: Text(AppStrings.noFileCodeText),
+                          ),
                         );
                         return;
                       }
@@ -61,7 +65,7 @@ class MoveFileAlert extends StatelessWidget {
                         );
                       }
                     },
-              child: const Text('Move'),
+              child: const Text(AppStrings.moveFileText),
             );
           },
         ),

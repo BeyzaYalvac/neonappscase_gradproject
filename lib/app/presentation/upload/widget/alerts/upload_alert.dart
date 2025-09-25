@@ -18,11 +18,11 @@ class UploadFileAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Upload File"),
+      title: const Text(AppStrings.uploadText),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text("upload edeceğim file'ın root'unu seç"),
+          const Text(AppStrings.folderChooseText),
           SelectRootFolderDropDownButton(items: items),
         ],
       ),
@@ -39,6 +39,7 @@ class UploadFileAlert extends StatelessWidget {
             final selectedId = context.read<HomeCubit>().state.selectedFolder;
 
             await context.read<UploadCubit>().uploadFile(folderId: selectedId);
+            // ignore: use_build_context_synchronously
             Navigator.of(context).pop();
           },
           child: const Text(AppStrings.createText),

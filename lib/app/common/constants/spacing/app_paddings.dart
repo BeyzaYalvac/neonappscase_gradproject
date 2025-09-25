@@ -6,14 +6,14 @@ class AppPaddings {
   static const double large = 48.0;
 
   static const EdgeInsets screenPadding = EdgeInsets.all(16.0);
-  static SizedBox CustomHeightSizedBox(
+  static SizedBox customHeightSizedBox(
     BuildContext context,
     double customHeight,
   ) {
     return SizedBox(height: MediaQuery.of(context).size.height * customHeight);
   }
 
-  static SizedBox CustomWidthSizedBox(
+  static SizedBox customWidthSizedBox(
     BuildContext context,
     double customHeight,
   ) {

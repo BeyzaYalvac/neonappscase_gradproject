@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 
-Future<dynamic> RenameDialog(
+Future<dynamic> renameDialog(
   BuildContext context,
   TextEditingController folderNameController,
   FileFolderListModel folder,
@@ -12,12 +13,12 @@ Future<dynamic> RenameDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text('Rename Folder'),
+        title: Text(AppStrings.renameFolderText),
         content: TextField(
           controller: folderNameController,
           decoration: InputDecoration(
-            label: Text("Enter your new folder name"),
-            hintText: "Enter new folder name",
+            label: Text(AppStrings.enterFolderName),
+            hintText: AppStrings.enterFolderName,
           ),
         ),
         actions: [
@@ -25,7 +26,7 @@ Future<dynamic> RenameDialog(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Cancel'),
+            child: Text(AppStrings.cancelText),
           ),
           TextButton(
             onPressed: () {
@@ -35,7 +36,7 @@ Future<dynamic> RenameDialog(
               );
               Navigator.of(context).pop();
             },
-            child: Text('Rename'),
+            child: Text(AppStrings.renameText),
           ),
         ],
       );

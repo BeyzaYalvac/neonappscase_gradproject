@@ -14,7 +14,7 @@ class UploadView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UploadCubit, UploadState>(
       builder: (context, state) {
-        return Scaffold(appBar: CustomAppBar(), body: photoUploadColumn());
+        return Scaffold(appBar: CustomAppBar(), body: PhotoUploadColumn());
       },
     );
   }

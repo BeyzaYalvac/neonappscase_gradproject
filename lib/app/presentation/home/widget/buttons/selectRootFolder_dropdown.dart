@@ -25,7 +25,7 @@ class SelectRootFolderDropDownButton extends StatelessWidget {
           const DropdownMenuItem<String>(
             value: createNewFolderId,
             child: Text(
-              "Create New Folder",
+              AppStrings.createFolderText,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),

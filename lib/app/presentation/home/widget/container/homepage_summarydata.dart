@@ -41,7 +41,7 @@ class HomePageSummmaryData extends StatelessWidget {
                   : AppColors.bgSecondary,
               size: 16,
             ),
-            AppPaddings.CustomWidthSizedBox(context, 0.01),
+            AppPaddings.customWidthSizedBox(context, 0.01),
 
             Text(
               " Total ${storageCanUsed.toStringAsFixed(3)} GB",
@@ -59,7 +59,7 @@ class HomePageSummmaryData extends StatelessWidget {
               ' Used  ${storageGb.toStringAsFixed(3)} GB',
               style: AppTextSytlyes.primaryColorTextStyle,
             ),
-            AppPaddings.CustomWidthSizedBox(context, 0.01),
+            AppPaddings.customWidthSizedBox(context, 0.01),
           ],
         ),
       ],

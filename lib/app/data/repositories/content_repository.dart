@@ -9,12 +9,12 @@ abstract class ContentRepository {
   /// Root (veya belirtilen) klasörün içeriğini getirir
   Future<List<FileFolderListModel>> getFolderList({
     int fldId = 0,
-    bool bustCache = false, // 👈 eklendi
+    bool bustCache = false, 
   });
 
   /// Sadece dosya listesini (API'nin /file/list sonucunu) getirir
   Future<List<FileItem>> getFileList({
-    required int fldId, // root için 0
+    required int fldId, // root için 0 id unutmaa
     int page = 1,
     int perPage = 20,
     int? isPublic,
@@ -31,7 +31,6 @@ abstract class ContentRepository {
     String selectedFolderId,
   );
 
-  Future<void> downloadFile(String fileUrl);
 
   Future<FolderProcessModel> renameFolder(String folderId, String name);
 
@@ -86,11 +85,6 @@ class ContentRepositoryImpl extends ContentRepository {
       folderName,
       selectedFolderId,
     );
-  }
-
-  @override
-  Future<void> downloadFile(String fileUrl) {
-    return InjectionContainerItems.contentDataSource.downloadFile(fileUrl);
   }
 
   @override

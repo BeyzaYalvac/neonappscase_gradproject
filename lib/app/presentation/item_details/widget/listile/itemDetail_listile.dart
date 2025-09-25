@@ -20,7 +20,7 @@ class ItemDetailListTile extends StatelessWidget {
         side: const BorderSide(color: Colors.grey, width: 0.5),
       ),
       leading: Theme.of(context).brightness == Brightness.light
-          ? AppIcons.folder_blue(context)
+          ? AppIcons.folderBlue(context)
           : AppIcons.folder(context),
       title: Text(f.name, style: TextStyle(color: AppColors.textDark)),
       onTap: () => context.pushRoute(

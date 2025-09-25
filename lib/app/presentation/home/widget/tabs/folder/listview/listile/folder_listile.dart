@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
@@ -8,7 +6,7 @@ import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dar
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/renameFolder_dialog.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/renamefolder_dialog.dart';
 
 class FolderListile extends StatelessWidget {
   final int index;
@@ -41,7 +39,7 @@ class FolderListile extends StatelessWidget {
             children: [
               Theme.of(context).brightness == Brightness.light
                   ? AppIcons.folder(context)
-                  : AppIcons.folder_blue(context),
+                  : AppIcons.folderBlue(context),
             ],
           ),
           title: Text(
@@ -53,13 +51,13 @@ class FolderListile extends StatelessWidget {
           ),
           trailing: PopupMenuButton<_FolderAction>(
             icon: Theme.of(context).brightness == Brightness.light
-                ? AppIcons.more_horiz
-                : AppIcons.more_horiz_blue,
+                ? AppIcons.moreHoriz
+                : AppIcons.moreHorizBlue,
             tooltip: AppStrings.folderProcesses,
             onSelected: (action) {
               switch (action) {
                 case _FolderAction.rename:
-                  RenameDialog(
+                  renameDialog(
                     context,
                     folderNameController,
                     filteredFolders[index],
@@ -79,7 +77,7 @@ class FolderListile extends StatelessWidget {
                   value: _FolderAction.rename,
                   child: ListTile(
                     leading: Theme.of(context).brightness == Brightness.light
-                        ? AppIcons.rename_blue
+                        ? AppIcons.renameBlue
                         : AppIcons.rename,
                     title: Text(AppStrings.folderProcesses),
                   ),
@@ -90,8 +88,8 @@ class FolderListile extends StatelessWidget {
                     leading: isFavoriteFolder
                         ? AppIcons.star(context)
                         : Theme.of(context).brightness == Brightness.light
-                        ? AppIcons.star_border(context)
-                        : AppIcons.star_border_blue(context),
+                        ? AppIcons.starBorder(context)
+                        : AppIcons.starBorderBlue(context),
                     title: Text(
                       isFavoriteFolder
                           ? AppStrings.removeFavorites

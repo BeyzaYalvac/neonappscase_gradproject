@@ -5,19 +5,19 @@ import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
 
 class ExpandableFab extends StatefulWidget {
   const ExpandableFab({
-    Key? key,
+    super.key,
     required this.children,
     required this.distance,
-  }) : super(key: key);
+  });
 
   final List<Widget> children;
   final double distance;
 
   @override
-  _ExpandableFabState createState() => _ExpandableFabState();
+  ExpandableFabState createState() => ExpandableFabState();
 }
 
-class _ExpandableFabState extends State<ExpandableFab>
+class ExpandableFabState extends State<ExpandableFab>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _expandAnimation;
@@ -133,12 +133,11 @@ class _ExpandableFabState extends State<ExpandableFab>
 
 class _ExpandableFab extends StatelessWidget {
   const _ExpandableFab({
-    Key? key,
     required this.directionDegrees,
     required this.maxDistance,
     required this.progress,
     required this.child,
-  }) : super(key: key);
+  });
 
   final double directionDegrees;
   final double maxDistance;

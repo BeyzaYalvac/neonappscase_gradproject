@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:neonappscase_gradproject/app/common/injections/injection_container.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_themes.dart';
 import 'package:neonappscase_gradproject/app/common/theme/cubit/theme_cubit.dart';
 import 'package:neonappscase_gradproject/app/common/theme/cubit/theme_state.dart';
@@ -37,12 +38,21 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         BlocProvider<ThemeCubit>(create: (_) => ThemeCubit(settingsBox)),
-        BlocProvider<NetworkCubit>(create: (_) => NetworkCubit()..start()),
-        BlocProvider<HomeCubit>(create: (_) => HomeCubit()),
-        BlocProvider<UploadCubit>(create: (_) => UploadCubit()),
-        BlocProvider<FavoriteCubit>(create: (_) => FavoriteCubit()),
+        BlocProvider<NetworkCubit>(
+          create: (_) => InjectionContainer.read<NetworkCubit>()..start(),
+        ),
+        BlocProvider<HomeCubit>(
+          create: (_) => InjectionContainer.read<HomeCubit>(),
+        ),
+        BlocProvider<UploadCubit>(
+          create: (_) => InjectionContainer.read<UploadCubit>(),
+        ),
+        BlocProvider<FavoriteCubit>(
+          create: (_) => InjectionContainer.read<FavoriteCubit>(),
+        ),
         BlocProvider<ProfileCubit>(
-          create: (_) => ProfileCubit()..loadProfileData(),
+          create: (_) =>
+              InjectionContainer.read<ProfileCubit>()..loadProfileData(),
         ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(

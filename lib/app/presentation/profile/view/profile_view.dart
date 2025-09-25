@@ -35,7 +35,7 @@ class ProfileView extends StatelessWidget {
         double progress = total > 0
             ? (double.tryParse(used) ?? 0) / total
             : 0.0;
-        print("progress: ${progress.toStringAsFixed(4)}");
+        debugPrint("progress: ${progress.toStringAsFixed(4)}");
 
         final h = AppMediaQuery.screenHeight(context);
         final w = AppMediaQuery.screenWidth(context);
@@ -46,7 +46,7 @@ class ProfileView extends StatelessWidget {
           height: h,
           color: Theme.of(context).brightness == Brightness.light
               ? AppColors.bgTriartry
-              : Theme.of(context).colorScheme.background,
+              : Theme.of(context).colorScheme.surface,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -91,7 +91,7 @@ class ProfileView extends StatelessWidget {
                       child: CircleAvatar(
                         radius: avatarRadius,
                         backgroundColor: AppColors.bgQuaternary,
-                        child: AppIcons.profile_xxl,
+                        child: AppIcons.profileXxl,
                       ),
                     ),
                   ],

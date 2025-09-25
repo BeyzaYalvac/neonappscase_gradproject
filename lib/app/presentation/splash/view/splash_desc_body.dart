@@ -13,7 +13,7 @@ class SplashDescriptionBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Stack(
         children: [
@@ -25,7 +25,7 @@ class SplashDescriptionBody extends StatelessWidget {
                       style: AppTextSytlyes.splashWelcomeStyle,
                       textAlign: TextAlign.center,
                     ).withCenter(),
-                    containerColor: AppColors.bgfourtary,
+                    containerColor: AppColors.bgSmoothDark,
                   )
                   .withAlignment(Alignment.topLeft)
                   .withPadding(const EdgeInsets.only(top: 150)),
@@ -37,13 +37,13 @@ class SplashDescriptionBody extends StatelessWidget {
                       overflow: TextOverflow.visible,
                       maxLines: null,
                     ),
-                    containerColor: AppColors.textLight,
+                    containerColor: AppColors.bgPrimary,
                   )
                   .withAlignment(Alignment.centerRight)
                   .withPadding(const EdgeInsets.only(top: 60)),
             ],
           ),
-          splash_gradient_bg(),
+          SplashGradientBg(),
         ],
       ),
     );

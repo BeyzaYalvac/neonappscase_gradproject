@@ -83,7 +83,7 @@ class _SplashViewState extends State<SplashView>
                     duration: const Duration(milliseconds: 600),
                     opacity: _readyToNavigate ? 0.0 : 1.0,
                     child: Lottie.asset(
-                      AppAssets.THEME_TOGGLE_ANIMATION,
+                      AppAssets.themeToggleAnimation,
                       controller: _ctrl,
                       onLoaded: (comp) {
                         _ctrl
@@ -96,7 +96,7 @@ class _SplashViewState extends State<SplashView>
                   ),
                 ),
 
-                AppPaddings.CustomHeightSizedBox(context, 0.2),
+                AppPaddings.customHeightSizedBox(context, 0.2),
 
                 Text(
                   AppStrings.appName,

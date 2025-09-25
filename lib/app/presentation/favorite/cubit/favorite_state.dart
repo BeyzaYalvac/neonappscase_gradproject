@@ -3,14 +3,14 @@ import 'package:equatable/equatable.dart';
 class FavoriteState extends Equatable {
   final List favoriteFolders;
   final bool isFavorite;
-  FavoriteState(this.favoriteFolders, this.isFavorite);
+  const FavoriteState(this.favoriteFolders, this.isFavorite);
 
   factory FavoriteState.initial() {
     return FavoriteState([], false);
   }
 
   FavoriteState copyWith({List? favorites}) {
-    return FavoriteState(favorites ?? this.favoriteFolders, isFavorite);
+    return FavoriteState(favorites ?? favoriteFolders, isFavorite);
   }
 
   @override

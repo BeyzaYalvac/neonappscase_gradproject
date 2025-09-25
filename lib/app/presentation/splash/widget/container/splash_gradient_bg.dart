@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 
-class splash_gradient_bg extends StatelessWidget {
-  const splash_gradient_bg({super.key});
+class SplashGradientBg extends StatelessWidget {
+  const SplashGradientBg({super.key});
 
   @override
   Widget build(BuildContext context) {

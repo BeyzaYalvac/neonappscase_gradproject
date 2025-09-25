@@ -6,13 +6,13 @@ import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/container/homepage_summary_data.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/container/homepage_summary_header.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/container/white_body.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/container/homepage_summarydata.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/container/homepage_summaryheader.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/container/blue_body.dart';
 import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 
 class HomeTab extends StatelessWidget {
-  const HomeTab();
+  const HomeTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class HomeTab extends StatelessWidget {
         final account = state.acountInfos;
         if (account == null) {
           return const Center(
-            child: CircularProgressIndicator(color: AppColors.textBej),
+            child: CircularProgressIndicator(color: AppColors.bgTriartry),
           );
         }
         return HomePageBody(isGrid: state.isGridView, acountData: account);

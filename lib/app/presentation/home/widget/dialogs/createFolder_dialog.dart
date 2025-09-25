@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/alerts/createFolder_alert.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/alerts/createfolder_alert.dart';
 
 Future<dynamic> createFolderDialog(BuildContext context) {
   TextEditingController folderNameController = TextEditingController();

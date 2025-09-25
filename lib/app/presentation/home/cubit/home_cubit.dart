@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/injections/injection_container_items.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   static const int _perPage = 5;
@@ -11,6 +12,7 @@ class HomeCubit extends Cubit<HomeState> {
     loadProfileData();
     loadImagesInitial();
     loadFolders();
+    loadFiles();
   }
   HomeCubit.forDetail() : super(HomeState.initial().copyWith(isLoading: true));
 
@@ -50,6 +52,15 @@ class HomeCubit extends Cubit<HomeState> {
     return source.where((f) => (f.name).toLowerCase().contains(q)).toList();
   }
 
+  List<FileItem> _onlyNonImages(List<FileItem> all) {
+    bool nameHas(String s) {
+      final n = s.trim().toLowerCase();
+      return n.endsWith('.png') || n.endsWith('.jpg') || n.endsWith('.jpeg');
+    }
+
+    return all.where((f) => !nameHas(f.name)).toList();
+  }
+
   Future<void> loadFiles() async {
     emit(state.copyWith(isLoading: true));
     try {
@@ -57,16 +68,22 @@ class HomeCubit extends Cubit<HomeState> {
         fldId: state.currentFldId,
         nameFilter: state.qsearch.isEmpty ? null : state.qsearch,
       );
+      emit(state.copyWith(isLoading: false, files: _onlyNonImages(all)));
+    } catch (_) {
+      emit(state.copyWith(isLoading: false));
+    }
+  }
 
-      // .png / .jpg / .jpeg ile bitmeyenler
-      final nonImages = all.where((f) {
-        final name = f.name.trim().toLowerCase();
-        return !(name.endsWith('.png') ||
-            name.endsWith('.jpg') ||
-            name.endsWith('.jpeg'));
-      }).toList();
+  //isim filtreli file çekme
 
-      emit(state.copyWith(isLoading: false, files: nonImages));
+  Future<void> _fetchFiles(String nameFilter) async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      final res = await InjectionContainerItems.contentRepository.getFileList(
+        fldId: state.currentFldId,
+        nameFilter: nameFilter.isEmpty ? null : nameFilter,
+      );
+      emit(state.copyWith(isLoading: false, files: _onlyNonImages(res)));
     } catch (_) {
       emit(state.copyWith(isLoading: false));
     }
@@ -180,26 +197,13 @@ class HomeCubit extends Cubit<HomeState> {
 
   void clearSearch(int tabIndex) => setSearchQueryForTab(tabIndex, '');
 
-  //isim filtreli file çekme
-  Future<void> _fetchFiles(String nameFilter) async {
-    emit(state.copyWith(isLoading: true));
-    try {
-      final res = await InjectionContainerItems.contentRepository.getFileList(
-        fldId: state.currentFldId,
-        nameFilter: nameFilter.isEmpty ? null : nameFilter,
-      );
-      emit(state.copyWith(isLoading: false, files: res));
-    } catch (_) {
-      emit(state.copyWith(isLoading: false));
-    }
-  }
-
   Future<void> downloadFile(String fileLink) async {
-    try {
-      await InjectionContainerItems.contentRepository.downloadFile(fileLink);
-      debugPrint('File downloaded successfully: $fileLink');
-    } catch (e) {
-      debugPrint('Error downloading file: $e');
+    final Uri url = Uri.parse(fileLink);
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Bu URL açılamıyor: $fileLink';
     }
   }
 

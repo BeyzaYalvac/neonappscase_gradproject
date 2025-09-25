@@ -21,7 +21,7 @@ class FavoriteIconButton extends StatelessWidget {
     return IconButton(
       icon: isFavoriteFolder
           ? AppIcons.star(context)
-          : AppIcons.star_border(context),
+          : AppIcons.starBorder(context),
       color: AppColors.bgTriartry,
       onPressed: () {
         if (isFavoriteFolder) {

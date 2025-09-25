@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:neonappscase_gradproject/app/common/injections/injection_container_items.dart';
 import 'upload_state.dart';
 
-
 class UploadCubit extends Cubit<UploadState> {
   final ImagePicker _picker = ImagePicker();
   UploadCubit() : super(UploadState.initial());
@@ -32,44 +31,57 @@ class UploadCubit extends Cubit<UploadState> {
     final img = state.imageFile;
     if (img == null) return;
 
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(
+      state.copyWith(
+        isLoading: true,
+        error: null,
+        status: UploadStatus.uploading,
+      ),
+    );
     try {
       final model = await InjectionContainerItems.contentRepository
           .uploadFileContent(File(img.path), folderId: folderId);
 
-      // Doğru doğrulama:
       final info = await InjectionContainerItems.contentDataSource.getFileInfo(
         model.fileCode,
-      ); // veya 65a3yjb8tsiu
-      debugPrint(
-        'INFO fld_id=${info['fld_id']}, owner=${info['owner'] ?? info['account_id']}, public=${info['public']}',
       );
 
-      debugPrint('Doğrulandı => ${info['file_code'] ?? info['fileCode']}');
-    } catch (e) {
-      emit(state.copyWith(error: e.toString()));
-    } finally {
-      emit(state.copyWith(isLoading: false));
+      debugPrint('FILE INFO (normalized) => $info');
+      debugPrint(
+        'INFO fld_id=${info['fld_id']}, '
+        'owner=${info['owner']}, '
+        'public=${info['public']}, '
+        'file_code=${info['file_code']}',
+      );
+
+      emit(state.copyWith(isLoading: false, status: UploadStatus.success));
+    } catch (e, st) {
+      debugPrint('uploadImageFromGallery error: $e\n$st');
+      emit(
+        state.copyWith(
+          isLoading: false,
+          status: UploadStatus.failure,
+          error: e.toString(),
+        ),
+      );
     }
   }
 
-  /// Sadece kamera ile çekip YÜKLER
+  void resetStatus() =>
+      emit(state.copyWith(status: UploadStatus.failure, error: null));
+
+  //kullanmadım ancak ileride kullanılabilir
   Future<void> uploadImageFromCamera({String? folderId}) async {
     await pickFromCamera();
     final img = state.imageFile;
     if (img == null) return;
 
     emit(state.copyWith(isLoading: true, error: null));
-    try {
-      await InjectionContainerItems.contentRepository.uploadFileContent(
-        File(img.path),
-        folderId: folderId,
-      );
-    } catch (e) {
-      emit(state.copyWith(error: e.toString()));
-    } finally {
-      emit(state.copyWith(isLoading: false));
-    }
+
+    await InjectionContainerItems.contentRepository.uploadFileContent(
+      File(img.path),
+      folderId: folderId,
+    );
   }
 
   /// Dosya yöneticisinden (pdf/doc/xls/jpg/png) seçer
@@ -121,6 +133,8 @@ class UploadCubit extends Cubit<UploadState> {
         fileToUpload,
         folderId: folderId,
       );
+
+      emit(state.copyWith(isLoading: false, status: UploadStatus.success));
     } catch (e) {
       emit(state.copyWith(error: e.toString()));
     } finally {

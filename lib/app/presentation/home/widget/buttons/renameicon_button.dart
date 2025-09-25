@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/renameFolder_dialog.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/renamefolder_dialog.dart';
 
 class RenameIconButton extends StatelessWidget {
   final Color color;
@@ -20,10 +20,10 @@ class RenameIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        RenameDialog(context, folderNameController, folder);
+        renameDialog(context, folderNameController, folder);
       },
       icon: color == AppColors.bgTriartry
-          ? AppIcons.rename_blue
+          ? AppIcons.renameBlue
           : AppIcons.rename,
     );
   }

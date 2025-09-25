@@ -5,7 +5,7 @@ import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart'
 class SplashContainerToRight extends StatelessWidget {
   final Widget textW;
   final Color containerColor;
-  SplashContainerToRight({
+  const SplashContainerToRight({
     super.key,
     required this.textW,
     required this.containerColor,
