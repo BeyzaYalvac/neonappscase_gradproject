@@ -1,35 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
-import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
-import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/container/blue_body_header.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/searchbars/custom_searchbar.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/listview_file/listlayout_file.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/listview_image/listlayout_image.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/folder/gridview/folder_gridview.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/folder/listview/folder_listview.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/gridview%20file_image/file_gridlayout.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/bloe_body_content_tabs.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/sections_tabs.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/gridtoggle_tabs.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/tabs%20sections/all_items_tab.dart';
-import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 
-class HomePageWhiteBody extends StatefulWidget {
-  const HomePageWhiteBody({super.key, required this.isGrid});
+class HomePageBlueBody extends StatefulWidget {
+  const HomePageBlueBody({super.key, required this.isGrid});
   final bool isGrid;
 
   @override
-  State<HomePageWhiteBody> createState() => _HomePageWhiteBodyState();
+  State<HomePageBlueBody> createState() => _HomePageBlueBodyState();
 }
 
-class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
+class _HomePageBlueBodyState extends State<HomePageBlueBody> {
   final TextEditingController _searchController = TextEditingController();
-
-  int _uiToCubit(int ui) => ui == 0 ? 3 : ui - 1;
 
   @override
   void dispose() {
@@ -37,10 +26,18 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
     super.dispose();
   }
 
+  void searchBarOnClear(BuildContext context) {
+    final uiIndex = DefaultTabController.of(context).index;
+    final eff = context.read<HomeCubit>().uiToCubit(uiIndex);
+    context.read<HomeCubit>().clearSearch(eff);
+    _searchController.clear();
+  }
+
   void _onTabChanged() {
     final tab = DefaultTabController.of(context);
-    if (tab.indexIsChanging) return;
-    context.read<HomeCubit>().applyFilterForTab(_uiToCubit(tab.index));
+    if (!tab.indexIsChanging) {
+      context.read<HomeCubit>().onTabChanged(tab.index);
+    }
   }
 
   @override
@@ -53,10 +50,7 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
 
           // 2) Search text'i state.qsearch ile senkronla (yalnız değiştiyse)
           if (_searchController.text != state.qsearch) {
-            _searchController.text = state.qsearch;
-            _searchController.selection = TextSelection.fromPosition(
-              TextPosition(offset: _searchController.text.length),
-            );
+            searhStateSenchron(state);
           }
 
           // 3) Listener’ı güvenli kur: önce kaldır, sonra ekle
@@ -77,72 +71,30 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
             child: Column(
               children: [
                 AppPaddings.customHeightSizedBox(context, 0.02),
-                Row(
-                  children: [
-                    Text(
-                          AppStrings.recentFilesText,
-                          style: AppTextSytlyes.recentFileTextStyle(context)
-                        )
-                        .withAlignment(Alignment.centerLeft)
-                        .withPadding(
-                          EdgeInsets.symmetric(
-                            horizontal:
-                                AppMediaQuery.screenWidth(context) * 0.05,
-                          ),
-                        ),
-                    const GridToggleTabs(),
-                  ],
-                ),
+                BlueBodyHeader(),
                 const HomePageSectionTabs(),
                 BlueSearchBar(
                   controller: _searchController,
                   onChanged: (v) {
-                    final uiIndex = DefaultTabController.of(context).index;
-                    final eff = _uiToCubit(uiIndex); // All(0)->3, diğerleri -1
-                    context.read<HomeCubit>().setSearchQueryForTab(eff, v);
+                    context.read<HomeCubit>().searchBarOnChanged(context, v);
                   },
                   onClear: () {
-                    final uiIndex = DefaultTabController.of(context).index;
-                    final eff = _uiToCubit(uiIndex);
-                    context.read<HomeCubit>().clearSearch(eff);
-                    _searchController.clear();
+                    searchBarOnClear(context);
                   },
                 ),
-                SizedBox(
-                  height: AppMediaQuery.screenHeight(context) * 0.5,
-                  child: TabBarView(
-                    children: [
-                      AllItemsBody(isGrid: widget.isGrid, state: state),
-
-                      widget.isGrid
-                          ? HomePageFolderGridLayoutTabFolder(
-                              filteredFolders: state.folders,
-                            )
-                          : HomePageFolderListLayoutTabFolder(
-                              filteredFolders: state.folders,
-                            ),
-                      widget.isGrid
-                          ? HomePageGridLayoutTabFileImage(
-                              filteredItems: state.files,
-                            )
-                          : HomePageListLayoutTabFile(
-                              filteredFiles: state.files,
-                            ),
-                      widget.isGrid
-                          ? HomePageGridLayoutTabFileImage(
-                              filteredItems: state.images,
-                            )
-                          : HomePageListLayoutTabImage(
-                              filteredImages: state.images,
-                            ),
-                    ],
-                  ),
-                ),
+                BlueBodyContentTab(widget: widget, state: state),
               ],
             ),
           );
         },
       ),
+    );
+  }
+
+  void searhStateSenchron(HomeState state) {
+    _searchController.text = state.qsearch;
+    _searchController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _searchController.text.length),
     );
   }
 }

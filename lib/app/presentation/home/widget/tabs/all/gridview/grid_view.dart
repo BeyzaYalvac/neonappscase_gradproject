@@ -6,7 +6,7 @@ import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/all/gridview/all_gridtile.dart';
 
 class AllGridView extends StatelessWidget {
-  const AllGridView({
+  const AllGridView({super.key, 
     required this.total,
     required this.folders,
     required this.files,

@@ -61,12 +61,15 @@ class HomeCubit extends Cubit<HomeState> {
     return all.where((f) => !nameHas(f.name)).toList();
   }
 
+  static const int _filesPerPage = 100; // ihtiyacına göre 50/100/200
+
   Future<void> loadFiles() async {
     emit(state.copyWith(isLoading: true));
     try {
       final all = await InjectionContainerItems.contentRepository.getFileList(
         fldId: state.currentFldId,
         nameFilter: state.qsearch.isEmpty ? null : state.qsearch,
+        perPage: _filesPerPage,
       );
       emit(state.copyWith(isLoading: false, files: _onlyNonImages(all)));
     } catch (_) {
@@ -75,7 +78,6 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   //isim filtreli file çekme
-
   Future<void> _fetchFiles(String nameFilter) async {
     emit(state.copyWith(isLoading: true));
     try {
@@ -180,43 +182,43 @@ class HomeCubit extends Cubit<HomeState> {
   void handleRefresh() => loadProfileData();
 
   void setSearchQueryForTab(int tabIndex, String query) {
-  emit(state.copyWith(qsearch: query));
+    emit(state.copyWith(qsearch: query));
 
-  if (tabIndex == 0) {
-    // Folders (client-side)
-    final filtered = _filterFolders(state.allFolders, query);
-    emit(state.copyWith(folders: filtered));
-  } else if (tabIndex == 1) {
-    // Files (server-side)
-    _fetchFiles(query); // async, beklemeden çağırıyoruz
-  } else if (tabIndex == 2) {
-    // Images (server-side, paged reset)
-    loadImagesInitial(); // async
-  } else if (tabIndex == 3) {
-    // ALL => üç listeyi birlikte güncelle
-    final filtered = _filterFolders(state.allFolders, query);
-    emit(state.copyWith(folders: filtered));
-    _fetchFiles(query);      // files
-    loadImagesInitial();     // images
+    if (tabIndex == 0) {
+      // Folders (client-side)
+      final filtered = _filterFolders(state.allFolders, query);
+      emit(state.copyWith(folders: filtered));
+    } else if (tabIndex == 1) {
+      // Files (server-side)
+      _fetchFiles(query); // async, beklemeden çağırıyoruz
+    } else if (tabIndex == 2) {
+      // Images (server-side, paged reset)
+      loadImagesInitial(); // async
+    } else if (tabIndex == 3) {
+      // ALL => üç listeyi birlikte güncelle
+      final filtered = _filterFolders(state.allFolders, query);
+      emit(state.copyWith(folders: filtered));
+      _fetchFiles(query); // files
+      loadImagesInitial(); // images
+    }
   }
-}
 
-void applyFilterForTab(int tabIndex) {
-  if (tabIndex == 0) {
-    final filtered = _filterFolders(state.allFolders, state.qsearch);
-    emit(state.copyWith(folders: filtered));
-  } else if (tabIndex == 1) {
-    loadFiles();
-  } else if (tabIndex == 2) {
-    loadImagesInitial();
-  } else if (tabIndex == 3) {
-    // ALL: mevcut qsearch ile hepsini tazele
-    final filtered = _filterFolders(state.allFolders, state.qsearch);
-    emit(state.copyWith(folders: filtered));
-    loadFiles();
-    loadImagesInitial();
+  void applyFilterForTab(int tabIndex) {
+    if (tabIndex == 0) {
+      final filtered = _filterFolders(state.allFolders, state.qsearch);
+      emit(state.copyWith(folders: filtered));
+    } else if (tabIndex == 1) {
+      loadFiles();
+    } else if (tabIndex == 2) {
+      loadImagesInitial();
+    } else if (tabIndex == 3) {
+      // ALL: mevcut qsearch ile hepsini tazele
+      final filtered = _filterFolders(state.allFolders, state.qsearch);
+      emit(state.copyWith(folders: filtered));
+      loadFiles();
+      loadImagesInitial();
+    }
   }
-}
 
   setSelectedFolder(String v) => emit(state.copyWith(selectedFolder: v));
 
@@ -297,7 +299,16 @@ void applyFilterForTab(int tabIndex) {
     }
   }
 
- 
+  void searchBarOnChanged(BuildContext context, String v) {
+    final uiIndex = DefaultTabController.of(context).index;
+    final eff = uiToCubit(uiIndex); // All(0)->3, diğerleri -1
+    context.read<HomeCubit>().setSearchQueryForTab(eff, v);
+  }
 
-  
+  int uiToCubit(int ui) => ui == 0 ? 3 : ui - 1;
+
+  void onTabChanged(int uiIndex) {
+    final eff = uiToCubit(uiIndex);
+    applyFilterForTab(eff);
+  }
 }

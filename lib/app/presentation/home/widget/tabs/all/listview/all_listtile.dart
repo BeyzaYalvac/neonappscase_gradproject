@@ -3,7 +3,7 @@ import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dar
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 
 class AllListTile extends StatelessWidget {
-  const AllListTile({required this.icon, required this.label, this.onTap});
+  const AllListTile({super.key, required this.icon, required this.label, this.onTap});
 
   final IconData icon;
   final String label;

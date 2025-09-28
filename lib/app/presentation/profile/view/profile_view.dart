@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
-import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
-import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
-import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/profile/cubit/profile_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/profile/cubit/profile_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/profile/widget/profile_status_cards.dart';
+import 'package:neonappscase_gradproject/app/presentation/profile/widget/bars/storage_bar.dart';
+import 'package:neonappscase_gradproject/app/presentation/profile/widget/cards/stats_cards.dart';
+import 'package:neonappscase_gradproject/app/presentation/profile/widget/header/header_avatar.dart';
+import 'package:neonappscase_gradproject/core/utils/storage_utils.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -20,10 +19,6 @@ class ProfileView extends StatelessWidget {
         final account = state.acountInfos;
         final traficLeft = state.acountInfos?.storageLeftFormatted;
 
-        byteToGB(double byte) {
-          return (byte / (1024 * 1024 * 1024)).toStringAsFixed(4);
-        }
-
         if (account == null) {
           return const Center(
             child: CircularProgressIndicator(color: AppColors.textBej),
@@ -31,12 +26,14 @@ class ProfileView extends StatelessWidget {
         }
 
         // Güvenli tipler ve hesap
-        final String used = byteToGB(account.storageUsed.toDouble());
+        final double used = StorageUtils.bytesToGb(account.storageUsed.toDouble());
+
         //final int left = account.storageLeft; kullanmıycam
         final int total = 5;
         double progress = total > 0
-            ? (double.tryParse(used) ?? 0) / total
+            ? (used) / total
             : 0.0;
+            
         debugPrint("progress: ${progress.toStringAsFixed(4)}");
 
         final h = AppMediaQuery.screenHeight(context);
@@ -53,113 +50,17 @@ class ProfileView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // HEADER + AVATAR STACK
-              SizedBox(
-                height: h * 0.20,
-                child: Stack(
-                  alignment: Alignment.topCenter,
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                      height: h * 0.12,
-                      width: w * 0.9,
-                      margin: EdgeInsets.fromLTRB(
-                        w * 0.05,
-                        h * 0.08,
-                        w * 0.05,
-                        0,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? AppColors.bgSmoothDark
-                            : AppColors.bgPrimary,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(top: h * 0.06),
-                        child: Center(
-                          child: Text(
-                            account.email,
-                            style: AppTextSytlyes.eMailTextStyle(context),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: h * 0.01,
-                      child: CircleAvatar(
-                        radius: avatarRadius,
-                        backgroundColor: AppColors.bgQuaternary,
-                        child: AppIcons.profileXxl,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              HeaderAvatar(h: h, w: w, account: account, avatarRadius: avatarRadius),
 
               SizedBox(height: h * 0.02),
 
               // STORAGE BAR
-              Container(
-                height: h * 0.10,
-                width: w * 0.9,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? AppColors.bgSmoothDark
-                      : AppColors.bgPrimary,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.bgQuaternary),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Current Storage: ${progress.toStringAsFixed(4)}GB / 5GB ",
-                        style: AppTextSytlyes.currStorage(context)
-                      ),
-                      const SizedBox(height: AppPaddings.small),
-                      LinearProgressIndicator(
-                        minHeight: h * 0.02,
-                        value: progress,
-                        backgroundColor: AppColors.bgQuaternary,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          AppColors.bgTriartry,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              StorageBar(h: h, w: w, progress: progress),
 
               SizedBox(height: h * 0.02),
 
               // Stats
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    StatCard(
-                      title: AppStrings.usedProfileText,
-                      value: used,
-                      height: h * 0.18,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? AppColors.bgSmoothDark
-                          : AppColors.bgPrimary,
-                    ),
-                    StatCard(
-                      title: AppStrings.leftProfileText,
-                      value: traficLeft ?? 'N/A',
-                      height: h * 0.18,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? AppColors.bgSmoothDark
-                          : AppColors.bgPrimary,
-                    ),
-                  ],
-                ),
-              ),
+              Stats(w: w, used: used.toString(), h: h, traficLeft: traficLeft),
             ],
           ),
         );
@@ -167,3 +68,5 @@ class ProfileView extends StatelessWidget {
     );
   }
 }
+
+

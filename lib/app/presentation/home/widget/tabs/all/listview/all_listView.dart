@@ -6,7 +6,7 @@ import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/all/listview/all_listtile.dart';
 
 class AllListView extends StatelessWidget {
-  const AllListView({
+  const AllListView({super.key, 
     required this.total,
     required this.folders,
     required this.files,

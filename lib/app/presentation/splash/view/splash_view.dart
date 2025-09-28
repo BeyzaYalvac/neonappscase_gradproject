@@ -1,15 +1,15 @@
 import 'package:auto_route/auto_route.dart' show AutoRouterX, RoutePage;
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:lottie/lottie.dart';
 import 'package:neonappscase_gradproject/app/common/config/app_config.dart';
-import 'package:neonappscase_gradproject/app/common/constants/app_assets.dart';
 import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/common/boot/app_bootstrap.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
+import 'package:neonappscase_gradproject/app/presentation/splash/widget/animate/icon_animate.dart';
+import 'package:neonappscase_gradproject/app/presentation/splash/widget/container/lineer_bg.dart';
 
 @RoutePage()
 class SplashView extends StatefulWidget {
@@ -76,25 +76,7 @@ class _SplashViewState extends State<SplashView>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                AnimatedScale(
-                  duration: const Duration(milliseconds: 800),
-                  scale: _readyToNavigate ? 0.95 : 1.0,
-                  child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 600),
-                    opacity: _readyToNavigate ? 0.0 : 1.0,
-                    child: Lottie.asset(
-                      AppAssets.themeToggleAnimation,
-                      controller: _ctrl,
-                      onLoaded: (comp) {
-                        _ctrl
-                          ..duration = comp.duration
-                          ..repeat();
-                      },
-                      width: 220,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
+                IconAnimate(readyToNavigate: _readyToNavigate, ctrl: _ctrl),
 
                 AppPaddings.customHeightSizedBox(context, 0.2),
 
@@ -109,17 +91,7 @@ class _SplashViewState extends State<SplashView>
               ],
             ),
           ),
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.textMedium, Colors.transparent],
-                begin: AlignmentGeometry.bottomCenter,
-                end: AlignmentGeometry.center,
-              ),
-            ),
-          ),
+          LineerBg(),
         ],
       ),
     );

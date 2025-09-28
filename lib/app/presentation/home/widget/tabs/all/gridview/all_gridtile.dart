@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 class AllGridTile extends StatelessWidget {
-  const AllGridTile({required this.icon, required this.label, this.onTap});
+  const AllGridTile({super.key, required this.icon, required this.label, this.onTap});
 
   final IconData icon;
   final String label;
