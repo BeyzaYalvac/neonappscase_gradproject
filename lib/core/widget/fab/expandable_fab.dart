@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
-
-import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
+import 'package:flutter/material.dart';
+import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 
 class ExpandableFab extends StatefulWidget {
   const ExpandableFab({
@@ -19,20 +18,18 @@ class ExpandableFab extends StatefulWidget {
 
 class ExpandableFabState extends State<ExpandableFab>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _expandAnimation;
+  late final AnimationController _controller;
+  late final Animation<double> _expandAnimation;
   bool _open = false;
 
   @override
   void initState() {
     super.initState();
-
     _controller = AnimationController(
       value: _open ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 250),
       vsync: this,
     );
-
     _expandAnimation = CurvedAnimation(
       parent: _controller,
       curve: Curves.fastOutSlowIn,
@@ -62,47 +59,59 @@ class ExpandableFabState extends State<ExpandableFab>
     return SizedBox.expand(
       child: Stack(
         alignment: Alignment.bottomRight,
-        children: [_tapToClose(), ..._buildExpandableFabButton(), _tapToOpen()],
-      ),
-    );
-  }
-
-  Widget _tapToClose() {
-    return SizedBox(
-      height: 55,
-      width: 55,
-      child: Center(
-        child: Material(
-          shape: const CircleBorder(),
-          clipBehavior: Clip.antiAlias,
-          elevation: 4,
-          child: InkWell(
-            onTap: _toggle,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: AppIcons.close(context),
+        children: [
+          IgnorePointer(
+            ignoring: !_open,
+            child: AnimatedOpacity(
+              opacity: _open ? 1 : 0,
+              duration: const Duration(milliseconds: 200),
+              child: Stack(children: _buildExpandableFabButton()),
             ),
           ),
-        ),
+          _mainFab(),
+        ],
       ),
     );
   }
 
-  Widget _tapToOpen() {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
-      transformAlignment: Alignment.center,
-      transform: Matrix4.diagonal3Values(
-        _open ? 0.7 : 1.0,
-        _open ? 0.7 : 1.0,
-        1.0,
-      ),
-      curve: Curves.easeOut,
-      child: AnimatedOpacity(
-        opacity: _open ? 0.0 : 1.0,
-        curve: Curves.easeInOut,
-        duration: const Duration(milliseconds: 250),
-        child: FloatingActionButton(onPressed: _toggle, child: AppIcons.create),
+  Widget _mainFab() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 16, bottom: 32),
+      child: SizedBox(
+        height: 56,
+        width: 56,
+        child: FloatingActionButton(
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: AppColors.bgSmoothDark),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          tooltip: _open ? 'Kapat' : 'Oluştur',
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? AppColors.bgPrimary
+              : AppColors.bgTriartry,
+          foregroundColor: Theme.of(context).brightness == Brightness.light
+              ? AppColors.bgTriartry
+              : AppColors.bgPrimary,
+          onPressed: _toggle,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            switchInCurve: Curves.easeOutBack,
+            switchOutCurve: Curves.easeIn,
+            transitionBuilder: (child, anim) {
+              return FadeTransition(
+                opacity: anim,
+                child: RotationTransition(
+                  turns: Tween<double>(begin: 0.75, end: 1.0).animate(anim),
+                  child: child,
+                ),
+              );
+            },
+            // İKİ tarafa da key ver + IconTheme KALDIR (renk = FAB.foregroundColor)
+            child: _open
+                ? const Icon(Icons.close, key: ValueKey('close'))
+                : const Icon(Icons.add, key: ValueKey('create')),
+          ),
+        ),
       ),
     );
   }
@@ -110,7 +119,10 @@ class ExpandableFabState extends State<ExpandableFab>
   List<Widget> _buildExpandableFabButton() {
     final List<Widget> children = <Widget>[];
     final count = widget.children.length;
-    final step = 90.0 / (count - 1);
+    if (count == 0) return children;
+
+    // 90°'lik yay
+    final step = count == 1 ? 0.0 : 90.0 / (count - 1);
 
     for (
       var i = 0, angleInDegrees = 0.0;
@@ -118,7 +130,7 @@ class ExpandableFabState extends State<ExpandableFab>
       i++, angleInDegrees += step
     ) {
       children.add(
-        _ExpandableFab(
+        _ExpandableFabItem(
           directionDegrees: angleInDegrees,
           maxDistance: widget.distance,
           progress: _expandAnimation,
@@ -126,13 +138,13 @@ class ExpandableFabState extends State<ExpandableFab>
         ),
       );
     }
-
     return children;
   }
 }
 
-class _ExpandableFab extends StatelessWidget {
-  const _ExpandableFab({
+// Tek tek yayılan item
+class _ExpandableFabItem extends StatelessWidget {
+  const _ExpandableFabItem({
     required this.directionDegrees,
     required this.maxDistance,
     required this.progress,
@@ -141,29 +153,28 @@ class _ExpandableFab extends StatelessWidget {
 
   final double directionDegrees;
   final double maxDistance;
-  final Animation<double>? progress;
+  final Animation<double> progress;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: progress!,
+      animation: progress,
       builder: (context, child) {
         final offset = Offset.fromDirection(
           directionDegrees * (math.pi / 180),
-          progress!.value * maxDistance,
+          progress.value * maxDistance,
         );
-
         return Positioned(
-          right: 4.0 + offset.dx,
-          bottom: 4.0 + offset.dy,
+          right: 16.0 + offset.dx,
+          bottom: 16.0 + offset.dy,
           child: Transform.rotate(
-            angle: (1.0 - progress!.value) * math.pi / 2,
+            angle: (1.0 - progress.value) * math.pi / 2,
             child: child,
           ),
         );
       },
-      child: FadeTransition(opacity: progress!, child: child),
+      child: FadeTransition(opacity: progress, child: child),
     );
   }
 }

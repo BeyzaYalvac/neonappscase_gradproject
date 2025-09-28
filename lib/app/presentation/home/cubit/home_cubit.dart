@@ -180,18 +180,43 @@ class HomeCubit extends Cubit<HomeState> {
   void handleRefresh() => loadProfileData();
 
   void setSearchQueryForTab(int tabIndex, String query) {
-    emit(state.copyWith(qsearch: query));
+  emit(state.copyWith(qsearch: query));
 
-    if (tabIndex == 0) {
-      // client-side filtre
-      final filtered = _filterFolders(state.allFolders, query);
-      emit(state.copyWith(folders: filtered));
-    } else if (tabIndex == 1) {
-      _fetchFiles(query);
-    } else {
-      loadImagesInitial();
-    }
+  if (tabIndex == 0) {
+    // Folders (client-side)
+    final filtered = _filterFolders(state.allFolders, query);
+    emit(state.copyWith(folders: filtered));
+  } else if (tabIndex == 1) {
+    // Files (server-side)
+    _fetchFiles(query); // async, beklemeden çağırıyoruz
+  } else if (tabIndex == 2) {
+    // Images (server-side, paged reset)
+    loadImagesInitial(); // async
+  } else if (tabIndex == 3) {
+    // ALL => üç listeyi birlikte güncelle
+    final filtered = _filterFolders(state.allFolders, query);
+    emit(state.copyWith(folders: filtered));
+    _fetchFiles(query);      // files
+    loadImagesInitial();     // images
   }
+}
+
+void applyFilterForTab(int tabIndex) {
+  if (tabIndex == 0) {
+    final filtered = _filterFolders(state.allFolders, state.qsearch);
+    emit(state.copyWith(folders: filtered));
+  } else if (tabIndex == 1) {
+    loadFiles();
+  } else if (tabIndex == 2) {
+    loadImagesInitial();
+  } else if (tabIndex == 3) {
+    // ALL: mevcut qsearch ile hepsini tazele
+    final filtered = _filterFolders(state.allFolders, state.qsearch);
+    emit(state.copyWith(folders: filtered));
+    loadFiles();
+    loadImagesInitial();
+  }
+}
 
   setSelectedFolder(String v) => emit(state.copyWith(selectedFolder: v));
 
@@ -272,14 +297,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  void applyFilterForTab(int tabIndex) {
-    if (tabIndex == 0) {
-      final filtered = _filterFolders(state.allFolders, state.qsearch);
-      emit(state.copyWith(folders: filtered));
-    } else if (tabIndex == 1) {
-      loadFiles();
-    } else {
-      loadImagesInitial();
-    }
-  }
+ 
+
+  
 }

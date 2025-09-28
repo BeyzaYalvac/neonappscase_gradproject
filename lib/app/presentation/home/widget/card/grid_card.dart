@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
@@ -67,24 +68,14 @@ class GridListCard extends StatelessWidget {
                               .replaceAll('&amp;', '&'),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.bgTriartry,
-                          ),
+                          style: AppTextSytlyes().gridCardNameTextStyle(),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           'Modified: ${file.uploaded}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color:
-                                (Theme.of(context).brightness ==
-                                    Brightness.light)
-                                ? AppColors.textMedium
-                                : AppColors.bgSmoothDark,
-                          ),
+                          style: AppTextSytlyes().gridCardMotifiedTextStyle(context),
                         ),
                       ],
                     ),

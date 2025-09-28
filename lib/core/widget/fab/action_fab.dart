@@ -16,10 +16,12 @@ class ActionFab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final bg = scheme.primary;
-    final fg = ThemeData.estimateBrightnessForColor(bg) == Brightness.dark
-        ? AppColors.bgPrimary
-        : AppColors.bgSecondary;
+    final bg = Theme.of(context).brightness == Brightness.light
+        ? AppColors.bgSmoothDark
+        : AppColors.bgSmoothLight;
+    final fg = Theme.of(context).brightness == Brightness.light
+        ? scheme.onPrimary
+        : scheme.onSecondary;
 
     return Material(
       color: bg,

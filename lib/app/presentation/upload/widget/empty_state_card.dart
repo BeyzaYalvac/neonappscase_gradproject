@@ -68,13 +68,7 @@ class PhotoUploadColumn extends StatelessWidget {
                       child: Text(
                         AppStrings.uploadImageText,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color:
-                              Theme.of(context).brightness == Brightness.light
-                              ? AppColors.textMedium
-                              : AppColors.textWhite,
-                          fontSize: AppMediaQuery.screenWidth(context) * 0.06,
-                        ),
+                        style: AppTextSytlyes().emptyCardTextStyle(context),
                       ),
                     ),
                   ).withPadding(
@@ -106,7 +100,7 @@ class PhotoUploadColumn extends StatelessWidget {
                   Lottie.asset(AppAssets.uploadAnimation),
                   Text(
                     AppStrings.uploadImageText,
-                    style: AppTextSytlyes.uploadFileTextStyle,
+                    style: AppTextSytlyes.uploadFileTextStyle_1,
                   ),
                 ],
               ),
@@ -116,4 +110,6 @@ class PhotoUploadColumn extends StatelessWidget {
       },
     );
   }
+
+  
 }

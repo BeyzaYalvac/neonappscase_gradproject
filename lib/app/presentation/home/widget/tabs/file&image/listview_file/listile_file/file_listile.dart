@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
-import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/listview_file/listile_file/fileactions_dropdown.dart';
@@ -30,11 +29,7 @@ class FileListile extends StatelessWidget {
       ),
       subtitle: Text(
         'Size: ${index * 10 + 5} MB',
-        style: TextStyle(
-          color: Theme.of(context).brightness == Brightness.light
-              ? AppColors.bgPrimary
-              : AppColors.bgSmoothLight,
-        ),
+        style: AppTextSytlyes.fileTileTextStyle(context),
       ),
       trailing: FileActionsPopUpMenu(filteredFiles: filteredFiles, index: index, isFavoriteFile: isFavoriteFile, cubit: cubit),
     );

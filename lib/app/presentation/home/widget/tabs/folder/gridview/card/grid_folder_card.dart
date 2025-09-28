@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
@@ -55,7 +56,7 @@ class GridFolderCard extends StatelessWidget {
                             : state.allFolders[idx];
                         return Text(
                           updated.name,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: AppTextSytlyes.profileStatusBoldTextStyle,
                         ).withAlignment(Alignment.center);
                       },
                     ),

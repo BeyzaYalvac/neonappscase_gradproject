@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
@@ -13,11 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         AppStrings.appName,
-        style: TextStyle(
-          color: Theme.of(context).brightness == Brightness.light
-              ? AppColors.bgTriartry
-              : AppColors.bgPrimary,
-        ),
+        style: AppTextSytlyes().appBarNameStyle(context),
       ),
       actions: [
         LottieThemeToggle().withPadding(

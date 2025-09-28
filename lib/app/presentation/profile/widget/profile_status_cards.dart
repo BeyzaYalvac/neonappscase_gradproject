@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 
 class StatCard extends StatelessWidget {
@@ -33,10 +34,10 @@ class StatCard extends StatelessWidget {
           children: [
             Text(
               value,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: w * 0.08),
+              style: AppTextSytlyes.profileStatusBoldAndSizedTextStyle(context),
             ),
             const SizedBox(height: 4),
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+            Text(title, style: AppTextSytlyes.profileStatusBoldTextStyle),
           ],
         ),
       ),

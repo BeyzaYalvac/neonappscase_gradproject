@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 
 class SplashButton extends StatelessWidget {
@@ -22,7 +23,7 @@ class SplashButton extends StatelessWidget {
       child: Ink(
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [AppColors.bgQuaternary, AppColors.bgTriartry],
+            colors: [AppColors.bgSmoothDark, AppColors.bgPrimary],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -33,12 +34,7 @@ class SplashButton extends StatelessWidget {
           constraints: const BoxConstraints(minWidth: 120, minHeight: 45),
           child: Text(
             text,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              letterSpacing: 1.1,
-            ),
+            style: AppTextSytlyes.onboardingButtonTextStyle
           ),
         ),
       ),

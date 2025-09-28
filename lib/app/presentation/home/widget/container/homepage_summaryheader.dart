@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
@@ -58,21 +59,11 @@ class HomePageSummaryHeader extends StatelessWidget {
                     children: [
                       Text(
                         '$percentText%',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.textWhite
-                              : AppColors.textMedium,
-                        ),
+                        style: AppTextSytlyes().percentTextStyle(context),
                       ),
                       Text(
                         AppStrings.usedText,
-                        style: TextStyle(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.textWhite
-                              : AppColors.textMedium,
-                        ),
+                        style: AppTextSytlyes().usedTextStyle(context),
                       ),
                     ],
                   ),

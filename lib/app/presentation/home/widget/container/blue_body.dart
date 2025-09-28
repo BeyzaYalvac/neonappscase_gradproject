@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
@@ -14,6 +15,7 @@ import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/folde
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/gridview%20file_image/file_gridlayout.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/sections_tabs.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/gridtoggle_tabs.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/tabs%20sections/all_items_tab.dart';
 import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 
 class HomePageWhiteBody extends StatefulWidget {
@@ -27,6 +29,8 @@ class HomePageWhiteBody extends StatefulWidget {
 class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
   final TextEditingController _searchController = TextEditingController();
 
+  int _uiToCubit(int ui) => ui == 0 ? 3 : ui - 1;
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -36,13 +40,13 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
   void _onTabChanged() {
     final tab = DefaultTabController.of(context);
     if (tab.indexIsChanging) return;
-    context.read<HomeCubit>().applyFilterForTab(tab.index);
+    context.read<HomeCubit>().applyFilterForTab(_uiToCubit(tab.index));
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           final tab = DefaultTabController.of(context);
@@ -77,14 +81,7 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
                   children: [
                     Text(
                           AppStrings.recentFilesText,
-                          style: TextStyle(
-                            color:
-                                Theme.of(context).brightness == Brightness.light
-                                ? AppColors.textWhite
-                                : AppColors.bgSmoothLight,
-                            fontWeight: FontWeight.bold,
-                            fontSize: AppMediaQuery.screenWidth(context) * 0.05,
-                          ),
+                          style: AppTextSytlyes.recentFileTextStyle(context)
                         )
                         .withAlignment(Alignment.centerLeft)
                         .withPadding(
@@ -100,12 +97,14 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
                 BlueSearchBar(
                   controller: _searchController,
                   onChanged: (v) {
-                    final tabIndex = DefaultTabController.of(context).index;
-                    context.read<HomeCubit>().setSearchQueryForTab(tabIndex, v);
+                    final uiIndex = DefaultTabController.of(context).index;
+                    final eff = _uiToCubit(uiIndex); // All(0)->3, diğerleri -1
+                    context.read<HomeCubit>().setSearchQueryForTab(eff, v);
                   },
                   onClear: () {
-                    final tabIndex = DefaultTabController.of(context).index;
-                    context.read<HomeCubit>().clearSearch(tabIndex);
+                    final uiIndex = DefaultTabController.of(context).index;
+                    final eff = _uiToCubit(uiIndex);
+                    context.read<HomeCubit>().clearSearch(eff);
                     _searchController.clear();
                   },
                 ),
@@ -113,6 +112,8 @@ class _HomePageWhiteBodyState extends State<HomePageWhiteBody> {
                   height: AppMediaQuery.screenHeight(context) * 0.5,
                   child: TabBarView(
                     children: [
+                      AllItemsBody(isGrid: widget.isGrid, state: state),
+
                       widget.isGrid
                           ? HomePageFolderGridLayoutTabFolder(
                               filteredFolders: state.folders,

@@ -6,8 +6,8 @@ import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
 
-class SelectRootFolderDropDownButton extends StatelessWidget {
-  const SelectRootFolderDropDownButton({super.key, required this.items});
+class SelectAnyFolderDropDownButton extends StatelessWidget {
+  const SelectAnyFolderDropDownButton({super.key, required this.items});
 
   final List<DropdownMenuItem<String>> items;
 
@@ -21,16 +21,7 @@ class SelectRootFolderDropDownButton extends StatelessWidget {
             ? state.selectedFolder
             : null;
 
-        final extendedItems = [
-          ...items,
-          DropdownMenuItem<String>(
-            value: createNewFolderId,
-            child: Text(
-              AppStrings.createFolderText,
-              style: AppTextSytlyes().boldTextStyle(),
-            ),
-          ),
-        ];
+        final extendedItems = [...items];
 
         return DropdownButton<String>(
           dropdownColor: AppColors.bgwhiteBlue,
@@ -40,7 +31,7 @@ class SelectRootFolderDropDownButton extends StatelessWidget {
           value: safeValue,
           hint: Text(
             AppStrings.selectText,
-            style: AppTextSytlyes.dropDownTextStyle(context),
+            style: AppTextSytlyes().selectAnyFolderTextStyle(context)
           ),
           items: extendedItems,
           onChanged: extendedItems.isEmpty

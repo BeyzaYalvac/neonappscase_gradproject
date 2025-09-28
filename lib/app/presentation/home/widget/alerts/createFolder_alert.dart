@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
@@ -43,12 +44,7 @@ class CreateFolderAlert extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
           child: Text(
             AppStrings.cancelText,
-            style: TextStyle(
-              color: Theme.of(context).brightness == Brightness.light
-                  ? AppColors.textSmoothDark
-                  : AppColors.bgwhiteBlue,
-              fontWeight: FontWeight.normal,
-            ),
+            style: AppTextSytlyes().cancelTextStyle(context),
           ),
         ),
         TextButton(
@@ -57,9 +53,9 @@ class CreateFolderAlert extends StatelessWidget {
             context.read<HomeCubit>().addFolder(_folderNameController.text);
             _folderNameController.clear();
           },
-          child: const Text(
+          child: Text(
             AppStrings.createText,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: AppTextSytlyes().boldTextStyle(),
           ),
         ),
       ],

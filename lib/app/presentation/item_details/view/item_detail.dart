@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
@@ -58,15 +59,7 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
                 children: [
                   Text(
                     currentFolderName,
-                    style: TextStyle(
-                      color:
-                          Theme.of(context).colorScheme.brightness ==
-                              Brightness.light
-                          ? AppColors.textWhite
-                          : AppColors.textBej,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: AppTextSytlyes.whiteItemTextStyle,
                   ),
 
                   AppPaddings.customHeightSizedBox(context, 0.02),
@@ -92,7 +85,7 @@ class ItemDetailView extends StatelessWidget implements AutoRouteWrapper {
                           return Center(
                             child: Text(
                               AppStrings.emptyFolderText,
-                              style: TextStyle(color: AppColors.textDark),
+                              style: AppTextSytlyes.darkTextStyle,
                             ),
                           );
                         }

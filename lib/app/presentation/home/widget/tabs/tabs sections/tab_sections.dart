@@ -7,16 +7,14 @@ import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/tabs%
 import 'package:neonappscase_gradproject/app/presentation/profile/view/profile_view.dart';
 
 class TabSections extends StatelessWidget {
-  const TabSections({
-    super.key,
-  });
+  const TabSections({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         final selected = state.selectedIndex;
-    
+
         return IndexedStack(
           index: selected,
           children: const [HomeTab(), FavoriteView(), ProfileView()],

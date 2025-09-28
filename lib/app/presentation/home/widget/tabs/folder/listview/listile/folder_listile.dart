@@ -44,10 +44,7 @@ class FolderListile extends StatelessWidget {
           ),
           title: Text(
             filteredFolders[index].name,
-            style: TextStyle(
-              color: AppTextSytlyes.fileNameTextStyle(context).color,
-              fontWeight: FontWeight.bold,
-            ),
+            style: AppTextSytlyes.fileNameTextStyle(context)
           ),
           trailing: PopupMenuButton<_FolderAction>(
             icon: Theme.of(context).brightness == Brightness.light
@@ -79,7 +76,7 @@ class FolderListile extends StatelessWidget {
                     leading: Theme.of(context).brightness == Brightness.light
                         ? AppIcons.renameBlue
                         : AppIcons.rename,
-                    title: Text(AppStrings.folderProcesses),
+                    title: Text(AppStrings.renameFolderText),
                   ),
                 ),
                 PopupMenuItem(

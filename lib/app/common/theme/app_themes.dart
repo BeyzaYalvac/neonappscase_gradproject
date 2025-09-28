@@ -32,7 +32,7 @@ class AppTheme {
       behavior: SnackBarBehavior.fixed,
       insetPadding: EdgeInsets.zero,
     ),
-
+    cardColor: AppColors.bgPrimary,
     useMaterial3: true,
     colorScheme: _lightScheme,
     scaffoldBackgroundColor: _lightScheme.surface,
@@ -46,6 +46,7 @@ class AppTheme {
   );
 
   static ThemeData darkTheme = ThemeData(
+    cardColor: AppColors.bgSmoothDark,
     snackBarTheme: const SnackBarThemeData(
       behavior: SnackBarBehavior.fixed,
       insetPadding: EdgeInsets.zero,

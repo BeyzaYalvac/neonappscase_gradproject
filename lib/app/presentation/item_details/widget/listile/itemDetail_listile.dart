@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
@@ -22,7 +23,7 @@ class ItemDetailListTile extends StatelessWidget {
       leading: Theme.of(context).brightness == Brightness.light
           ? AppIcons.folderBlue(context)
           : AppIcons.folder(context),
-      title: Text(f.name, style: TextStyle(color: AppColors.textDark)),
+      title: Text(f.name, style: AppTextSytlyes.darkTextStyle),
       onTap: () => context.pushRoute(
         ItemDetailRoute(item: f, oldFolderName: item?.name ?? ""),
       ),

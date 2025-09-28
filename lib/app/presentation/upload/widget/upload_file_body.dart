@@ -58,14 +58,7 @@ class UploadFileBody extends StatelessWidget {
                     child: Text(
                       AppStrings.uploadFileText,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color:
-                            Theme.of(context).colorScheme.brightness ==
-                                Brightness.light
-                            ? AppColors.textMedium
-                            : AppColors.textWhite,
-                        fontSize: AppMediaQuery.screenWidth(context) * 0.06,
-                      ),
+                      style: AppTextSytlyes().uploadFileTextStyle(context),
                     ),
                   ),
                 ).withPadding(
@@ -92,7 +85,7 @@ class UploadFileBody extends StatelessWidget {
                 Lottie.asset(AppAssets.uploadFileAnimation),
                 Text(
                   AppStrings.uploadFileText,
-                  style: AppTextSytlyes.uploadFileTextStyle,
+                  style: AppTextSytlyes.uploadFileTextStyle_1,
                 ),
               ],
             ),

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
+import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/profile/cubit/profile_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/profile/cubit/profile_state.dart';
@@ -77,11 +79,7 @@ class ProfileView extends StatelessWidget {
                         child: Center(
                           child: Text(
                             account.email,
-                            style: TextStyle(
-                              fontSize: w * 0.04,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textMedium,
-                            ),
+                            style: AppTextSytlyes.eMailTextStyle(context),
                           ),
                         ),
                       ),
@@ -119,12 +117,9 @@ class ProfileView extends StatelessWidget {
                     children: [
                       Text(
                         "Current Storage: ${progress.toStringAsFixed(4)}GB / 5GB ",
-                        style: TextStyle(
-                          fontSize: w * 0.035,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: AppTextSytlyes.currStorage(context)
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: AppPaddings.small),
                       LinearProgressIndicator(
                         minHeight: h * 0.02,
                         value: progress,

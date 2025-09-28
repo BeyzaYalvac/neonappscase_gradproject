@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 
@@ -12,10 +13,7 @@ class HomePageSectionTabs extends StatelessWidget {
       width: AppMediaQuery.screenWidth(context),
 
       child: TabBar(
-        /*padding: EdgeInsets.only(
-          //left: AppMediaQuery.screenWidth(context) * 0.1,
-          //right: AppMediaQuery.screenWidth(context) * 0.1,
-        ),*/
+       
         tabAlignment: TabAlignment.center,
         dividerHeight: 0,
 
@@ -25,19 +23,15 @@ class HomePageSectionTabs extends StatelessWidget {
         unselectedLabelColor: Theme.of(context).brightness == Brightness.light
             ? AppColors.bgPrimary
             : AppColors.bgTriartry,
-        unselectedLabelStyle: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-        ),
+        unselectedLabelStyle: AppTextSytlyes().tabUnselectedTextStyle(context),
         indicator: BoxDecoration(
           shape: BoxShape.rectangle,
-          //color: AppColors.bgTriartry,
           border: BoxBorder.fromLTRB(
             bottom: BorderSide(width: 3, color: AppColors.bgPrimary),
           ),
-          //borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         tabs: [
+          Tab(text: "All Contents"),
           Tab(text: AppStrings.folderTabText),
           Tab(text: AppStrings.fileTabText),
           Tab(text: AppStrings.imageTabText),

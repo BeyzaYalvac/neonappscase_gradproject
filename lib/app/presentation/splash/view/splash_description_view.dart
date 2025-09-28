@@ -31,7 +31,6 @@ class SplashDescriptionView extends StatelessWidget {
           return Scaffold(
             body: Stack(
               children: [
-                // Text body'ler containerların üstünde
                 PageView(
                   controller: cubit.controller,
                   onPageChanged: (index) => cubit.updatePage(index),

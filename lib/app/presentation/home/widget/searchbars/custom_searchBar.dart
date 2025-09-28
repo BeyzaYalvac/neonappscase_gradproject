@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_icons.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 
 class BlueSearchBar extends StatelessWidget {
   final TextEditingController controller;
@@ -27,7 +28,7 @@ class BlueSearchBar extends StatelessWidget {
         style: const TextStyle(fontSize: 16, color: Colors.black87),
         decoration: InputDecoration(
           hintText: 'Ara...',
-          hintStyle: TextStyle(color: Colors.blue.shade300),
+          hintStyle: AppTextSytlyes.smootLightTextStyle,
           prefixIcon: AppIcons.search,
           suffixIcon: controller.text.isEmpty
               ? null
