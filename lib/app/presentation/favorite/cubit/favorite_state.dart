@@ -1,18 +1,29 @@
 import 'package:equatable/equatable.dart';
 
+enum FavoriteStatus { none, deleted }
+
 class FavoriteState extends Equatable {
   final List favoriteFolders;
   final bool isFavorite;
-  const FavoriteState(this.favoriteFolders, this.isFavorite);
+  final FavoriteStatus favoriteStatus;
+  const FavoriteState(
+    this.favoriteFolders,
+    this.isFavorite,
+    this.favoriteStatus,
+  );
 
   factory FavoriteState.initial() {
-    return FavoriteState([], false);
+    return FavoriteState([], false, FavoriteStatus.none);
   }
 
-  FavoriteState copyWith({List? favorites}) {
-    return FavoriteState(favorites ?? favoriteFolders, isFavorite);
+  FavoriteState copyWith({List? favorites, FavoriteStatus? favoriteStatus}) {
+    return FavoriteState(
+      favorites ?? favoriteFolders,
+      isFavorite,
+      favoriteStatus ?? this.favoriteStatus,
+    );
   }
 
   @override
-  List<Object?> get props => [favoriteFolders, isFavorite];
+  List<Object?> get props => [favoriteFolders, isFavorite, favoriteStatus];
 }

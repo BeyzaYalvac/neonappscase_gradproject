@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/alerts/movefile_alert.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/alerts/move_file_alert.dart';
 
 Future<dynamic> moveFileDialog(BuildContext context, HomeState state, file) {
     return showDialog(

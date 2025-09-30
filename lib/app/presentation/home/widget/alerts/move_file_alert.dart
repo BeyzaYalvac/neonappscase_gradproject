@@ -5,7 +5,7 @@ import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddin
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/selectanyfolder_dropdown.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/select_any_folder_dropdown.dart';
 
 class MoveFileAlert extends StatelessWidget {
   const MoveFileAlert({super.key, required this.items, required this.file});
@@ -52,18 +52,13 @@ class MoveFileAlert extends StatelessWidget {
                         return;
                       }
 
-                      try {
+                     
                         await context.read<HomeCubit>().moveFileToFolders(
                           file.fileCode,
                           targetFldId,
                         );
                         if (context.mounted) Navigator.of(context).pop();
-                      } catch (e) {
-                        if (!context.mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Move failed: $e')),
-                        );
-                      }
+                      
                     },
               child: const Text(AppStrings.moveFileText),
             );

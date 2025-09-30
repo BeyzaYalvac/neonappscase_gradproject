@@ -19,15 +19,16 @@ class HomePageSummaryHeader extends StatelessWidget {
     debugPrint(storageBytes.toString());
     // Sabit kapasite: 5 GB
     const totalBytes = 5 * 1024 * 1024 * 1024;
-    final percent = usedBytes / totalBytes; // 0.0 ile 1.0 arası
-    debugPrint(percent.clamp(0, 1).toString()); // yüzde formatı için
+    final percent = usedBytes / totalBytes;
+    debugPrint(percent.clamp(0, 1).toString());
 
     final percentText = (percent).toStringAsFixed(4);
+
     return Column(
       children: [
         SizedBox(
           width: AppMediaQuery.screenWidth(context),
-          height: AppMediaQuery.screenHeight(context) * 0.35,
+          height: AppMediaQuery.screenHeight(context) * 0.28,
           child: Center(
             child: SizedBox(
               width: AppMediaQuery.screenWidth(context) * 0.5,
@@ -39,8 +40,10 @@ class HomePageSummaryHeader extends StatelessWidget {
                     child: CircularProgressIndicator(
                       value: 1,
                       strokeWidth: 16,
-                      valueColor: const AlwaysStoppedAnimation(
-                        AppColors.bgSmoothLight,
+                      valueColor: AlwaysStoppedAnimation(
+                        Theme.of(context).brightness == Brightness.light
+                            ? AppColors.bgSmoothLight
+                            : AppColors.bgwhiteBlue,
                       ),
                     ),
                   ),
@@ -49,8 +52,10 @@ class HomePageSummaryHeader extends StatelessWidget {
                       value: percent,
                       strokeWidth: 16,
                       backgroundColor: Colors.transparent,
-                      valueColor: const AlwaysStoppedAnimation(
-                        AppColors.bgTriartry,
+                      valueColor: AlwaysStoppedAnimation(
+                        Theme.of(context).brightness == Brightness.light
+                            ? AppColors.bgTriartry
+                            : AppColors.bgQuaternary,
                       ),
                     ),
                   ),

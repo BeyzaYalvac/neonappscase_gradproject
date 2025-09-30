@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:neonappscase_gradproject/app/common/constants/app_assets.dart';
 import 'package:neonappscase_gradproject/app/common/theme/cubit/theme_cubit.dart';
 
 class LottieThemeToggle extends StatefulWidget {
@@ -65,7 +66,7 @@ class _LottieThemeToggleState extends State<LottieThemeToggle>
         width: 80,
         height: 80,
         child: Lottie.asset(
-          'assets/animations/theme_toggle.json',
+          AppAssets.themeToggleAnimation,
           controller: _ctrl,
           repeat: false, // 👈 döngü KAPALI
           animate: false, // 👈 otomatik oynatma YOK (tam kontrol sende)

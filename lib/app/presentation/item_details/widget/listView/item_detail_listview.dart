@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
-import 'package:neonappscase_gradproject/app/presentation/item_details/widget/listile/itemdetail_listile.dart';
+import 'package:neonappscase_gradproject/app/presentation/item_details/widget/listile/item_detail_listile.dart';
 
 class ItemDetailListView extends StatelessWidget {
   const ItemDetailListView({
@@ -22,8 +22,7 @@ class ItemDetailListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.separated(
       itemCount: total,
-      separatorBuilder: (_, __) =>
-          const SizedBox(height: 8),
+      separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
         if (index < folders.length) {
           final f = folders[index];
@@ -35,7 +34,7 @@ class ItemDetailListView extends StatelessWidget {
             shape: BeveledRectangleBorder(
               borderRadius: BorderRadius.circular(16),
               side: const BorderSide(
-                color: Colors.grey,
+                color: AppColors.bgSmoothLight,
                 width: 0.5,
               ),
             ),
@@ -43,14 +42,10 @@ class ItemDetailListView extends StatelessWidget {
               Icons.insert_drive_file,
               color: AppColors.bgQuaternary,
             ),
-            title: Text(
-              file.name,
-              style: AppTextSytlyes.darkTextStyle,
-            ),
+            title: Text(file.name, style: AppTextSytlyes.darkTextStyle),
           );
         }
       },
     );
   }
 }
-

@@ -26,4 +26,6 @@ class AppColors {
   static const Color success = Colors.green;
   static const Color fail = Colors.red;
   static const Color star = Colors.orange;
+  static const Color purple = Color(0xff3B38A0);
+  static const Color lightPurple = Color(0xffB2B0E8);
 }

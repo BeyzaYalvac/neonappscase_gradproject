@@ -25,16 +25,15 @@ class ProfileView extends StatelessWidget {
           );
         }
 
-        // Güvenli tipler ve hesap
-        final double used = StorageUtils.bytesToGb(account.storageUsed.toDouble());
+        final double used = StorageUtils.bytesToGb(
+          account.storageUsed.toDouble(),
+        );
+        String usedString = used.toStringAsFixed(4);
+        //debugPrint("used: $usedString GB");
 
         //final int left = account.storageLeft; kullanmıycam
-        final int total = 5;
-        double progress = total > 0
-            ? (used) / total
-            : 0.0;
-            
-        debugPrint("progress: ${progress.toStringAsFixed(4)}");
+
+        //debugPrint("progress: ${progress.toStringAsFixed(4)}");
 
         final h = AppMediaQuery.screenHeight(context);
         final w = AppMediaQuery.screenWidth(context);
@@ -50,17 +49,22 @@ class ProfileView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // HEADER + AVATAR STACK
-              HeaderAvatar(h: h, w: w, account: account, avatarRadius: avatarRadius),
+              HeaderAvatar(
+                h: h,
+                w: w,
+                account: account,
+                avatarRadius: avatarRadius,
+              ),
 
               SizedBox(height: h * 0.02),
 
-              // STORAGE BAR
-              StorageBar(h: h, w: w, progress: progress),
+              // Storage Bar
+              StorageBar(h: h, w: w, progress: used),
 
               SizedBox(height: h * 0.02),
 
               // Stats
-              Stats(w: w, used: used.toString(), h: h, traficLeft: traficLeft),
+              Stats(w: w, used: usedString, h: h, traficLeft: traficLeft),
             ],
           ),
         );
@@ -68,5 +72,3 @@ class ProfileView extends StatelessWidget {
     );
   }
 }
-
-

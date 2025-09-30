@@ -6,7 +6,7 @@ class AppTextSytlyes {
   static const TextStyle appNameTextStyle = TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.bold,
-    color: AppColors.textWhite,
+    color: AppColors.textLight,
   );
 
   //splash
@@ -59,9 +59,33 @@ class AppTextSytlyes {
 
   //home page
   static const TextStyle whiteTextStyle = TextStyle(color: AppColors.textWhite);
+  static const TextStyle listViewTextStyle = TextStyle(
+    color: AppColors.textWhite,
+    overflow: TextOverflow.ellipsis,
+  );
   static const TextStyle primaryColorTextStyle = TextStyle(
     color: AppColors.textMedium,
   );
+
+  static TextStyle totalMainTextStyle(BuildContext context) {
+    return TextStyle(
+      color: Theme.of(context).brightness == Brightness.light
+          ? AppColors.textWhite
+          : AppColors.bgwhiteBlue,
+
+      fontWeight: FontWeight.w600,
+    );
+  }
+
+  static TextStyle usedMainTextStyle(BuildContext context) {
+    return TextStyle(
+      color: Theme.of(context).brightness == Brightness.light
+          ? AppColors.bgTriartry
+          : AppColors.purple,
+      fontWeight: FontWeight.w600,
+    );
+  }
+
   static const TextStyle smootLightTextStyle = TextStyle(
     color: AppColors.bgSmoothLight,
   );
@@ -171,7 +195,11 @@ class AppTextSytlyes {
 
   //tabs
   TextStyle tabUnselectedTextStyle(BuildContext context) {
-    return TextStyle(fontSize: 12, fontWeight: FontWeight.w400);
+    return TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+      
+    );
   }
 
   //selectanyfolder

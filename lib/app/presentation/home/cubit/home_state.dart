@@ -4,6 +4,8 @@ import 'package:equatable/equatable.dart';
 import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 
+enum CreateStatus { idle, success, failure }
+
 class HomeState extends Equatable {
   final bool isLoading;
   final bool isGridView;
@@ -29,6 +31,8 @@ class HomeState extends Equatable {
   final bool imagesHasMore;
   final bool isLoadingMore;
 
+  final CreateStatus createStatus;
+
   const HomeState({
     this.isLoading = false,
     this.isGridView = false,
@@ -45,6 +49,7 @@ class HomeState extends Equatable {
     this.imagesPage = 1,
     this.imagesHasMore = true,
     this.isLoadingMore = false,
+    this.createStatus = CreateStatus.idle,
   });
 
   factory HomeState.initial() => const HomeState();
@@ -65,6 +70,7 @@ class HomeState extends Equatable {
     int? imagesPage,
     bool? imagesHasMore,
     bool? isLoadingMore,
+    CreateStatus? createStatus,
   }) {
     return HomeState(
       isLoading: isLoading ?? this.isLoading,
@@ -82,6 +88,7 @@ class HomeState extends Equatable {
       imagesPage: imagesPage ?? this.imagesPage,
       imagesHasMore: imagesHasMore ?? this.imagesHasMore,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      createStatus: createStatus ?? this.createStatus,
     );
   }
 
@@ -102,5 +109,6 @@ class HomeState extends Equatable {
     imagesPage,
     imagesHasMore,
     isLoadingMore,
+    createStatus,
   ];
 }

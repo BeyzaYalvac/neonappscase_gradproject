@@ -19,31 +19,22 @@ class AppStrings {
 
   //Profile Page Strings
 
-  //Home Page Strings
+  //Home Page
   static const String internetHasCome = 'Internet has come';
   static const String internetHasGone = 'Internet has gone';
   static const String closeText = 'Close ';
-
   static const String createFolderText = 'create folder';
   static const String selectFolderNameText =
       'What is your folder name of your folder?';
   static const String selectFolderNameHintText = 'Folder name';
-
   static const String cancelText = 'Cancel';
   static const String createText = 'Create';
-
   static const String selectText = 'Select';
-
   static const String usedText = 'used';
-
   static const String recentFilesText = 'Recent Files ';
-
   static const String emptyFolderText = 'This folder is empty';
-
   static const String uploadFileText = 'Please upload file';
-
   static const String usedProfileText = 'Used';
-
   static const String leftProfileText = 'Left';
 
   //homepage dropdown
@@ -69,4 +60,21 @@ class AppStrings {
 
   //upload File
   static const String uploadText = 'Upload File';
+
+  //uploadalert
+  static const String uploadAlertTitle = 'Upload';
+  static const String uploadAlertContent = 'Upload complated';
+  static const String uploadAlertButtonText = 'Done';
+
+  //create folder alert
+  static const String createFolderAlertTitle = 'Create Folder';
+  static const String createFolderAlertContent = 'Create folder completed.';
+  static const String createFolderAlertButtonText = 'Done';
+
+  //all items
+  static const String noItemText = 'Has no items';
+  static const String allContentsText = 'All Contents';
+
+  //delete material banner
+  static const String deleteMaterialBannerText = 'Your content deleted.';
 }

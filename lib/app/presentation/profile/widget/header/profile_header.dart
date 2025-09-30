@@ -18,22 +18,19 @@ class ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: h * 0.12,
+      height: h * 0.1,
       width: w * 0.9,
-      margin: EdgeInsets.fromLTRB(w * 0.05, h * 0.08, w * 0.05, 0),
+      margin: EdgeInsets.fromLTRB(w * 0.05, h * 0.04, w * 0.05, 0),
       decoration: BoxDecoration(
         color: Theme.of(context).brightness == Brightness.dark
             ? AppColors.bgSmoothDark
             : AppColors.bgPrimary,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Padding(
-        padding: EdgeInsets.only(top: h * 0.06),
-        child: Center(
-          child: Text(
-            account!.email,
-            style: AppTextSytlyes.eMailTextStyle(context),
-          ),
+      child: Center(
+        child: Text(
+          account!.email,
+          style: AppTextSytlyes.eMailTextStyle(context),
         ),
       ),
     );

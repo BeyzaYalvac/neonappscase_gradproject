@@ -31,10 +31,7 @@ import 'package:neonappscase_gradproject/app/presentation/upload/view/upload_ima
 /// [_i1.FavoriteView]
 class FavoriteRoute extends _i8.PageRouteInfo<void> {
   const FavoriteRoute({List<_i8.PageRouteInfo>? children})
-      : super(
-          FavoriteRoute.name,
-          initialChildren: children,
-        );
+    : super(FavoriteRoute.name, initialChildren: children);
 
   static const String name = 'FavoriteRoute';
 
@@ -50,10 +47,7 @@ class FavoriteRoute extends _i8.PageRouteInfo<void> {
 /// [_i2.HomeView]
 class HomeRoute extends _i8.PageRouteInfo<void> {
   const HomeRoute({List<_i8.PageRouteInfo>? children})
-      : super(
-          HomeRoute.name,
-          initialChildren: children,
-        );
+    : super(HomeRoute.name, initialChildren: children);
 
   static const String name = 'HomeRoute';
 
@@ -74,14 +68,14 @@ class ItemDetailRoute extends _i8.PageRouteInfo<ItemDetailRouteArgs> {
     String? oldFolderName,
     List<_i8.PageRouteInfo>? children,
   }) : super(
-          ItemDetailRoute.name,
-          args: ItemDetailRouteArgs(
-            key: key,
-            item: item,
-            oldFolderName: oldFolderName,
-          ),
-          initialChildren: children,
-        );
+         ItemDetailRoute.name,
+         args: ItemDetailRouteArgs(
+           key: key,
+           item: item,
+           oldFolderName: oldFolderName,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ItemDetailRoute';
 
@@ -89,23 +83,21 @@ class ItemDetailRoute extends _i8.PageRouteInfo<ItemDetailRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<ItemDetailRouteArgs>(
-          orElse: () => const ItemDetailRouteArgs());
+        orElse: () => const ItemDetailRouteArgs(),
+      );
       return _i8.WrappedRoute(
-          child: _i3.ItemDetailView(
-        key: args.key,
-        item: args.item,
-        oldFolderName: args.oldFolderName,
-      ));
+        child: _i3.ItemDetailView(
+          key: args.key,
+          item: args.item,
+          oldFolderName: args.oldFolderName,
+        ),
+      );
     },
   );
 }
 
 class ItemDetailRouteArgs {
-  const ItemDetailRouteArgs({
-    this.key,
-    this.item,
-    this.oldFolderName,
-  });
+  const ItemDetailRouteArgs({this.key, this.item, this.oldFolderName});
 
   final _i9.Key? key;
 
@@ -123,10 +115,7 @@ class ItemDetailRouteArgs {
 /// [_i4.SplashDescriptionView]
 class SplashDescriptionRoute extends _i8.PageRouteInfo<void> {
   const SplashDescriptionRoute({List<_i8.PageRouteInfo>? children})
-      : super(
-          SplashDescriptionRoute.name,
-          initialChildren: children,
-        );
+    : super(SplashDescriptionRoute.name, initialChildren: children);
 
   static const String name = 'SplashDescriptionRoute';
 
@@ -142,10 +131,7 @@ class SplashDescriptionRoute extends _i8.PageRouteInfo<void> {
 /// [_i5.SplashView]
 class SplashRoute extends _i8.PageRouteInfo<void> {
   const SplashRoute({List<_i8.PageRouteInfo>? children})
-      : super(
-          SplashRoute.name,
-          initialChildren: children,
-        );
+    : super(SplashRoute.name, initialChildren: children);
 
   static const String name = 'SplashRoute';
 
@@ -161,10 +147,7 @@ class SplashRoute extends _i8.PageRouteInfo<void> {
 /// [_i6.UploadFileView]
 class UploadFileRoute extends _i8.PageRouteInfo<void> {
   const UploadFileRoute({List<_i8.PageRouteInfo>? children})
-      : super(
-          UploadFileRoute.name,
-          initialChildren: children,
-        );
+    : super(UploadFileRoute.name, initialChildren: children);
 
   static const String name = 'UploadFileRoute';
 
@@ -180,10 +163,7 @@ class UploadFileRoute extends _i8.PageRouteInfo<void> {
 /// [_i7.UploadView]
 class UploadRoute extends _i8.PageRouteInfo<void> {
   const UploadRoute({List<_i8.PageRouteInfo>? children})
-      : super(
-          UploadRoute.name,
-          initialChildren: children,
-        );
+    : super(UploadRoute.name, initialChildren: children);
 
   static const String name = 'UploadRoute';
 

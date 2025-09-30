@@ -6,7 +6,7 @@ import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/container/blue_body_header.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/searchbars/custom_searchbar.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/bloe_body_content_tabs.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/blue_body_content_tabs.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/sections_tabs.dart';
 
 class HomePageBlueBody extends StatefulWidget {
@@ -48,12 +48,10 @@ class _HomePageBlueBodyState extends State<HomePageBlueBody> {
         builder: (context, state) {
           final tab = DefaultTabController.of(context);
 
-          // 2) Search text'i state.qsearch ile senkronla (yalnız değiştiyse)
           if (_searchController.text != state.qsearch) {
             searhStateSenchron(state);
           }
 
-          // 3) Listener’ı güvenli kur: önce kaldır, sonra ekle
           tab.removeListener(_onTabChanged);
           tab.addListener(_onTabChanged);
 

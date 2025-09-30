@@ -21,21 +21,11 @@ class HeaderAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: h * 0.20,
+      height: h * 0.15,
       child: Stack(
         alignment: Alignment.topCenter,
         clipBehavior: Clip.none,
-        children: [
-          ProfileHeader(h: h, w: w, account: account),
-          Positioned(
-            top: h * 0.01,
-            child: CircleAvatar(
-              radius: avatarRadius,
-              backgroundColor: AppColors.bgQuaternary,
-              child: AppIcons.profileXxl,
-            ),
-          ),
-        ],
+        children: [ProfileHeader(h: h, w: w, account: account)],
       ),
     );
   }

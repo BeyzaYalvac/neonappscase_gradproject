@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
@@ -7,6 +8,7 @@ import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorit
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/listview_image/listile_image/image_listile.dart';
+import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 
 class HomePageListLayoutTabImage extends StatefulWidget {
   final List<FileItem> filteredImages;
@@ -28,7 +30,6 @@ class _HomePageListLayoutTabImageState extends State<HomePageListLayoutTabImage>
     super.initState();
     _sc.addListener(_onScroll);
 
-    // İlk frame'den sonra, liste ekranı doldurmuyorsa bir sayfa daha çek
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final cubit = context.read<HomeCubit>();
       _maybeTopUp(cubit);
@@ -41,6 +42,7 @@ class _HomePageListLayoutTabImageState extends State<HomePageListLayoutTabImage>
     final st = cubit.state;
     if (!canScroll && st.imagesHasMore && !st.isLoadingMore) {
       debugPrint('[IMG] viewport dolmadı → loadMore');
+
       cubit.loadMoreImages();
     }
   }
@@ -48,7 +50,6 @@ class _HomePageListLayoutTabImageState extends State<HomePageListLayoutTabImage>
   void _onScroll() {
     if (!_sc.hasClients) return;
 
-    // Tam en alta inince tetikle (istersen -200 buffer kullan)
     final atEdge = _sc.position.atEdge;
     final atBottom = atEdge && _sc.position.pixels != 0;
 
@@ -67,7 +68,6 @@ class _HomePageListLayoutTabImageState extends State<HomePageListLayoutTabImage>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // orientation/yeniden build sonrası da kontrol et
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final cubit = context.read<HomeCubit>();
       _maybeTopUp(cubit);
@@ -90,7 +90,6 @@ class _HomePageListLayoutTabImageState extends State<HomePageListLayoutTabImage>
           p.imagesHasMore != c.imagesHasMore ||
           p.isLoadingMore != c.isLoadingMore,
       listener: (context, homeState) {
-        // Yeni sayfa geldi ama hâlâ ekran dolmadıysa devam et
         _maybeTopUp(context.read<HomeCubit>());
       },
       builder: (context, homeState) {
@@ -101,40 +100,67 @@ class _HomePageListLayoutTabImageState extends State<HomePageListLayoutTabImage>
             final itemCount =
                 homeState.images.length + (homeState.isLoadingMore ? 1 : 0);
 
-            return ListView.builder(
-              controller: _sc,
-              primary: false,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: itemCount,
-              itemBuilder: (context, index) {
-                // Loader satırı
-                if (index >= homeState.images.length) {
-                  return const Padding(
-                    padding: EdgeInsets.all(16),
+            return Stack(
+              children: [
+                ListView.builder(
+                  controller: _sc,
+                  primary: false,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: itemCount,
+                  itemBuilder: (context, index) {
+                    // Loader satırı
+                    if (index >= homeState.images.length) {
+                      return const Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.textBej,
+                          ),
+                        ),
+                      );
+                    }
+
+                    final item = homeState.images[index];
+                    final String fileKey = item.link;
+
+                    // Kontrolde 'link' değil 'id' alanını kıyasla:
+                    final bool isFavoriteImage = favState.favoriteFolders.any(
+                      (fav) => fav['id'] == fileKey && fav['type'] == 'image',
+                    );
+
+                    return ImageListile(
+                      isFavoriteImage: isFavoriteImage,
+                      favCubit: favCubit,
+                      fileKey: fileKey,
+                      item: item,
+                      index: index,
+                    );
+                  },
+                ),
+                if (homeState.isLoadingMore)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 8,
                     child: Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.textBej,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: .15),
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child:
+                            CircularProgressIndicator(
+                              color: AppColors.textBej,
+                            ).withPadding(
+                              EdgeInsets.symmetric(
+                                horizontal: AppPaddings.medium,
+                                vertical: AppPaddings.small,
+                              ),
+                            ),
                       ),
                     ),
-                  );
-                }
-
-                final item = homeState.images[index];
-                final String fileKey = item.link;
-
-                // Kontrolde 'link' değil 'id' alanını kıyasla:
-                final bool isFavoriteImage = favState.favoriteFolders.any(
-                  (fav) => fav['id'] == fileKey && fav['type'] == 'image',
-                );
-
-                return ImageListile(
-                  isFavoriteImage: isFavoriteImage,
-                  favCubit: favCubit,
-                  fileKey: fileKey,
-                  item: item,
-                  index: index,
-                );
-              },
+                  ),
+              ],
             );
           },
         );

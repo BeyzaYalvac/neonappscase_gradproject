@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_mediaqueries.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
-import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/domain/model/account_model.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/container/homepage_summary_data_Icon_text.dart';
+import 'package:neonappscase_gradproject/core/utils/storage_utils.dart';
 
 class HomePageSummmaryData extends StatelessWidget {
   final AccountModel acountInfos;
   const HomePageSummmaryData({super.key, required this.acountInfos});
-
-  double bytoToGb(int bytes) {
-    return (bytes / (1024 * 1024 * 1024));
-  }
 
   @override
   Widget build(BuildContext context) {
     final stats = acountInfos;
     //print(stats);
     final storageBytes = stats.storageUsed;
-    final storageGb = bytoToGb(storageBytes);
+    final storageGb = StorageUtils.bytoToGb(storageBytes);
     final storageLeft = stats.storageLeft;
-    final storageLeftGB = bytoToGb(storageLeft);
+    final storageLeftGB = StorageUtils.bytoToGb(storageLeft);
     final storageCanUsed = storageGb + storageLeftGB;
 
     //debugPrint('ROOT keys: ${acountInfos.keys}');
@@ -34,31 +30,17 @@ class HomePageSummmaryData extends StatelessWidget {
       children: [
         Row(
           children: [
-            Icon(
-              Icons.donut_large,
-              color: Theme.of(context).brightness == Brightness.light
-                  ? AppColors.bgfourtary
-                  : AppColors.bgSecondary,
-              size: 16,
-            ),
-            AppPaddings.customWidthSizedBox(context, 0.01),
+            MainTotalIcon(),
 
-            Text(
-              " Total ${storageCanUsed.toStringAsFixed(3)} GB",
-              style: AppTextSytlyes.primaryColorTextStyle,
-            ),
-            SizedBox(width: AppMediaQuery.screenWidth(context) * 0.27),
-            Icon(
-              Icons.donut_large,
-              color: Theme.of(context).brightness == Brightness.light
-                  ? AppColors.bgSmoothLight
-                  : AppColors.bgQuaternary,
-              size: 16,
-            ),
-            Text(
-              ' Used  ${storageGb.toStringAsFixed(3)} GB',
-              style: AppTextSytlyes.primaryColorTextStyle,
-            ),
+            //AppPaddings.customWidthSizedBox(context, 0.001),
+            MainTotalText(storageCanUsed: storageCanUsed),
+
+            SizedBox(width: AppMediaQuery.screenWidth(context) * 0.15),
+
+            MainUsedIcon(),
+
+            MainUsedText(storageGb: storageGb),
+
             AppPaddings.customWidthSizedBox(context, 0.01),
           ],
         ),

@@ -13,16 +13,15 @@ class HomePageSectionTabs extends StatelessWidget {
       width: AppMediaQuery.screenWidth(context),
 
       child: TabBar(
-       
         tabAlignment: TabAlignment.center,
         dividerHeight: 0,
 
         indicatorSize: TabBarIndicatorSize.tab,
         isScrollable: true,
-        labelColor: AppColors.textBej,
+        labelColor: AppColors.textWhite,
         unselectedLabelColor: Theme.of(context).brightness == Brightness.light
-            ? AppColors.bgPrimary
-            : AppColors.bgTriartry,
+            ? AppColors.textBej
+            : AppColors.bgSmoothLight,
         unselectedLabelStyle: AppTextSytlyes().tabUnselectedTextStyle(context),
         indicator: BoxDecoration(
           shape: BoxShape.rectangle,
@@ -31,7 +30,7 @@ class HomePageSectionTabs extends StatelessWidget {
           ),
         ),
         tabs: [
-          Tab(text: "All Contents"),
+          Tab(text: AppStrings.allContentsText),
           Tab(text: AppStrings.folderTabText),
           Tab(text: AppStrings.fileTabText),
           Tab(text: AppStrings.imageTabText),

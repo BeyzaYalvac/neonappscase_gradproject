@@ -8,9 +8,9 @@ import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorit
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/favoriteicon_button.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/renameicon_button.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/container/foldericon_container.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/favorite_icon_button.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/buttons/rename_icon_button.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/container/folder_icon_container.dart';
 import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 
 class GridFolderCard extends StatelessWidget {

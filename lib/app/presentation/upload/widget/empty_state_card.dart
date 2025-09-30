@@ -10,6 +10,7 @@ import 'package:neonappscase_gradproject/app/common/injections/injection_contain
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/upload/cubit/upload_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/upload/cubit/upload_state.dart';
+import 'package:neonappscase_gradproject/app/presentation/upload/widget/alerts/upload_success_dialog.dart';
 import 'package:neonappscase_gradproject/core/extensions/widget_extensions.dart';
 
 class PhotoUploadColumn extends StatelessWidget {
@@ -21,19 +22,7 @@ class PhotoUploadColumn extends StatelessWidget {
       listenWhen: (prev, curr) => prev.status != curr.status,
       listener: (context, state) async {
         if (state.status == UploadStatus.success) {
-          await showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-              title: const Text('Yükleme tamamlandı'),
-              content: const Text('Dosya başarıyla yüklendi.'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Tamam'),
-                ),
-              ],
-            ),
-          );
+          await uploadSuccessDialog(context);
           InjectionContainer.read<UploadCubit>().resetStatus();
         }
 
@@ -110,6 +99,4 @@ class PhotoUploadColumn extends StatelessWidget {
       },
     );
   }
-
-  
 }

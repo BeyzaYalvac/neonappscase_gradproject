@@ -10,7 +10,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> loadProfileData() async {
     emit(state.copyWith(isLoading: true));
-    try {
+  
       // Repo'nun AccountModel döndürdüğünü varsayıyoruz
       final account = await InjectionContainerItems.appAccountRepository
           .fetchAccountDetails();
@@ -18,10 +18,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       debugPrint("ProfileCubit - Account Info: $account");
 
       emit(state.copyWith(isLoading: false, acountInfos: account));
-    } catch (e) {
-      // İstersen burada error alanı ekleyebilirsin (state’e error field eklemek gerekir)
-      emit(state.copyWith(isLoading: false));
-    }
+    
   }
 
   Future<void> refresh() => loadProfileData();

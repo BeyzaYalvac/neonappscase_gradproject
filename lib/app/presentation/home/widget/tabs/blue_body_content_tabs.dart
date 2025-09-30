@@ -4,7 +4,7 @@ import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.
 import 'package:neonappscase_gradproject/app/presentation/home/widget/container/blue_body.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/gridview%20file_image/file_gridlayout.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/listview_file/listlayout_file.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/listview_image/listlayout_image.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/file&image/listview_image/list_layout_image.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/folder/gridview/folder_gridview.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/folder/listview/folder_listview.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/tabs%20sections/all_items_tab.dart';

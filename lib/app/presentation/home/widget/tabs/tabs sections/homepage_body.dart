@@ -48,7 +48,7 @@ class HomePageBody extends StatelessWidget {
             return Container(
               decoration: BoxDecoration(
                 color: theme.brightness == Brightness.dark
-                    ? AppColors.bgSmoothDark
+                    ? AppColors.bgSecondary
                     : AppColors.bgTriartry,
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(24),
@@ -62,7 +62,9 @@ class HomePageBody extends StatelessWidget {
                 ],
               ),
               child: LiquidPullToRefresh(
-                color: AppColors.bgPrimary,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.bgSmoothDark
+                    : AppColors.bgPrimary,
                 backgroundColor: Theme.of(context).brightness == Brightness.dark
                     ? AppColors.bgSecondary
                     : AppColors.bgTriartry,

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dart';
 import 'package:neonappscase_gradproject/app/common/constants/spacing/app_paddings.dart';
@@ -35,17 +34,15 @@ class StorageBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Current Storage: ${progress.toStringAsFixed(4)}GB / 5GB ",
-              style: AppTextSytlyes.currStorage(context)
+              "Current Storage: ${progress.toStringAsFixed(4)} / 5GB ",
+              style: AppTextSytlyes.currStorage(context),
             ),
             const SizedBox(height: AppPaddings.small),
             LinearProgressIndicator(
               minHeight: h * 0.02,
               value: progress,
               backgroundColor: AppColors.bgQuaternary,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                AppColors.bgTriartry,
-              ),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.bgTriartry),
             ),
           ],
         ),

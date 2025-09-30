@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neonappscase_gradproject/app/common/injections/injection_container.dart';
 import 'package:neonappscase_gradproject/app/common/theme/app_colors.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/create_folder_success_dialog.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/tabs%20sections/homepage_body.dart';
 
 class HomeTab extends StatelessWidget {
@@ -10,17 +12,26 @@ class HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(
-      builder: (context, state) {
-        final account = state.acountInfos;
-        if (account == null) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.bgTriartry),
-          );
-        }
-        return HomePageBody(isGrid: state.isGridView, acountData: account);
+    return BlocListener<HomeCubit, HomeState>(
+      listenWhen: (previous, current) =>
+          previous.createStatus != current.createStatus &&
+          current.createStatus == CreateStatus.success,
+      listener: (context, state) {
+        createFolderSuccessDialog(context);
+        InjectionContainer.read<HomeCubit>().resetStatus();
       },
+
+      child: BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          final account = state.acountInfos;
+          if (account == null) {
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.bgTriartry),
+            );
+          }
+          return HomePageBody(isGrid: state.isGridView, acountData: account);
+        },
+      ),
     );
   }
 }
-

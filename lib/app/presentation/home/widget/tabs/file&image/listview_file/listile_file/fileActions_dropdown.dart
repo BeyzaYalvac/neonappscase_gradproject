@@ -5,7 +5,7 @@ import 'package:neonappscase_gradproject/app/common/constants/app_strings.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/movefile_dialog.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/move_file_dialog.dart';
 
 class FileActionsPopUpMenu extends StatelessWidget {
   const FileActionsPopUpMenu({

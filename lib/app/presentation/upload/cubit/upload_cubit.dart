@@ -38,7 +38,7 @@ class UploadCubit extends Cubit<UploadState> {
         status: UploadStatus.uploading,
       ),
     );
-    try {
+   
       final model = await InjectionContainerItems.contentRepository
           .uploadFileContent(File(img.path), folderId: folderId);
 
@@ -55,16 +55,7 @@ class UploadCubit extends Cubit<UploadState> {
       );
 
       emit(state.copyWith(isLoading: false, status: UploadStatus.success));
-    } catch (e, st) {
-      debugPrint('uploadImageFromGallery error: $e\n$st');
-      emit(
-        state.copyWith(
-          isLoading: false,
-          status: UploadStatus.failure,
-          error: e.toString(),
-        ),
-      );
-    }
+    
   }
 
   void resetStatus() =>
@@ -114,7 +105,7 @@ class UploadCubit extends Cubit<UploadState> {
     if (pf == null) return;
 
     emit(state.copyWith(isLoading: true, error: null));
-    try {
+    
       File fileToUpload;
 
       if (pf.path != null) {
@@ -135,10 +126,6 @@ class UploadCubit extends Cubit<UploadState> {
       );
 
       emit(state.copyWith(isLoading: false, status: UploadStatus.success));
-    } catch (e) {
-      emit(state.copyWith(error: e.toString()));
-    } finally {
-      emit(state.copyWith(isLoading: false));
-    }
+    
   }
 }

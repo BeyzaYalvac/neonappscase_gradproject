@@ -1,12 +1,13 @@
-
-
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:neonappscase_gradproject/app/common/router/app_router.gr.dart';
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/widget/tabs/all/listview/all_listtile.dart';
 
 class AllListView extends StatelessWidget {
-  const AllListView({super.key, 
+  const AllListView({
+    super.key,
     required this.total,
     required this.folders,
     required this.files,
@@ -32,7 +33,15 @@ class AllListView extends StatelessWidget {
 
         if (i < fLen) {
           final f = folders[i];
-          return AllListTile(icon: Icons.folder, label: f.name,);
+          return AllListTile(
+            icon: Icons.folder,
+            label: f.name,
+            onTap: () {
+              context.router.push(
+                ItemDetailRoute(item: f, oldFolderName: state.selectedFolder),
+              );
+            },
+          );
         }
 
         if (i < fLen + fiLen) {

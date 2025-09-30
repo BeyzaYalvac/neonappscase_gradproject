@@ -6,7 +6,7 @@ import 'package:neonappscase_gradproject/app/common/constants/app_textstyles.dar
 import 'package:neonappscase_gradproject/app/domain/model/file_folder_list_model.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/renamefolder_dialog.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/rename_folder_dialog.dart';
 
 class FolderListile extends StatelessWidget {
   final int index;

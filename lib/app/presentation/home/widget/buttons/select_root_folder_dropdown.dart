@@ -38,6 +38,7 @@ class SelectRootFolderDropDownButton extends StatelessWidget {
           elevation: 6,
           isExpanded: true,
           value: safeValue,
+          menuMaxHeight: 200,
           hint: Text(
             AppStrings.selectText,
             style: AppTextSytlyes.dropDownTextStyle(context),
@@ -49,13 +50,9 @@ class SelectRootFolderDropDownButton extends StatelessWidget {
                   if (id == null) return;
 
                   if (id == createNewFolderId) {
-                    // burada Cubit'e özel 0 değeri set ediyorsun
                     context.read<HomeCubit>().setSelectedFolder(
                       createNewFolderId,
                     );
-
-                    // ekstra olarak hemen create dialog açabilirsin
-                    // showDialog(...);
                   } else {
                     context.read<HomeCubit>().setSelectedFolder(id);
                   }

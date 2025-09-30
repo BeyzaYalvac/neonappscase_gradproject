@@ -18,29 +18,23 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> loadFolders() async {
     emit(state.copyWith(isLoading: true));
-    try {
-      final result = await InjectionContainerItems.contentRepository
-          .getFolderList(fldId: state.currentFldId, bustCache: true);
-      //debugPrint('-----------$result------------');
-      // Ham listeyi saklamak ve aktif qFolder’a göre ekrana yansıtmak
-      final filtered = _filterFolders(result, state.qsearch);
-      emit(
-        state.copyWith(isLoading: false, allFolders: result, folders: filtered),
-      );
-    } catch (e) {
-      emit(state.copyWith(isLoading: false));
-    }
+
+    final result = await InjectionContainerItems.contentRepository
+        .getFolderList(fldId: state.currentFldId, bustCache: true);
+    //debugPrint('-----------$result------------');
+    // Ham listeyi saklamak ve aktif qFolder’a göre ekrana yansıtmak
+    final filtered = _filterFolders(result, state.qsearch);
+    emit(
+      state.copyWith(isLoading: false, allFolders: result, folders: filtered),
+    );
   }
 
   Future<void> getFoldersInFolder(int fldId) async {
     emit(state.copyWith(isLoading: true));
-    try {
-      final result = await InjectionContainerItems.contentRepository
-          .getFolderList(fldId: fldId);
-      emit(state.copyWith(isLoading: false, folders: result));
-    } catch (_) {
-      emit(state.copyWith(isLoading: false));
-    }
+
+    final result = await InjectionContainerItems.contentRepository
+        .getFolderList(fldId: fldId);
+    emit(state.copyWith(isLoading: false, folders: result));
   }
 
   List<FileFolderListModel> _filterFolders(
@@ -65,58 +59,52 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> loadFiles() async {
     emit(state.copyWith(isLoading: true));
-    try {
-      final all = await InjectionContainerItems.contentRepository.getFileList(
-        fldId: state.currentFldId,
-        nameFilter: state.qsearch.isEmpty ? null : state.qsearch,
-        perPage: _filesPerPage,
-      );
-      emit(state.copyWith(isLoading: false, files: _onlyNonImages(all)));
-    } catch (_) {
-      emit(state.copyWith(isLoading: false));
-    }
+
+    final all = await InjectionContainerItems.contentRepository.getFileList(
+      fldId: state.currentFldId,
+      nameFilter: state.qsearch.isEmpty ? null : state.qsearch,
+      perPage: _filesPerPage,
+    );
+    emit(state.copyWith(isLoading: false, files: _onlyNonImages(all)));
   }
 
   //isim filtreli file çekme
+  // isim filtreli file çekme
   Future<void> _fetchFiles(String nameFilter) async {
     emit(state.copyWith(isLoading: true));
-    try {
-      final res = await InjectionContainerItems.contentRepository.getFileList(
-        fldId: state.currentFldId,
-        nameFilter: nameFilter.isEmpty ? null : nameFilter,
-      );
-      emit(state.copyWith(isLoading: false, files: _onlyNonImages(res)));
-    } catch (_) {
-      emit(state.copyWith(isLoading: false));
-    }
+
+    final res = await InjectionContainerItems.contentRepository.getFileList(
+      fldId: state.currentFldId,
+      nameFilter: nameFilter.isEmpty ? null : nameFilter,
+      page: 1,
+      perPage: _filesPerPage,
+    );
+    emit(state.copyWith(isLoading: false, files: _onlyNonImages(res)));
   }
 
   // 2.1) İlk sayfa (listeyi sıfırla)
   Future<void> loadImagesInitial() async {
     emit(state.copyWith(isLoading: true, imagesPage: 1, imagesHasMore: true));
-    try {
-      final page = 1;
-      final all = await InjectionContainerItems.contentRepository.getFileList(
-        fldId: state.currentFldId,
-        nameFilter: state.qsearch.isEmpty ? null : state.qsearch,
-        page: page,
-        perPage: _perPage,
-      );
 
-      final re = RegExp(r'\.(png|jpe?g)$', caseSensitive: false);
-      final images = all.where((f) => re.hasMatch(f.name)).toList();
+    final page = 1;
+    final all = await InjectionContainerItems.contentRepository.getFileList(
+      fldId: state.currentFldId,
+      nameFilter: state.qsearch.isEmpty ? null : state.qsearch,
+      page: page,
+      perPage: _perPage,
+    );
 
-      emit(
-        state.copyWith(
-          isLoading: false,
-          images: images,
-          imagesPage: page,
-          imagesHasMore: all.length == _perPage, // < perPage ise bitti
-        ),
-      );
-    } catch (_) {
-      emit(state.copyWith(isLoading: false));
-    }
+    final re = RegExp(r'\.(png|jpe?g)$', caseSensitive: false);
+    final images = all.where((f) => re.hasMatch(f.name)).toList();
+
+    emit(
+      state.copyWith(
+        isLoading: false,
+        images: images,
+        imagesPage: page,
+        imagesHasMore: all.length == _perPage, // < perPage ise bitti
+      ),
+    );
   }
 
   // 2.2) Devamını getir (append)
@@ -124,56 +112,46 @@ class HomeCubit extends Cubit<HomeState> {
     if (state.isLoadingMore || !state.imagesHasMore) return;
 
     emit(state.copyWith(isLoadingMore: true));
-    try {
-      final nextPage = state.imagesPage + 1;
 
-      final all = await InjectionContainerItems.contentRepository.getFileList(
-        fldId: state.currentFldId,
-        nameFilter: state.qsearch.isEmpty ? null : state.qsearch,
-        page: nextPage,
-        perPage: _perPage,
-      );
+    final nextPage = state.imagesPage + 1;
 
-      final re = RegExp(r'\.(png|jpe?g)$', caseSensitive: false);
-      final newImages = all.where((f) => re.hasMatch(f.name)).toList();
+    final all = await InjectionContainerItems.contentRepository.getFileList(
+      fldId: state.currentFldId,
+      nameFilter: state.qsearch.isEmpty ? null : state.qsearch,
+      page: nextPage,
+      perPage: _perPage,
+    );
 
-      emit(
-        state.copyWith(
-          isLoadingMore: false,
-          images: [...state.images, ...newImages],
-          imagesPage: nextPage,
-          // ⬇️ yine ham listeye göre
-          imagesHasMore: all.length == _perPage,
-        ),
-      );
-    } catch (_) {
-      emit(state.copyWith(isLoadingMore: false));
-    }
+    final re = RegExp(r'\.(png|jpe?g)$', caseSensitive: false);
+    final newImages = all.where((f) => re.hasMatch(f.name)).toList();
+
+    emit(
+      state.copyWith(
+        isLoadingMore: false,
+        images: [...state.images, ...newImages],
+        imagesPage: nextPage,
+        imagesHasMore: all.length == _perPage,
+      ),
+    );
   }
 
   Future<void> loadProfileData() async {
     emit(state.copyWith(isLoading: true));
-    try {
-      final account = await InjectionContainerItems.appAccountRepository
-          .fetchAccountDetails();
-      emit(state.copyWith(isLoading: false, acountInfos: account));
-    } catch (_) {
-      emit(state.copyWith(isLoading: false));
-    }
+
+    final account = await InjectionContainerItems.appAccountRepository
+        .fetchAccountDetails();
+    emit(state.copyWith(isLoading: false, acountInfos: account));
   }
 
   Future<List<FileItem>?> getFilesInFolder(int fldId) async {
     emit(state.copyWith(isLoading: true));
-    try {
-      final result = await InjectionContainerItems.contentRepository
-          .getFileList(fldId: fldId);
-      emit(state.copyWith(isLoading: false, files: result));
-      debugPrint(result.toString());
-      return result;
-    } catch (_) {
-      emit(state.copyWith(isLoading: false));
-    }
-    return null;
+
+    final result = await InjectionContainerItems.contentRepository.getFileList(
+      fldId: fldId,
+    );
+    emit(state.copyWith(isLoading: false, files: result));
+    debugPrint(result.toString());
+    return result;
   }
 
   void setGridView(bool value) => emit(state.copyWith(isGridView: value));
@@ -239,8 +217,12 @@ class HomeCubit extends Cubit<HomeState> {
       name,
       state.selectedFolder,
     );
+    emit(state.copyWith(createStatus: CreateStatus.success));
     await loadFolders();
   }
+
+  void resetStatus() =>
+      emit(state.copyWith(createStatus: CreateStatus.failure));
 
   Future<void> renameFolder(String folderId, String newName) async {
     final trimmed = newName.trim();
@@ -268,35 +250,21 @@ class HomeCubit extends Cubit<HomeState> {
     ]; */
     final patchedFiltered = _filterFolders(newList, state.qsearch);
 
-    try {
-      await InjectionContainerItems.contentRepository.renameFolder(
-        folderId,
-        trimmed,
-      );
+    await InjectionContainerItems.contentRepository.renameFolder(
+      folderId,
+      trimmed,
+    );
 
-      //await _reloadFoldersBust();
-      emit(state.copyWith(allFolders: newList, folders: patchedFiltered));
-    } catch (e) {
-      emit(
-        state.copyWith(
-          allFolders: state.allFolders,
-          folders: _filterFolders(state.allFolders, state.qsearch),
-        ),
-      );
-      rethrow;
-    }
+    //await _reloadFoldersBust();
+    emit(state.copyWith(allFolders: newList, folders: patchedFiltered));
   }
 
   Future<void> moveFileToFolders(String fileCode, int fileId) async {
-    try {
-      await InjectionContainerItems.contentRepository.moveFileToFolders(
-        fileCode,
-        fileId,
-      );
-      debugPrint('File moved successfully: $fileCode');
-    } catch (e) {
-      debugPrint('Error moving file: $e');
-    }
+    await InjectionContainerItems.contentRepository.moveFileToFolders(
+      fileCode,
+      fileId,
+    );
+    debugPrint('File moved successfully: $fileCode');
   }
 
   void searchBarOnChanged(BuildContext context, String v) {

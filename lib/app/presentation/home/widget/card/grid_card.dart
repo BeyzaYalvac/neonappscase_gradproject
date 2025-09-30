@@ -10,7 +10,7 @@ import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorit
 import 'package:neonappscase_gradproject/app/presentation/favorite/cubit/favorite_state.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_cubit.dart';
 import 'package:neonappscase_gradproject/app/presentation/home/cubit/home_state.dart';
-import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/movefile_dialog.dart';
+import 'package:neonappscase_gradproject/app/presentation/home/widget/dialogs/move_file_dialog.dart';
 
 class GridListCard extends StatelessWidget {
   final FileItem file;

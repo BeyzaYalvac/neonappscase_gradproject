@@ -47,7 +47,10 @@ class FavoriteCubit extends Cubit<FavoriteState> {
         break;
       }
     }
+    emit(state.copyWith(favoriteStatus: FavoriteStatus.deleted));
     _refreshState();
+
+    emit(state.copyWith(favoriteStatus: FavoriteStatus.none));
   }
 
   void removeFavoriteFileByKey(String key) {
@@ -59,7 +62,10 @@ class FavoriteCubit extends Cubit<FavoriteState> {
         break;
       }
     }
+    emit(state.copyWith(favoriteStatus: FavoriteStatus.deleted));
     _refreshState();
+
+    emit(state.copyWith(favoriteStatus: FavoriteStatus.none));
   }
 
   bool isFavoriteFolder(String fldId) {
@@ -89,6 +95,16 @@ class FavoriteCubit extends Cubit<FavoriteState> {
         break;
       }
     }
-    emit(state.copyWith(favorites: box.values.toList()));
+    emit(
+      state.copyWith(
+        favorites: box.values.toList(),
+        favoriteStatus: FavoriteStatus.deleted,
+      ),
+    );
+
+    emit(state.copyWith(favoriteStatus: FavoriteStatus.none));
   }
+
+  void resetStatus() =>
+      emit(state.copyWith(favoriteStatus: FavoriteStatus.none));
 }
