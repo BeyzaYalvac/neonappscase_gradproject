@@ -9,28 +9,41 @@ Uygulama **Clean Architecture** prensipleri, **Dependency Injection (DI)** ve **
 
 - 📂 **Klasör Yönetimi**
   - Klasör oluşturma, listeleme, silme
-  - Favorilere ekleme/silme (Hive ile kalıcı)
+  - Favorilere ekleme/silme (Hive ile kalıcı)  
+  <img src="https://github.com/user-attachments/assets/67272c78-a72a-4b3d-aea2-1dc50d95fb3d" width="300"/>
+
 - 📑 **Dosya Yönetimi**
   - Dosya yükleme, indirme, taşıma
   - Silme ve yeniden adlandırma
+
 - 🖼️ **Resim Yönetimi**
   - Galeri görünümü
-  - Filtreleme ve önizleme
+  - Filtreleme ve önizleme  
+  <img src="https://github.com/user-attachments/assets/db0b6743-cbdc-49a0-97b8-105373fba28f" width="300"/>
+
 - 🔍 **Arama**
-  - Dosya, klasör ve resimler için ayrı filtreleme
+  - Dosya, klasör ve resimler için ayrı filtreleme  
+  <img src="https://github.com/user-attachments/assets/30a247c8-b07b-4b26-b175-2840be94f682" width="300"/>
+
 - 📶 **Offline Desteği**
   - İnternet bağlantısı yokken cache üzerinden çalışma
+
 - 🌗 **Tema Yönetimi**
-  - Light/Dark theme (Hive üzerinden kalıcı)
+  - Light/Dark theme (Hive üzerinden kalıcı)  
+  <img src="https://github.com/user-attachments/assets/4f63b95f-05f8-4e92-9779-2c26c176ace9" width="300"/>
+
 - 🔔 **Network Durumu Takibi**
-  - ConnectivityPlus ile bağlantı değişikliklerini izleme
+  - ConnectivityPlus ile bağlantı değişikliklerini izleme  
+  <img src="https://github.com/user-attachments/assets/3a2aa806-11b4-4a3f-9d67-a91ca32a3c93" width="300"/>
+
 - 🎮 **Gelişmiş UI**
   - DraggableScrollableSheet tabanlı bottom sheet
   - Expandable FAB (Floating Action Button)
   - Animasyonlu widget’lar ve Lottie animasyonları
 
----
-
+- **Hive ile dosya, image ve klasörlerin favorilere kaydedilmesi**  
+  <img src="https://github.com/user-attachments/assets/8679c5f4-f9bf-417e-bc53-f5103b22701c" width="300"/>
+  
 ## 🛠 Teknolojiler ve Kullanılan Paketler
 
 ### Çekirdek
